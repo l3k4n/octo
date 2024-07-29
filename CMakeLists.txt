@@ -8,10 +8,16 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 set(CMAKE_PREFIX_PATH ~/Qt/6.7.2/gcc_64/lib/cmake)
 set(SKIP_AUTOMOC ON)
 
+set(SOURCES
+    src/main.cpp
+    src/mainwindow.cpp
+    src/widgets/navbar.cpp
+)
+
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 qt_standard_project_setup()
-qt_add_executable(main main.cpp)
+qt_add_executable(main ${SOURCES})
 
 target_link_libraries(main PRIVATE Qt6::Widgets)
 
