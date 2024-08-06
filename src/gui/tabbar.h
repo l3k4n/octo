@@ -1,3 +1,6 @@
+#ifndef GUI_TAB_BAR_H
+#define GUI_TAB_BAR_H
+
 #include <QListView>
 #include <QStyledItemDelegate>
 #include <QWidget>
@@ -12,3 +15,5 @@ public:
 };
 
 }  // namespace octo::gui
+
+#endif  // !GUI_TAB_BAR_H

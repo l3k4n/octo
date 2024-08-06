@@ -1,3 +1,6 @@
+#ifndef GUI_TAB_BUTTON_H
+#define GUI_TAB_BUTTON_H
+
 #include <QStyledItemDelegate>
 
 namespace octo::gui {
@@ -14,3 +17,5 @@ public:
 };
 
 }  // namespace octo::gui
+
+#endif  // !GUI_TAB_BUTTON_H
