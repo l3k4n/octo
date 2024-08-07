@@ -11,6 +11,7 @@ set(SOURCES
     src/main.cpp
     src/mainwindow.cpp
     src/gui/tabbar.cpp
+    src/gui/browserwindow.cpp
     src/gui/delegates/tabbutton.cpp
 )
 
