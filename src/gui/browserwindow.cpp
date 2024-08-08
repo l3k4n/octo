@@ -21,7 +21,7 @@ inline QPushButton *createNavButton(const QString &str, const QSize &size) {
 }
 
 BrowserWindow::BrowserWindow(QPersistentModelIndex idx, QWidget *parent)
-    : QWidget(parent), model_index(idx) {
+    : QWidget(parent), modelIndex(idx) {
     const auto size = QSize(NAV_BTN_SIZE, NAV_BTN_SIZE);
     navBackBtn = createNavButton("<-", size);
     navNextBtn = createNavButton("->", size);

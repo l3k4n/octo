@@ -12,10 +12,10 @@ class BrowserWindow : public QWidget {
     Q_OBJECT;
 
 public:
-    BrowserWindow(const QPersistentModelIndex model_index, QWidget *parent = nullptr);
+    BrowserWindow(const QPersistentModelIndex modelIndex, QWidget *parent = nullptr);
 
 private:
-    const QPersistentModelIndex model_index;
+    const QPersistentModelIndex modelIndex;
     QPushButton *navBackBtn;
     QPushButton *navNextBtn;
     QPushButton *navRefreshBtn;

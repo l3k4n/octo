@@ -11,20 +11,20 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
     auto model = new QStandardItemModel(this);
     model->appendRow(new QStandardItem("New Tab"));
 
-    QListView *tab_bar = new octo::gui::TabBarView(this);
-    tab_bar->setModel(model);
-    tab_bar->setCurrentIndex(model->index(0, 0));
+    QListView *tabBar = new octo::gui::TabBarView(this);
+    tabBar->setModel(model);
+    tabBar->setCurrentIndex(model->index(0, 0));
 
-    QStackedWidget *tab_stack = new QStackedWidget(this);
-    tab_stack->addWidget(new octo::gui::BrowserWindow(QPersistentModelIndex(model->index(0, 0))));
+    QStackedWidget *tabStack = new QStackedWidget(this);
+    tabStack->addWidget(new octo::gui::BrowserWindow(QPersistentModelIndex(model->index(0, 0))));
 
-    QVBoxLayout *main_layout = new QVBoxLayout(this);
-    main_layout->setSpacing(0);
-    main_layout->setContentsMargins(0, 0, 0, 0);
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setSpacing(0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
 
-    main_layout->addWidget(tab_bar);
-    main_layout->addWidget(tab_stack);
+    mainLayout->addWidget(tabBar);
+    mainLayout->addWidget(tabStack);
 
-    main_layout->addStretch();
-    setLayout(main_layout);
+    mainLayout->addStretch();
+    setLayout(mainLayout);
 }

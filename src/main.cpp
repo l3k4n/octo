@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
-    MainWindow main_window(nullptr);
+    MainWindow mainWindow(nullptr);
 
     // load global stylesheet
     QFile file(":styles/global.qss");
@@ -19,6 +19,6 @@ int main(int argc, char *argv[]) {
         qDebug() << "Failed to open stylesheet at" << file.fileName();
     }
 
-    main_window.show();
+    mainWindow.show();
     return app.exec();
 }
