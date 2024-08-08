@@ -1,0 +1,14 @@
+* {
+   background-color: #0D0D0D;
+   color: #fff;
+}
+
+QPushButton, QLineEdit { background-color: red; border-radius: 2px; }
+QPushButton, QListView { border: none; }
+QPushButton:hover { background-color: blue; }
+
+/* tab styles */
+#TabBarView { padding: 2px 5px; }
+#TabBarView::item { border-radius: 5px; }
+#TabBarView::item:selected { background-color: #444; }
+#TabBarView::item:hover { background-color: #222; }

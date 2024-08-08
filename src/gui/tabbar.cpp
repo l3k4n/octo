@@ -18,4 +18,6 @@ TabBarView::TabBarView(QWidget *parent) {
     setFixedHeight(40);
     setIconSize(QSize(20, 20));
     setSpacing(2);
+    setMouseTracking(true);
+    setObjectName("TabBarView");
 }

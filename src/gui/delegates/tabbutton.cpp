@@ -1,7 +1,6 @@
 #include "tabbutton.h"
 
 #include <QPainter>
-#include <QPainterPath>
 
 using namespace octo::gui;
 
@@ -18,20 +17,19 @@ void TabBarButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     QStyleOptionViewItem opt = option;
     initStyleOption(&opt, index);
 
-    // Draw background
+    // prevent mouseover state when if tab is selected
     if (opt.state & QStyle::State_Selected) {
-        QPainterPath path;
-        QColor cc("#00FFFFFF");  // (ARGB) translucent white
-        cc.setAlphaF(0.1);
-        path.addRoundedRect(option.rect.adjusted(0, 0, 0, 0), CORNER_RADIUS, CORNER_RADIUS);
-        painter->setRenderHint(QPainter::Antialiasing);
-        painter->fillPath(path, QBrush(cc));
+        opt.state &= ~QStyle::State_MouseOver;
     }
 
+    // Draw background
+    QStyle *style = option.widget->style();
+    style->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, opt.widget);
+
     // Draw icon
-    QIcon icon = qvariant_cast<QIcon>(index.data(Qt::DecorationRole));
     QRect icon_rect(
         opt.rect.adjusted(GAP, (opt.rect.height() - opt.decorationSize.height()) / 2, 0, 0));
+    QIcon icon = qvariant_cast<QIcon>(index.data(Qt::DecorationRole));
     icon_rect.setSize(opt.decorationSize);
     icon.paint(painter, icon_rect, Qt::AlignLeft | Qt::AlignVCenter);
 

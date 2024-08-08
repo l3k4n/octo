@@ -26,6 +26,5 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
     main_layout->addWidget(tab_stack);
 
     main_layout->addStretch();
-    setStyleSheet("background-color: #111; border: none;");
     setLayout(main_layout);
 }

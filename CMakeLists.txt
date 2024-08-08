@@ -6,17 +6,21 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 set(CMAKE_PREFIX_PATH ~/Qt/6.7.2/gcc_64/lib/cmake)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 set(SOURCES
     src/main.cpp
     src/mainwindow.cpp
+
     src/gui/tabbar.cpp
     src/gui/browserwindow.cpp
     src/gui/delegates/tabbutton.cpp
+
+    src/resources/resources.qrc
 )
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
-
 
 qt_standard_project_setup()
 qt_add_executable(octo ${SOURCES})

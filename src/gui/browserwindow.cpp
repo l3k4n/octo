@@ -34,9 +34,6 @@ BrowserWindow::BrowserWindow(QPersistentModelIndex idx, QWidget *parent)
     navbar->setContentsMargins(5, 5, 5, 5);
     navbarLayout->setContentsMargins(0, 0, 0, 0);
     navbarLayout->setSpacing(5);
-    navbar->setStyleSheet(
-        "QWidget { background-color: #222; }"
-        "QPushButton, QLineEdit { background-color: #111; color: #fff; }");
     navbarLayout->addWidget(navBackBtn);
     navbarLayout->addWidget(navNextBtn);
     navbarLayout->addWidget(navRefreshBtn);
@@ -49,5 +46,4 @@ BrowserWindow::BrowserWindow(QPersistentModelIndex idx, QWidget *parent)
     windowLayout->addStretch();
     setParent(parent);
     setLayout(windowLayout);
-    setStyleSheet("background-color: #222; border-radius: 2px");
 }
