@@ -3,12 +3,26 @@
    color: #fff;
 }
 
-QPushButton, QLineEdit { background-color: red; border-radius: 2px; }
 QPushButton, QListView { border: none; }
-QPushButton:hover { background-color: blue; }
+QPushButton, QLineEdit { border-radius: 5px; }
 
-/* tab styles */
-#TabBarView { padding: 2px 5px; }
+/* Nav bar styles */
+#NavBar { background-color: #1a1a1a; }
+#NavBar > QPushButton { background-color: none; }
+#NavBar > QPushButton:hover { background-color: #363636; }
+#NavBar > QLineEdit { padding: 0px 5px }
+
+/* Tab bar styles */
+#TabBarView { padding: 2px 5px; background-color: #1a1a1a; }
 #TabBarView::item { border-radius: 5px; }
-#TabBarView::item:selected { background-color: #444; }
-#TabBarView::item:hover { background-color: #222; }
+#TabBarView::item:selected { background-color: #363636; }
+#TabBarView::item:hover { background-color: #262626; }
+
+/*
+	LEGEND:
+
+	#0D0D0D -> bg 
+	#1a1a1a -> panel bg 
+	#262626 -> focus/selection indicator 
+	#363636 -> hover
+*/

@@ -2,6 +2,11 @@
 <RCC version="1.0">
 	<qresource>
 		<file>styles/global.qss</file>
+
+		<file>icons/xmark-solid.png</file>
+		<file>icons/arrow-left-solid.png</file>
+		<file>icons/arrow-right-solid.png</file>
+		<file>icons/rotate-right-solid.png</file>
 	</qresource>
 </RCC>
 
