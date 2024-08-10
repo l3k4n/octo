@@ -8,7 +8,6 @@
 using namespace octo::gui;
 
 TabBarView::TabBarView(QWidget *parent) : QListView(parent) {
-    new octo::gui::TabBarButtonDelegate(this);
     setParent(parent);
     setItemDelegate(new TabBarButtonDelegate(this));
     setSelectionMode(QListView::SelectionMode::SingleSelection);
