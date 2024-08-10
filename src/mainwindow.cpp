@@ -2,21 +2,22 @@
 
 #include <QBoxLayout>
 #include <QStackedWidget>
-#include <QStandardItemModel>
 
 #include "gui/browserwindow.h"
 #include "gui/tabbar.h"
+#include "models/OctoInstanceModel.h"
+
+using namespace octo;
 
 MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
-    auto model = new QStandardItemModel(this);
-    model->appendRow(new QStandardItem("New Tab"));
+    models::OctoInstanceModel *model = new models::OctoInstanceModel(this);
 
-    QListView *tabBar = new octo::gui::TabBarView(this);
+    gui::TabBarView *tabBar = new gui::TabBarView(this);
     tabBar->setModel(model);
     tabBar->setCurrentIndex(model->index(0, 0));
 
     QStackedWidget *tabStack = new QStackedWidget(this);
-    tabStack->addWidget(new octo::gui::BrowserWindow(QPersistentModelIndex(model->index(0, 0))));
+    tabStack->addWidget(new gui::BrowserWindow(model->index(0, 0)));
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(0);

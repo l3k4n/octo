@@ -7,8 +7,10 @@
 #include <QPushButton>
 #include <QWidget>
 
+#include "OctoInstanceModel.h"
 #include "utils.h"
 
+using namespace octo;
 using namespace octo::gui;
 
 const int NAV_BTN_SIZE = 30;
@@ -35,7 +37,7 @@ BrowserWindow::BrowserWindow(QPersistentModelIndex idx, QWidget *parent)
     navBackBtn = createNavButton(":icons/arrow-left-solid.png", size);
     navNextBtn = createNavButton(":icons/arrow-right-solid.png", size);
     navRefreshBtn = createNavButton(":icons/rotate-right-solid.png", size);
-    addressBar = new QLineEdit("https://www.google.com");
+    addressBar = new QLineEdit(idx.data(models::OctoInstanceModel::UrlRole).toString());
     addressBar->setFixedHeight(NAV_BTN_SIZE);
 
     // no history by default, so buttons are disabled

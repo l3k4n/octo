@@ -17,6 +17,8 @@ set(SOURCES
     src/gui/browserwindow.cpp
     src/gui/delegates/tabbutton.cpp
 
+    src/models/OctoInstanceModel.cpp
+
     src/utils/utils.cpp
 
     src/resources/resources.qrc
@@ -27,7 +29,7 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 qt_standard_project_setup()
 qt_add_executable(octo ${SOURCES})
 
-target_include_directories(octo PRIVATE src/gui src/gui/delegates src/utils)
+target_include_directories(octo PRIVATE src/gui src/gui/delegates src/utils src/models)
 target_link_libraries(octo PRIVATE Qt6::Widgets)
 
 set_target_properties(octo PROPERTIES

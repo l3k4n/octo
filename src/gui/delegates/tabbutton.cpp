@@ -2,6 +2,9 @@
 
 #include <QPainter>
 
+#include "OctoInstanceModel.h"
+
+using namespace octo;
 using namespace octo::gui;
 
 const int CORNER_RADIUS = 5;
@@ -29,15 +32,15 @@ void TabBarButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     // Draw icon
     QRect iconRect(
         opt.rect.adjusted(GAP, (opt.rect.height() - opt.decorationSize.height()) / 2, 0, 0));
-    QIcon icon = qvariant_cast<QIcon>(index.data(Qt::DecorationRole));
+    QIcon icon = qvariant_cast<QIcon>(index.data(models::OctoInstanceModel::FaviconRole));
     iconRect.setSize(opt.decorationSize);
     icon.paint(painter, iconRect, Qt::AlignLeft | Qt::AlignVCenter);
 
     // Draw text
     int textOffset = (opt.rect.height() - opt.fontMetrics.height()) / 2;
-    QRect textRect =
-        opt.rect.adjusted(opt.decorationSize.width() + (2 * GAP), textOffset, -GAP, 0);
+    QRect textRect = opt.rect.adjusted(opt.decorationSize.width() + (2 * GAP), textOffset, -GAP, 0);
     textRect.setHeight(opt.fontMetrics.height());
     painter->setPen("#ffffff");
-    painter->drawText(textRect, opt.displayAlignment, index.data(Qt::DisplayRole).toString());
+    painter->drawText(textRect, opt.displayAlignment,
+                      index.data(models::OctoInstanceModel::TitleRole).toString());
 }
