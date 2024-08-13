@@ -1,17 +1,18 @@
 #ifndef GUI_TAB_BAR_H
 #define GUI_TAB_BAR_H
 
-#include <QListView>
-#include <QStyledItemDelegate>
+#include <QPaintEvent>
+#include <QTabBar>
 #include <QWidget>
 
 namespace octo::gui {
 
-class TabBarView : public QListView {
+class TabBar : public QTabBar {
     Q_OBJECT;
 
 public:
-    TabBarView(QWidget *parent = nullptr);
+    TabBar(QWidget *parent = nullptr);
+    void paintEvent(QPaintEvent *) override;
 };
 
 }  // namespace octo::gui

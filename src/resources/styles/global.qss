@@ -1,28 +1,31 @@
-* {
-   background-color: #0D0D0D;
-   color: #fff;
+#MainWindow { background-color: #1a1a1a; }
+#MainWindow::pane { border: 1px solid blue; }
+
+#TabBar { color: blue; }
+#TabBar::tab {
+  background: none;
+  border-radius: 5px;
+  width: 180px;
+  height: 30px;
+  margin: 5px 0 5px 5px;
+}
+#TabBar::tab:selected { background-color: #363636; }
+#TabBar::tab:hover { background-color: #262626; }
+#TabBar::close-button {
+  image: url(:icons/xmark-solid.png);
+  margin: 3px; /* close button only resizes with margin */
 }
 
-QPushButton, QListView { border: none; }
-QPushButton, QLineEdit { border-radius: 5px; }
-
-/* Nav bar styles */
 #NavBar { background-color: #1a1a1a; }
-#NavBar > QPushButton { background-color: none; }
+#NavBar > QPushButton { background-color: none; border: none; border-radius: 5px }
 #NavBar > QPushButton:hover { background-color: #363636; }
-#NavBar > QLineEdit { padding: 0px 5px }
-
-/* Tab bar styles */
-#TabBarView { padding: 2px 5px; background-color: #1a1a1a; }
-#TabBarView::item { border-radius: 5px; }
-#TabBarView::item:selected { background-color: #363636; }
-#TabBarView::item:hover { background-color: #262626; }
+#NavBar > QLineEdit { padding: 0px 5px; border-radius: 5px; }
 
 /*
-	LEGEND:
+  LEGEND:
 
-	#0D0D0D -> bg 
-	#1a1a1a -> panel bg 
-	#262626 -> focus/selection indicator 
-	#363636 -> hover
+  #0D0D0D -> bg 
+  #1a1a1a -> panel bg 
+  #262626 -> focus/selection indicator 
+  #363636 -> hover
 */

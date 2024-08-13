@@ -1,5 +1,5 @@
-#ifndef GUI_BROWSER_WINDOW_H
-#define GUI_BROWSER_WINDOW_H
+#ifndef GUI_TAB_PAGE_H
+#define GUI_TAB_PAGE_H
 
 #include <QLineEdit>
 #include <QPersistentModelIndex>
@@ -8,11 +8,11 @@
 
 namespace octo::gui {
 
-class BrowserWindow : public QWidget {
+class TabPage : public QWidget {
     Q_OBJECT;
 
 public:
-    BrowserWindow(const QPersistentModelIndex modelIndex, QWidget *parent = nullptr);
+    TabPage(const QPersistentModelIndex modelIndex, QWidget *parent = nullptr);
 
 private:
     const QPersistentModelIndex modelIndex;
@@ -24,4 +24,4 @@ private:
 
 }  // namespace octo::gui
 
-#endif  // !GUI_BROWSER_WINDOW_H
+#endif  // !GUI_TAB_PAGE_H

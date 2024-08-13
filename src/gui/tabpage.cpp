@@ -1,5 +1,3 @@
-#include "browserwindow.h"
-
 #include <QBoxLayout>
 #include <QIcon>
 #include <QLineEdit>
@@ -8,6 +6,7 @@
 #include <QWidget>
 
 #include "OctoInstanceModel.h"
+#include "tabpage.h"
 #include "utils.h"
 
 using namespace octo;
@@ -31,8 +30,7 @@ inline QPushButton *createNavButton(const QString &iconPath, const QSize &size) 
     return btn;
 }
 
-BrowserWindow::BrowserWindow(QPersistentModelIndex idx, QWidget *parent)
-    : QWidget(parent), modelIndex(idx) {
+TabPage::TabPage(QPersistentModelIndex idx, QWidget *parent) : QWidget(parent), modelIndex(idx) {
     const auto size = QSize(NAV_BTN_SIZE, NAV_BTN_SIZE);
     navBackBtn = createNavButton(":icons/arrow-left-solid.png", size);
     navNextBtn = createNavButton(":icons/arrow-right-solid.png", size);

@@ -1,9 +1,7 @@
 #include "OctoInstanceModel.h"
 
 #include <QAbstractListModel>
-#include <QIcon>
 #include <QVariant>
-#include <QObject>
 
 using namespace octo::models;
 

@@ -1,22 +1,39 @@
 #include "tabbar.h"
 
 #include <QPainter>
-#include <QPainterPath>
-
-#include "delegates/tabbutton.h"
+#include <QStyleOptionTab>
+#include <QStylePainter>
 
 using namespace octo::gui;
 
-TabBarView::TabBarView(QWidget *parent) : QListView(parent) {
-    setParent(parent);
-    setItemDelegate(new TabBarButtonDelegate(this));
-    setSelectionMode(QListView::SelectionMode::SingleSelection);
-    setEditTriggers(QListView::NoEditTriggers);
-    setFlow(QListView::LeftToRight);
-    setUniformItemSizes(true);
-    setFixedHeight(40);
-    setIconSize(QSize(20, 20));
-    setSpacing(2);
-    setMouseTracking(true);
-    setObjectName("TabBarView");
+TabBar::TabBar(QWidget *parent) : QTabBar(parent) {
+    setObjectName("TabBar");
+}
+
+void TabBar::paintEvent(QPaintEvent *) {
+    QStylePainter painter(this);
+    QStyleOptionTab opt;
+
+    for (int i = 0; i < count(); i++) {
+        initStyleOption(&opt, i);
+
+        auto iconRect = QRect();
+        iconRect.setSize(opt.iconSize);
+        iconRect.moveCenter(opt.rect.center());
+        auto closeRect = iconRect;
+        iconRect.moveLeft(opt.rect.left() + 15);
+        closeRect.moveRight(opt.rect.right() - 15);
+        auto textRect = opt.rect;
+        textRect.setLeft(iconRect.right() + 5);
+        textRect.setRight(closeRect.left() - 5);
+
+        // draw background
+        painter.drawControl(QStyle::CE_TabBarTabShape, opt);
+
+        // draw icon
+        opt.icon.paint(&painter, iconRect, Qt::AlignCenter);
+
+        // draw text
+        painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, opt.text);
+    }
 }
