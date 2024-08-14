@@ -13,10 +13,10 @@ class TabPage : public QWidget {
     Q_OBJECT;
 
 public:
-    TabPage(const core::Tab *tab, QWidget *parent = nullptr);
+    TabPage(const core::Tab &tab, QWidget *parent = nullptr);
 
 private:
-    const core::Tab *tab;
+    const core::Tab &tab;
     QPushButton *navBackBtn;
     QPushButton *navNextBtn;
     QPushButton *navRefreshBtn;

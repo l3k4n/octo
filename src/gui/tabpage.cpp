@@ -30,7 +30,7 @@ inline QPushButton *createNavButton(const QString &iconPath, const QSize &size) 
     return btn;
 }
 
-TabPage::TabPage(const core::Tab *_tab, QWidget *parent) : QWidget(parent), tab(_tab) {
+TabPage::TabPage(const core::Tab &_tab, QWidget *parent) : QWidget(parent), tab(_tab) {
     const auto size = QSize(NAV_BTN_SIZE, NAV_BTN_SIZE);
     navBackBtn = createNavButton(":icons/arrow-left-solid.png", size);
     navNextBtn = createNavButton(":icons/arrow-right-solid.png", size);
