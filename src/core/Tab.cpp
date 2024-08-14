@@ -5,9 +5,9 @@
 
 using namespace octo::core;
 
-Tab::Tab() : pageData(newPage()) {}
+Tab::Tab(QObject* parent) : QObject(parent), pageData(newPage()) {}
 
-Tab::Tab(const QString& url) : pageData() {
+Tab::Tab(const QString& url, QObject* parent) : QObject(parent), pageData() {
     pageData = std::make_unique<PageData>(PageData{"Loading ...", url, QIcon()});
 }
 

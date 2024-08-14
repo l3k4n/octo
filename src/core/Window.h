@@ -14,9 +14,13 @@ class Window : public QObject {
 
 public:
     Window(QObject* parent = nullptr);
+    const Tab& newTab();
+
+signals:
+    void newTabCreated(const Tab& tab, size_t pos);
 
 private:
-    QVector<Tab> m_tabs;
+    QVector<Tab*> m_tabs;
 };
 
 }  // namespace octo::core

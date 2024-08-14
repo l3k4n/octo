@@ -3,14 +3,15 @@
 
 #include <QIcon>
 #include <QObject>
+#include <memory>
 
 namespace octo::core {
 
 class Tab : public QObject {
     Q_OBJECT;
 
-    Tab();
-    Tab(const QString& url);
+    Tab(QObject* parent);
+    Tab(const QString& url, QObject* parent);
     friend class Window;
 
 public:
@@ -25,7 +26,7 @@ private:
         QIcon favicon;
     };
 
-    std::unique_ptr<Tab::PageData> newPage();
+    std::unique_ptr<PageData> newPage();
     std::unique_ptr<PageData> pageData;
 };
 
