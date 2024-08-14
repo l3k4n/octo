@@ -6,9 +6,7 @@
 
 using namespace octo::gui;
 
-TabBar::TabBar(QWidget *parent) : QTabBar(parent) {
-    setObjectName("TabBar");
-}
+TabBar::TabBar(QWidget *parent) : QTabBar(parent) { setObjectName("TabBar"); }
 
 void TabBar::paintEvent(QPaintEvent *) {
     QStylePainter painter(this);

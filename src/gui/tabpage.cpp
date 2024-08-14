@@ -1,12 +1,12 @@
+#include "tabpage.h"
+
 #include <QBoxLayout>
 #include <QIcon>
 #include <QLineEdit>
-#include <QPersistentModelIndex>
 #include <QPushButton>
 #include <QWidget>
 
-#include "OctoInstanceModel.h"
-#include "tabpage.h"
+#include "Tab.h"
 #include "utils.h"
 
 using namespace octo;
@@ -17,9 +17,9 @@ const int NAV_ICON_SIZE = 15;
 
 inline QPushButton *createNavButton(const QString &iconPath, const QSize &size) {
     QIcon icon;
-    QPixmap enabled_pixmap = octo::utils::createColoredPixmap(iconPath, "#fff", "#ccc");
+    QPixmap enabled_pixmap = utils::createColoredPixmap(iconPath, "#fff", "#ccc");
     icon.addPixmap(enabled_pixmap, QIcon::Mode::Active);
-    QPixmap disabled_pixmap = octo::utils::createColoredPixmap(iconPath, "#fff", "#333");
+    QPixmap disabled_pixmap = utils::createColoredPixmap(iconPath, "#fff", "#333");
     icon.addPixmap(disabled_pixmap, QIcon::Mode::Disabled);
 
     auto btn = new QPushButton;
@@ -30,12 +30,12 @@ inline QPushButton *createNavButton(const QString &iconPath, const QSize &size) 
     return btn;
 }
 
-TabPage::TabPage(QPersistentModelIndex idx, QWidget *parent) : QWidget(parent), modelIndex(idx) {
+TabPage::TabPage(const core::Tab *_tab, QWidget *parent) : QWidget(parent), tab(_tab) {
     const auto size = QSize(NAV_BTN_SIZE, NAV_BTN_SIZE);
     navBackBtn = createNavButton(":icons/arrow-left-solid.png", size);
     navNextBtn = createNavButton(":icons/arrow-right-solid.png", size);
     navRefreshBtn = createNavButton(":icons/rotate-right-solid.png", size);
-    addressBar = new QLineEdit(idx.data(models::OctoInstanceModel::UrlRole).toString());
+    addressBar = new QLineEdit(tab->url());
     addressBar->setFixedHeight(NAV_BTN_SIZE);
 
     // no history by default, so buttons are disabled

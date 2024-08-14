@@ -2,9 +2,10 @@
 #define GUI_TAB_PAGE_H
 
 #include <QLineEdit>
-#include <QPersistentModelIndex>
 #include <QPushButton>
 #include <QWidget>
+
+#include "Tab.h"
 
 namespace octo::gui {
 
@@ -12,10 +13,10 @@ class TabPage : public QWidget {
     Q_OBJECT;
 
 public:
-    TabPage(const QPersistentModelIndex modelIndex, QWidget *parent = nullptr);
+    TabPage(const core::Tab *tab, QWidget *parent = nullptr);
 
 private:
-    const QPersistentModelIndex modelIndex;
+    const core::Tab *tab;
     QPushButton *navBackBtn;
     QPushButton *navNextBtn;
     QPushButton *navRefreshBtn;
