@@ -6,7 +6,9 @@
 
 namespace octo::core {
 
-class Tab : protected QObject {
+class Tab : public QObject {
+    Q_OBJECT;
+
     Tab();
     Tab(const QString& url);
     friend class Window;

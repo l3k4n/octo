@@ -9,7 +9,7 @@
 
 namespace octo::core {
 
-class Window : protected QObject {
+class Window : public QObject {
     Q_OBJECT;
 
 public:
