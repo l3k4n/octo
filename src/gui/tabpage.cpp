@@ -35,7 +35,7 @@ TabPage::TabPage(const core::Tab &_tab, QWidget *parent) : QWidget(parent), tab(
     navBackBtn = createNavButton(":icons/arrow-left-solid.png", size);
     navNextBtn = createNavButton(":icons/arrow-right-solid.png", size);
     navRefreshBtn = createNavButton(":icons/rotate-right-solid.png", size);
-    addressBar = new QLineEdit(tab->url());
+    addressBar = new QLineEdit(tab.url());
     addressBar->setFixedHeight(NAV_BTN_SIZE);
 
     // no history by default, so buttons are disabled
