@@ -26,6 +26,7 @@ inline QPushButton *createNavButton(const QString &iconPath, const QSize &size) 
     btn->setIcon(icon);
     btn->setFixedSize(size);
     btn->setIconSize(QSize(NAV_ICON_SIZE, NAV_ICON_SIZE));
+    btn->setObjectName("NavBarBtn");
 
     return btn;
 }
@@ -37,6 +38,8 @@ TabPage::TabPage(const core::Tab &_tab, QWidget *parent) : QWidget(parent), tab(
     navRefreshBtn = createNavButton(":icons/rotate-right-solid.png", size);
     addressBar = new QLineEdit(tab.url());
     addressBar->setFixedHeight(NAV_BTN_SIZE);
+    addressBar->setObjectName("NavBarAddrInput");
+    addressBar->setPlaceholderText("Enter address");
 
     // no history by default, so buttons are disabled
     navBackBtn->setEnabled(false);
@@ -44,7 +47,7 @@ TabPage::TabPage(const core::Tab &_tab, QWidget *parent) : QWidget(parent), tab(
 
     QWidget *navbar = new QWidget(this);
     QHBoxLayout *navbarLayout = new QHBoxLayout(navbar);
-    navbar->setContentsMargins(5, 2, 5, 5);
+    navbar->setContentsMargins(5, 5, 5, 5);
     navbarLayout->setContentsMargins(0, 0, 0, 0);
     navbarLayout->setSpacing(5);
     navbarLayout->addWidget(navBackBtn);

@@ -1,9 +1,8 @@
-#MainWindow { background-color: #1a1a1a; }
-#MainWindow::pane { border: 1px solid blue; }
+#MainWindow { background-color: #0D0D0D; }
+#MainWindow::pane { border: none; }
 
-#TabBar { color: blue; }
+#TabBar { color: #fff; }
 #TabBar::tab {
-  background: none;
   border-radius: 5px;
   width: 180px;
   height: 30px;
@@ -16,10 +15,24 @@
   margin: 3px; /* close button only resizes with margin */
 }
 
-#NavBar { background-color: #1a1a1a; }
-#NavBar > QPushButton { background-color: none; border: none; border-radius: 5px }
-#NavBar > QPushButton:hover { background-color: #363636; }
-#NavBar > QLineEdit { padding: 0px 5px; border-radius: 5px; }
+#NavBar { background-color: #1a1a1a; padding: 10px; }
+#NavBar #NavBarBtn { background-color: none;  }
+#NavBar #NavBarBtn:hover { background-color: #363636; }
+#NavBar #NavBarAddrInput {
+  background-color: #0D0D0D;
+  padding: 0px 5px;
+  color: #fff;
+}
+
+#NavBar #NavBarAddrInput, #NavBar #NavBarBtn {
+  border: 2px solid transparent;
+  border-radius: 5px
+}
+
+#NavBar #NavBarAddrInput:focus, #NavBar #NavBarBtn:focus {
+    outline: none;
+    border-color: #0072BB;
+}
 
 /*
   LEGEND:
@@ -28,4 +41,5 @@
   #1a1a1a -> panel bg 
   #262626 -> focus/selection indicator 
   #363636 -> hover
+  #0072BB -> accent
 */
