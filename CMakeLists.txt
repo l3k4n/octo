@@ -15,6 +15,7 @@ set(SOURCES
 
     src/gui/tabbar.cpp
     src/gui/tabpage.cpp
+    src/gui/navbarbutton.cpp
 
     src/core/Tab.cpp
     src/core/Window.cpp

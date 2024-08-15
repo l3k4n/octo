@@ -3,9 +3,11 @@
 
 #include <QLineEdit>
 #include <QPushButton>
+#include <QSize>
 #include <QWidget>
 
 #include "Tab.h"
+#include "navbarbutton.h"
 
 namespace octo::gui {
 
@@ -16,10 +18,16 @@ public:
     TabPage(const core::Tab &tab, QWidget *parent = nullptr);
 
 private:
+    void setupNavBarWidgets();
+
+private:
     const core::Tab &tab;
-    QPushButton *navBackBtn;
-    QPushButton *navNextBtn;
-    QPushButton *navRefreshBtn;
+    QSize btnSize = QSize(30, 30);
+    QSize iconSize = QSize(15, 15);
+    int addressBarHeight = 30;
+    NavBarButton *navBackBtn;
+    NavBarButton *navNextBtn;
+    NavBarButton *navRefreshBtn;
     QLineEdit *addressBar;
 };
 

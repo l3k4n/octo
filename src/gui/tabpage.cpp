@@ -7,60 +7,50 @@
 #include <QWidget>
 
 #include "Tab.h"
-#include "utils.h"
+#include "navbarbutton.h"
 
 using namespace octo;
 using namespace octo::gui;
 
-const int NAV_BTN_SIZE = 30;
-const int NAV_ICON_SIZE = 15;
+TabPage::TabPage(const core::Tab &_tab, QWidget *parent) : QWidget(parent), tab(_tab) {
+    QWidget *navbar = new QWidget(this);
+    QHBoxLayout *navbarLayout = new QHBoxLayout(navbar);
+    navbar->setLayout(navbarLayout);
+    navbar->setObjectName("NavBar");
+    navbar->setContentsMargins(5, 5, 5, 5);
+    navbarLayout->setContentsMargins(0, 0, 0, 0);
+    navbarLayout->setSpacing(5);
 
-inline QPushButton *createNavButton(const QString &iconPath, const QSize &size) {
-    QIcon icon;
-    QPixmap enabled_pixmap = utils::createColoredPixmap(iconPath, "#fff", "#ccc");
-    icon.addPixmap(enabled_pixmap, QIcon::Mode::Active);
-    QPixmap disabled_pixmap = utils::createColoredPixmap(iconPath, "#fff", "#333");
-    icon.addPixmap(disabled_pixmap, QIcon::Mode::Disabled);
+    navbarLayout->addWidget(navBackBtn);
+    navbarLayout->addWidget(navNextBtn);
+    navbarLayout->addWidget(navRefreshBtn);
+    navbarLayout->addWidget(addressBar);
 
-    auto btn = new QPushButton;
-    btn->setIcon(icon);
-    btn->setFixedSize(size);
-    btn->setIconSize(QSize(NAV_ICON_SIZE, NAV_ICON_SIZE));
-    btn->setObjectName("NavBarBtn");
-
-    return btn;
+    QVBoxLayout *windowLayout = new QVBoxLayout(this);
+    windowLayout->setContentsMargins(0, 0, 0, 0);
+    windowLayout->addWidget(navbar);
+    windowLayout->addStretch();
+    setLayout(windowLayout);
 }
 
-TabPage::TabPage(const core::Tab &_tab, QWidget *parent) : QWidget(parent), tab(_tab) {
-    const auto size = QSize(NAV_BTN_SIZE, NAV_BTN_SIZE);
-    navBackBtn = createNavButton(":icons/arrow-left-solid.png", size);
-    navNextBtn = createNavButton(":icons/arrow-right-solid.png", size);
-    navRefreshBtn = createNavButton(":icons/rotate-right-solid.png", size);
+void TabPage::setupNavBarWidgets() {
+    navBackBtn = new NavBarButton(":icons/arrow-left-solid.png", this);
+    navNextBtn = new NavBarButton(":icons/arrow-right-solid.png", this);
+    navRefreshBtn = new NavBarButton(":icons/rotate-right-solid.png", this);
     addressBar = new QLineEdit(tab.url());
-    addressBar->setFixedHeight(NAV_BTN_SIZE);
+
+    navBackBtn->setFixedSize(btnSize);
+    navNextBtn->setFixedSize(btnSize);
+    navRefreshBtn->setFixedSize(btnSize);
+    navBackBtn->setIconSize(iconSize);
+    navNextBtn->setIconSize(iconSize);
+    navRefreshBtn->setIconSize(iconSize);
+
+    addressBar->setFixedHeight(addressBarHeight);
     addressBar->setObjectName("NavBarAddrInput");
     addressBar->setPlaceholderText("Enter address");
 
     // no history by default, so buttons are disabled
     navBackBtn->setEnabled(false);
     navNextBtn->setEnabled(false);
-
-    QWidget *navbar = new QWidget(this);
-    QHBoxLayout *navbarLayout = new QHBoxLayout(navbar);
-    navbar->setContentsMargins(5, 5, 5, 5);
-    navbarLayout->setContentsMargins(0, 0, 0, 0);
-    navbarLayout->setSpacing(5);
-    navbarLayout->addWidget(navBackBtn);
-    navbarLayout->addWidget(navNextBtn);
-    navbarLayout->addWidget(navRefreshBtn);
-    navbarLayout->addWidget(addressBar);
-    navbar->setLayout(navbarLayout);
-    navbar->setObjectName("NavBar");
-
-    QVBoxLayout *windowLayout = new QVBoxLayout(this);
-    windowLayout->setContentsMargins(0, 0, 0, 0);
-    windowLayout->addWidget(navbar);
-    windowLayout->addStretch();
-    setParent(parent);
-    setLayout(windowLayout);
-}
+};
