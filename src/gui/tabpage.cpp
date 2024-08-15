@@ -13,6 +13,8 @@ using namespace octo;
 using namespace octo::gui;
 
 TabPage::TabPage(const core::Tab &_tab, QWidget *parent) : QWidget(parent), tab(_tab) {
+    setupNavBarWidgets();
+
     QWidget *navbar = new QWidget(this);
     QHBoxLayout *navbarLayout = new QHBoxLayout(navbar);
     navbar->setLayout(navbarLayout);
