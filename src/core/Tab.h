@@ -7,12 +7,14 @@
 
 namespace octo::core {
 
+class Window;
+
 class Tab : public QObject {
     Q_OBJECT;
 
-    Tab(QObject* parent);
-    Tab(const QString& url, QObject* parent);
-    friend class Window;
+    Tab(Window* parent);
+    Tab(const QString& url, Window* parent);
+    friend Window;
 
 public:
     const QString& title() const;

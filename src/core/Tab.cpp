@@ -3,11 +3,13 @@
 #include <QObject>
 #include <memory>
 
+#include "Window.h"
+
 using namespace octo::core;
 
-Tab::Tab(QObject* parent) : QObject(parent), pageData(newPage()) {}
+Tab::Tab(Window* parent) : QObject(parent), pageData(newPage()) {}
 
-Tab::Tab(const QString& url, QObject* parent) : QObject(parent), pageData() {
+Tab::Tab(const QString& url, Window* parent) : QObject(parent), pageData() {
     pageData = std::make_unique<PageData>(PageData{"Loading ...", url, QIcon()});
 }
 
