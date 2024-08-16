@@ -8,6 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 set(CMAKE_PREFIX_PATH ~/Qt/6.7.2/gcc_64/lib/cmake)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+set(CMAKE_BUILD_TYPE Debug)
 
 set(SOURCES
     src/main.cpp
