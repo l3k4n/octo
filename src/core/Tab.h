@@ -12,14 +12,18 @@ class Window;
 class Tab : public QObject {
     Q_OBJECT;
 
-    Tab(Window* parent);
-    Tab(const QString& url, Window* parent);
     friend Window;
+
+    Tab(Window* parent, int position);
+    Tab(const QString& url, int position, Window* parent);
+    void setPosition(int position);
+
 
 public:
     const QString& title() const;
     const QString& url() const;
     const QIcon favicon() const;
+    int position() const;
 
 private:
     struct PageData {
@@ -28,6 +32,7 @@ private:
         QIcon favicon;
     };
 
+    int pos;
     std::unique_ptr<PageData> newPage();
     std::unique_ptr<PageData> pageData;
 };

@@ -16,8 +16,12 @@ public:
     Window(QObject* parent = nullptr);
     const Tab& newTab();
 
+public slots:
+    void moveTab(int from, int to);
+    void closeTab(int idx);
+
 signals:
-    void newTabCreated(const Tab& tab, size_t pos);
+    void newTabCreated(const Tab& tab);
 
 private:
     QVector<Tab*> m_tabs;
