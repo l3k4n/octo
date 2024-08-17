@@ -12,27 +12,11 @@
 using namespace octo;
 using namespace octo::gui;
 
-TabPage::TabPage(const core::Tab &_tab, QWidget *parent) : QWidget(parent), tab(_tab) {
+TabPage::TabPage(core::Tab &_tab, QWidget *parent) : QWidget(parent), tab(_tab) {
     setupNavBarWidgets();
+    setupPageLayout();
 
-    QWidget *navbar = new QWidget(this);
-    QHBoxLayout *navbarLayout = new QHBoxLayout(navbar);
-    navbar->setLayout(navbarLayout);
-    navbar->setObjectName("NavBar");
-    navbar->setContentsMargins(5, 5, 5, 5);
-    navbarLayout->setContentsMargins(0, 0, 0, 0);
-    navbarLayout->setSpacing(5);
-
-    navbarLayout->addWidget(navBackBtn);
-    navbarLayout->addWidget(navNextBtn);
-    navbarLayout->addWidget(navRefreshBtn);
-    navbarLayout->addWidget(addressBar);
-
-    QVBoxLayout *windowLayout = new QVBoxLayout(this);
-    windowLayout->setContentsMargins(0, 0, 0, 0);
-    windowLayout->addWidget(navbar);
-    windowLayout->addStretch();
-    setLayout(windowLayout);
+    connect(addressBar, &QLineEdit::returnPressed, [this]() { tab.navigate(addressBar->text()); });
 }
 
 void TabPage::setupNavBarWidgets() {
@@ -56,3 +40,24 @@ void TabPage::setupNavBarWidgets() {
     navBackBtn->setEnabled(false);
     navNextBtn->setEnabled(false);
 };
+
+void TabPage::setupPageLayout() {
+    QWidget *navbar = new QWidget(this);
+    QHBoxLayout *navbarLayout = new QHBoxLayout(navbar);
+    navbar->setLayout(navbarLayout);
+    navbar->setObjectName("NavBar");
+    navbar->setContentsMargins(5, 5, 5, 5);
+    navbarLayout->setContentsMargins(0, 0, 0, 0);
+    navbarLayout->setSpacing(5);
+
+    navbarLayout->addWidget(navBackBtn);
+    navbarLayout->addWidget(navNextBtn);
+    navbarLayout->addWidget(navRefreshBtn);
+    navbarLayout->addWidget(addressBar);
+
+    QVBoxLayout *windowLayout = new QVBoxLayout(this);
+    windowLayout->setContentsMargins(0, 0, 0, 0);
+    windowLayout->addWidget(navbar);
+    windowLayout->addStretch();
+    setLayout(windowLayout);
+}

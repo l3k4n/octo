@@ -27,3 +27,10 @@ std::unique_ptr<Tab::PageData> Tab::newPage() {
 void Tab::setPosition(int position) { pos = position; }
 
 int Tab::position() const { return pos; }
+
+void Tab::navigate(const QString& url) {
+    pageData->url = url;
+    pageData->title = url;
+    emit urlChanged(url);
+    emit titleChanged(url);
+}

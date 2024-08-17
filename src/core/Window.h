@@ -14,14 +14,14 @@ class Window : public QObject {
 
 public:
     Window(QObject* parent = nullptr);
-    const Tab& newTab();
+    Tab& newTab();
 
 public slots:
     void moveTab(int from, int to);
     void closeTab(int idx);
 
 signals:
-    void newTabCreated(const Tab& tab);
+    void newTabCreated(Tab& tab);
 
 private:
     QVector<Tab*> m_tabs;

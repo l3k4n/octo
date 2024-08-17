@@ -18,12 +18,18 @@ class Tab : public QObject {
     Tab(const QString& url, int position, Window* parent);
     void setPosition(int position);
 
-
 public:
     const QString& title() const;
     const QString& url() const;
     const QIcon favicon() const;
     int position() const;
+
+public slots:
+    void navigate(const QString& url);
+
+signals:
+    void urlChanged(const QString& url);
+    void titleChanged(const QString& title);
 
 private:
     struct PageData {

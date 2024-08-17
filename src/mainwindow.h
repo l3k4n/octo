@@ -13,7 +13,7 @@ public:
     MainWindow(QWidget* parent = nullptr);
 
 public slots:
-    void createTab(const octo::core::Tab& tab);
+    void createTab(octo::core::Tab& tab);
     void tabMoved(int from, int to);
     void tabCloseRequested(int idx);
 

@@ -15,13 +15,14 @@ class TabPage : public QWidget {
     Q_OBJECT;
 
 public:
-    TabPage(const core::Tab &tab, QWidget *parent = nullptr);
+    TabPage(core::Tab &tab, QWidget *parent = nullptr);
 
 private:
     void setupNavBarWidgets();
+    void setupPageLayout();
 
 private:
-    const core::Tab &tab;
+    core::Tab &tab;
     QSize btnSize = QSize(30, 30);
     QSize iconSize = QSize(15, 15);
     int addressBarHeight = 30;

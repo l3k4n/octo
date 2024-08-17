@@ -22,10 +22,18 @@ MainWindow::MainWindow(QWidget* parent) : QTabWidget(parent), window(core::Windo
     window.newTab();
 }
 
-void MainWindow::createTab(const octo::core::Tab& tab) {
+void MainWindow::createTab(octo::core::Tab& tab) {
     int idx = addTab(new gui::TabPage(tab, this), tab.title());
     Q_ASSERT_X(idx == tab.position(), "MainWindow::createTab",
                "Some how tab position got mixed up");
+
+    connect(&tab, &core::Tab::urlChanged, [this, &tab](const QString& url) {
+        // use url as title until content loads and real title is set
+        tabBar()->setTabText(tab.position(), url);
+    });
+
+    connect(&tab, &core::Tab::titleChanged,
+            [this, &tab](const QString& title) { tabBar()->setTabText(tab.position(), title); });
 }
 
 void MainWindow::tabMoved(int from, int to) { window.moveTab(from, to); }
