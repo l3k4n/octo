@@ -1,9 +1,9 @@
-#include "Tab.h"
+#include "core/Tab.h"
 
 #include <QObject>
 #include <memory>
 
-#include "Window.h"
+#include "core/Window.h"
 
 using namespace octo::core;
 

@@ -1,14 +1,23 @@
-#include "navbarbutton.h"
-
-#include "utils.h"
+#include "gui/navbarbutton.h"
 
 using namespace octo;
 using namespace octo::gui;
 
+QPixmap createColoredPixmap(const QString &iconPath, const QString &sourceColor,
+                            const QString &targetColor) {
+    auto pixmap = QPixmap(iconPath);
+    auto mask = pixmap.createMaskFromColor(QColor(sourceColor), Qt::MaskOutColor);
+    pixmap.fill(QColor(targetColor));
+    pixmap.setMask(mask);
+
+    return pixmap;
+}
+
+
 NavBarButton::NavBarButton(const QString& iconPath, QWidget* parent) : QPushButton(parent) {
     QIcon icon;
-    QPixmap enabled_pixmap = utils::createColoredPixmap(iconPath, "#fff", "#ccc");
-    QPixmap disabled_pixmap = utils::createColoredPixmap(iconPath, "#fff", "#333");
+    QPixmap enabled_pixmap = createColoredPixmap(iconPath, "#fff", "#ccc");
+    QPixmap disabled_pixmap = createColoredPixmap(iconPath, "#fff", "#333");
     icon.addPixmap(enabled_pixmap, QIcon::Mode::Active);
     icon.addPixmap(disabled_pixmap, QIcon::Mode::Disabled);
 

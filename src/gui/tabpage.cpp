@@ -1,4 +1,4 @@
-#include "tabpage.h"
+#include "gui/tabpage.h"
 
 #include <QBoxLayout>
 #include <QIcon>
@@ -6,8 +6,8 @@
 #include <QPushButton>
 #include <QWidget>
 
-#include "Tab.h"
-#include "navbarbutton.h"
+#include "core/Tab.h"
+#include "gui/navbarbutton.h"
 
 using namespace octo;
 using namespace octo::gui;

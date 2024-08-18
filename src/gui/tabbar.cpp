@@ -1,4 +1,4 @@
-#include "tabbar.h"
+#include "gui/tabbar.h"
 
 #include <QPainter>
 #include <QStyleOptionTab>

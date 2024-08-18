@@ -1,9 +1,9 @@
-#ifndef MAIN_WINDOW_H
-#define MAIN_WINDOW_H
+#ifndef GUI_MAIN_WINDOW_H
+#define GUI_MAIN_WINDOW_H
 
 #include <QTabWidget>
 
-#include "Window.h"
+#include "core/Window.h"
 #include "core/Tab.h"
 
 class MainWindow : public QTabWidget {
@@ -21,4 +21,4 @@ private:
     octo::core::Window window;
 };
 
-#endif  // !MAIN_WINDOW_H
+#endif  // !GUI_MAIN_WINDOW_H

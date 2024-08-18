@@ -1,10 +1,10 @@
-#include "Window.h"
+#include "core/Window.h"
 
 #include <QWidget>
 #include <QtGlobal>
 #include <QtNumeric>
 
-#include "Tab.h"
+#include "core/Tab.h"
 
 using namespace octo::core;
 

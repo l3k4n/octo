@@ -1,12 +1,12 @@
-#include "mainwindow.h"
+#include "gui/mainwindow.h"
 
 #include <QTabBar>
 #include <QTabWidget>
 #include <QtGlobal>
 
-#include "Window.h"
-#include "tabbar.h"
-#include "tabpage.h"
+#include "core/Window.h"
+#include "gui/tabbar.h"
+#include "gui/tabpage.h"
 
 using namespace octo;
 

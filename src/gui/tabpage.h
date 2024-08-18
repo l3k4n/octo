@@ -6,8 +6,8 @@
 #include <QSize>
 #include <QWidget>
 
-#include "Tab.h"
-#include "navbarbutton.h"
+#include "core/Tab.h"
+#include "gui/navbarbutton.h"
 
 namespace octo::gui {
 

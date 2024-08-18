@@ -5,7 +5,7 @@
 #include <QString>
 #include <QVector>
 
-#include "Tab.h"
+#include "core/Tab.h"
 
 namespace octo::core {
 
