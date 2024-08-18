@@ -11,7 +11,7 @@
 #TabBar::tab:selected { background-color: #363636; }
 #TabBar::tab:hover { background-color: #262626; }
 #TabBar::close-button {
-  image: url(:icons/xmark-solid.png);
+  image: url(:icons/close.png);
   margin: 3px; /* close button only resizes with margin */
 }
 

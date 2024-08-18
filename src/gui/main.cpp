@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
     MainWindow mainWindow(nullptr);
 
     // load global stylesheet
-    QFile file(":styles/global.qss");
+    QFile file(":styles/general.qss");
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         app.setStyleSheet(QLatin1String(file.readAll()));
         file.close();

@@ -1,12 +1,14 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
-	<qresource>
-		<file>styles/global.qss</file>
+	<qresource prefix="/styles">
+		<file>general.qss</file>
+	</qresource>
 
-		<file>icons/xmark-solid.png</file>
-		<file>icons/arrow-left-solid.png</file>
-		<file>icons/arrow-right-solid.png</file>
-		<file>icons/rotate-right-solid.png</file>
+	<qresource prefix="/icons">
+		<file>close.png</file>
+		<file>navigate-back.png</file>
+		<file>navigate-next.png</file>
+		<file>refresh.png</file>
 	</qresource>
 </RCC>
 

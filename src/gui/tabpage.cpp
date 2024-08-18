@@ -17,9 +17,9 @@ TabPage::TabPage(Core::Tab &_tab, QWidget *parent) : QWidget(parent), tab(_tab) 
 }
 
 void TabPage::setupNavBarWidgets() {
-    navBackBtn = new NavBarButton(":icons/arrow-left-solid.png", this);
-    navNextBtn = new NavBarButton(":icons/arrow-right-solid.png", this);
-    navRefreshBtn = new NavBarButton(":icons/rotate-right-solid.png", this);
+    navBackBtn = new NavBarButton(":icons/navigate-back.png", this);
+    navNextBtn = new NavBarButton(":icons/navigate-next.png", this);
+    navRefreshBtn = new NavBarButton(":icons/refresh.png", this);
     addressBar = new QLineEdit(tab.url());
 
     navBackBtn->setFixedSize(btnSize);
