@@ -9,20 +9,18 @@
 #include "core/Tab.h"
 #include "gui/navbarbutton.h"
 
-namespace octo::gui {
-
 class TabPage : public QWidget {
     Q_OBJECT;
 
 public:
-    TabPage(core::Tab &tab, QWidget *parent = nullptr);
+    TabPage(Core::Tab &tab, QWidget *parent = nullptr);
 
 private:
     void setupNavBarWidgets();
     void setupPageLayout();
 
 private:
-    core::Tab &tab;
+    Core::Tab &tab;
     QSize btnSize = QSize(30, 30);
     QSize iconSize = QSize(15, 15);
     int addressBarHeight = 30;
@@ -31,7 +29,5 @@ private:
     NavBarButton *navRefreshBtn;
     QLineEdit *addressBar;
 };
-
-}  // namespace octo::gui
 
 #endif  // !GUI_TAB_PAGE_H

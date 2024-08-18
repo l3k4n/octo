@@ -5,8 +5,6 @@
 #include <QTabBar>
 #include <QWidget>
 
-namespace octo::gui {
-
 class TabBar : public QTabBar {
     Q_OBJECT;
 
@@ -14,7 +12,5 @@ public:
     TabBar(QWidget *parent = nullptr);
     void paintEvent(QPaintEvent *) override;
 };
-
-}  // namespace octo::gui
 
 #endif  // !GUI_TAB_BAR_H

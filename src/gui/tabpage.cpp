@@ -9,10 +9,7 @@
 #include "core/Tab.h"
 #include "gui/navbarbutton.h"
 
-using namespace octo;
-using namespace octo::gui;
-
-TabPage::TabPage(core::Tab &_tab, QWidget *parent) : QWidget(parent), tab(_tab) {
+TabPage::TabPage(Core::Tab &_tab, QWidget *parent) : QWidget(parent), tab(_tab) {
     setupNavBarWidgets();
     setupPageLayout();
 

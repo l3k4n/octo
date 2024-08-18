@@ -7,7 +7,7 @@
 
 #include "core/Tab.h"
 
-namespace octo::core {
+namespace Core {
 
 class Window : public QObject {
     Q_OBJECT;
@@ -27,6 +27,6 @@ private:
     QVector<Tab*> m_tabs;
 };
 
-}  // namespace octo::core
+}  // namespace Core
 
 #endif  // !CORE_INSTANCE_H

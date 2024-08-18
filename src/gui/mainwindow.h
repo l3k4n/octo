@@ -13,12 +13,12 @@ public:
     MainWindow(QWidget* parent = nullptr);
 
 public slots:
-    void createTab(octo::core::Tab& tab);
+    void createTab(Core::Tab& tab);
     void tabMoved(int from, int to);
     void tabCloseRequested(int idx);
 
 private:
-    octo::core::Window window;
+    Core::Window window;
 };
 
 #endif  // !GUI_MAIN_WINDOW_H

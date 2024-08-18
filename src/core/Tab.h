@@ -5,7 +5,7 @@
 #include <QObject>
 #include <memory>
 
-namespace octo::core {
+namespace Core {
 
 class Window;
 
@@ -43,6 +43,6 @@ private:
     std::unique_ptr<PageData> pageData;
 };
 
-}  // namespace octo::core
+}  // namespace Core
 
 #endif  // !CORE_TAB_H

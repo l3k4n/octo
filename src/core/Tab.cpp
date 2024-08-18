@@ -5,7 +5,7 @@
 
 #include "core/Window.h"
 
-using namespace octo::core;
+using namespace Core;
 
 Tab::Tab(Window* parent, int position) : QObject(parent), pageData(newPage()), pos(position) {}
 

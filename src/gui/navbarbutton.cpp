@@ -1,8 +1,5 @@
 #include "gui/navbarbutton.h"
 
-using namespace octo;
-using namespace octo::gui;
-
 QPixmap createColoredPixmap(const QString &iconPath, const QString &sourceColor,
                             const QString &targetColor) {
     auto pixmap = QPixmap(iconPath);

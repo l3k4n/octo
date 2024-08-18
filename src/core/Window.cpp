@@ -6,7 +6,7 @@
 
 #include "core/Tab.h"
 
-using namespace octo::core;
+using namespace Core;
 
 Window::Window(QObject* parent) : QObject(parent) {}
 
