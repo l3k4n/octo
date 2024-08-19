@@ -15,7 +15,7 @@
   margin: 3px; /* close button only resizes with margin */
 }
 
-#NavBar { background-color: #1a1a1a; padding: 10px; }
+#NavBar { background-color: #1a1a1a; }
 #NavBar #NavBarBtn { background-color: none;  }
 #NavBar #NavBarBtn:hover { background-color: #363636; }
 #NavBar #NavBarAddrInput {

@@ -6,6 +6,8 @@ set(GUI_SOURCES
 
     navbarbutton.h
     navbarbutton.cpp
+    navbar.h
+    navbar.cpp
     tabbar.h
     tabbar.cpp
     tabpage.h
