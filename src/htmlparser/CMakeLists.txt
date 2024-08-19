@@ -1,0 +1,8 @@
+set(HTMLPARSER_SOURCES src/input_preprocessor.cpp)
+
+add_library(htmlparser ${HTMLPARSER_SOURCES})
+target_include_directories(htmlparser PUBLIC include)
+
+# build test executable
+add_executable(parser src/main.cpp)
+target_link_libraries(parser PRIVATE htmlparser)
