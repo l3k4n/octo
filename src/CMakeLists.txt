@@ -6,5 +6,4 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_subdirectory(core)
 add_subdirectory(gui)

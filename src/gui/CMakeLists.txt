@@ -17,8 +17,7 @@ set(GUI_SOURCES
 qt_standard_project_setup()
 qt_add_executable(octo ${GUI_SOURCES})
 
-# target_include_directories(octo PRIVATE "${CMAKE_SOURCE_DIR}/src")
-target_link_libraries(octo PRIVATE Qt6::Widgets core)
+target_link_libraries(octo PRIVATE Qt6::Widgets)
 
 set_target_properties(octo PROPERTIES
     WIN32_EXECUTABLE ON

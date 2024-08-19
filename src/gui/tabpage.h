@@ -3,16 +3,11 @@
 
 #include <QWidget>
 
-#include "core/Tab.h"
-
 class TabPage : public QWidget {
     Q_OBJECT;
 
 public:
-    TabPage(Core::Tab &tab, QWidget *parent = nullptr);
-
-private:
-    Core::Tab &tab;
+    TabPage(QWidget *parent = nullptr);
 };
 
 #endif  // !GUI_TAB_PAGE_H
