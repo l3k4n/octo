@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <istream>
+#include <optional>
 
 HTMLInputPreprocessor::HTMLInputPreprocessor(std::istream& in) : m_in(in) {}
 
@@ -35,7 +36,7 @@ codepoint_t create_codepoint(uint8_t bytes[4], const unsigned int len) {
     }
 }
 
-codepoint_t HTMLInputPreprocessor::next() {
+codepoint_t HTMLInputPreprocessor::get_next_codepoint() {
     uint8_t bytes[4] = {0, 0, 0, 0};
 
     // `EOF_CHAR` is only returned when there is no starting byte, if eof is reached after starting
@@ -65,3 +66,43 @@ codepoint_t HTMLInputPreprocessor::next() {
 
     return REPLACEMENT_CHAR;
 }
+
+codepoint_t HTMLInputPreprocessor::advance() {
+    if (m_peeked_codepoint.has_value()) {
+        codepoint_t codepoint = m_peeked_codepoint.value();
+        m_peeked_codepoint.reset();
+        return codepoint;
+    }
+
+    return get_next_codepoint();
+}
+
+codepoint_t& HTMLInputPreprocessor::peek() {
+    if (!m_peeked_codepoint.has_value()) {
+        std::streampos pos = m_in.tellg();
+        m_peeked_codepoint = get_next_codepoint();
+        m_in.seekg(pos);
+    }
+
+    return m_peeked_codepoint.value();
+}
+
+void HTMLInputPreprocessor::put_back(codepoint_t codepoint) {
+    if (codepoint <= 0x7F) {
+        m_in.putback(static_cast<char>(codepoint));
+    } else if (codepoint <= 0x7FF) {
+        m_in.putback(0b11000000 | (codepoint >> 6));
+        m_in.putback(0b10000000 | (codepoint & 0b111111));
+    } else if (codepoint <= 0xFFFF) {
+        m_in.putback(0b11100000 | (codepoint >> 12));
+        m_in.putback(0b10000000 | ((codepoint >> 6) & 0b111111));
+        m_in.putback(0b10000000 | (codepoint & 0b111111));
+    } else if (codepoint <= 0x10FFFF) {
+        m_in.putback(0b11110000 | (codepoint >> 18));
+        m_in.putback(0b10000000 | ((codepoint >> 12) & 0b111111));
+        m_in.putback(0b10000000 | ((codepoint >> 6) & 0b111111));
+        m_in.putback(0b10000000 | (codepoint & 0b111111));
+    }
+}
+
+bool HTMLInputPreprocessor::eof() const { return m_in.eof(); }
