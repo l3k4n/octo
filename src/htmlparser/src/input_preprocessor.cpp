@@ -79,9 +79,7 @@ codepoint_t HTMLInputPreprocessor::advance() {
 
 codepoint_t& HTMLInputPreprocessor::peek() {
     if (!m_peeked_codepoint.has_value()) {
-        std::streampos pos = m_in.tellg();
         m_peeked_codepoint = get_next_codepoint();
-        m_in.seekg(pos);
     }
 
     return m_peeked_codepoint.value();
