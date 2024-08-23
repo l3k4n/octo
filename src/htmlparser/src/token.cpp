@@ -2,13 +2,13 @@
 
 #include <vector>
 
-#include "htmlparser/input_preprocessor.h"
+#include "htmlparser/unicode.h"
 
 HTMLToken::TokenType HTMLToken::type() const { return m_type; }
 
 bool HTMLToken::selfClosing() const { return m_selfClosing; }
 
-const std::vector<codepoint_t>& HTMLToken::data() const { return m_data; }
+const codepoint_buf_t& HTMLToken::data() const { return m_data; }
 
 const std::vector<HTMLToken::Attribute>& HTMLToken::attributes() const { return m_attributes; }
 

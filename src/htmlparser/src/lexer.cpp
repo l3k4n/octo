@@ -5,6 +5,7 @@
 
 #include "htmlparser/input_preprocessor.h"
 #include "htmlparser/token.h"
+#include "htmlparser/unicode.h"
 
 #define STATE_CASE(state, handler) \
     case state:                    \

@@ -4,6 +4,8 @@
 #include <istream>
 #include <optional>
 
+#include "htmlparser/unicode.h"
+
 HTMLInputPreprocessor::HTMLInputPreprocessor(std::istream& in) : m_in(in) {}
 
 inline bool HTMLInputPreprocessor::set_continuation_byte(uint8_t& byte) {

@@ -5,9 +5,7 @@
 #include <istream>
 #include <optional>
 
-typedef uint32_t codepoint_t;
-#define REPLACEMENT_CHAR codepoint_t(0xFFFD)
-#define EOF_CHAR codepoint_t('\0')
+#include "htmlparser/unicode.h"
 
 class HTMLInputPreprocessor {
 public:
