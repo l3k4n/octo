@@ -14,5 +14,6 @@ bool codepoint_buf_t::operator==(codepoint_t codepoint) const {
 };
 
 bool codepoint_buf_t::operator==(std::string_view str) const {
-    return std::equal(this->begin(), this->end(), str);
+    if (size() != str.size()) return false;
+    return std::equal(begin(), end(), str.begin());
 };
