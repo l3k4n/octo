@@ -3,9 +3,35 @@
 #include <iostream>
 #include <ostream>
 
+#include "check.h"
 #include "htmlparser/input_preprocessor.h"
 #include "htmlparser/token.h"
 #include "htmlparser/unicode.h"
+
+#define ToLowerCase(cc) cc + 0x20
+#define CREATE_TOKEN(tokenType)                                      \
+    DCHECK(m_token.data().empty() && m_token.attributes().empty() && \
+           m_token.type() == HTMLToken::UNSET);                      \
+    m_token.setType(tokenType);
+#define EMIT_TOKEN()     \
+    m_emit_token = true; \
+    return;
+#define RECONSUME_TOKEN_IN_STATE(cc, state) \
+    if (!m_in.eof()) m_in.put_back(cc);     \
+    m_state = state;
+
+#define APPEND_TO_TAG_NAME(cc)                                                            \
+    DCHECK(m_token.type() == HTMLToken::StartTag || m_token.type() == HTMLToken::EndTag); \
+    m_token.appendToData(cc);
+#define APPEND_TO_CURRENT_ATTR_NAME(cc)                                                   \
+    DCHECK(m_token.type() == HTMLToken::StartTag || m_token.type() == HTMLToken::EndTag); \
+    m_token.appendToCurrentAttrName(cc)
+#define APPEND_TO_CURRENT_ATTR_VAL(cc)                                                    \
+    DCHECK(m_token.type() == HTMLToken::StartTag || m_token.type() == HTMLToken::EndTag); \
+    m_token.appendToCurrentAttrValue(cc)
+#define APPEND_TO_CHARACTER_TOKEN(cc)               \
+    DCHECK(m_token.type() == HTMLToken::Character); \
+    m_token.appendToData(cc)
 
 #define STATE_CASE(state, handler) \
     case state:                    \
@@ -316,7 +342,3 @@ void HTMLLexer::afterAttrNameState() {
         m_state = ATTR_NAME;
     }
 }
-
-#define READ_INTO_PEEK_BUF(buf, from, to) \
-    int i = from;                         \
-    while (i < 2) peek_buf[i] = m_in.advance();
