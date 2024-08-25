@@ -69,13 +69,14 @@ codepoint_t HTMLInputPreprocessor::get_next_codepoint() {
     return REPLACEMENT_CHAR;
 }
 
-codepoint_t HTMLInputPreprocessor::advance() {
-    if (m_peeked_codepoint.has_value()) {
-        codepoint_t codepoint = m_peeked_codepoint.value();
-        m_peeked_codepoint.reset();
-        return codepoint;
-    }
+codepoint_t HTMLInputPreprocessor::take_peeked_codepoint() {
+    codepoint_t codepoint = m_peeked_codepoint.value();
+    m_peeked_codepoint.reset();
+    return codepoint;
+}
 
+codepoint_t HTMLInputPreprocessor::advance() {
+    if (m_peeked_codepoint.has_value()) return take_peeked_codepoint();
     return get_next_codepoint();
 }
 
@@ -88,6 +89,9 @@ codepoint_t& HTMLInputPreprocessor::peek() {
 }
 
 void HTMLInputPreprocessor::put_back(codepoint_t codepoint) {
+    // put back peeked codepoint first, if it exists.
+    if (m_peeked_codepoint.has_value()) put_back(take_peeked_codepoint());
+
     if (codepoint <= 0x7F) {
         m_in.putback(static_cast<char>(codepoint));
     } else if (codepoint <= 0x7FF) {

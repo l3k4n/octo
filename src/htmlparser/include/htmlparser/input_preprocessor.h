@@ -18,6 +18,7 @@ public:
 
 private:
     codepoint_t get_next_codepoint();
+    codepoint_t take_peeked_codepoint();
 
     std::optional<codepoint_t> m_peeked_codepoint;
     std::istream& m_in;
