@@ -6,23 +6,17 @@
 
 class HTMLLexer {
     enum LexerState {
+        // clang-format off
         DATA,
-        TAG_OPEN,
-        END_TAG_OPEN,
-        TAG_NAME,
-        BEFORE_ATTR_NAME,
-        SELF_CLOSING_START_TAG,
         MARKUP_DECL_OPEN,
         BOGUS_COMMENT,
-        CHAR_REF_IN_DATA,
-        ATTR_NAME,
-        AFTER_ATTR_NAME,
-        BEFORE_ATTR_VALUE,
-        ATTR_VALUE_DBL_QUOTED,
-        ATTR_VALUE_UNQUOTED,
-        ATTR_VALUE_SINGLE_QUOTED,
+        TAG_OPEN, END_TAG_OPEN, TAG_NAME,
+        BEFORE_ATTR_NAME, ATTR_NAME, AFTER_ATTR_NAME, BEFORE_ATTR_VALUE,
+        ATTR_VALUE_SINGLE_QUOTED, ATTR_VALUE_DBL_QUOTED, ATTR_VALUE_UNQUOTED,
         AFTER_ATTR_VALUE_QUOTED,
-        CHAR_REF_IN_ATTR_VALUE
+        SELF_CLOSING_START_TAG,
+        CHAR_REF_IN_DATA, CHAR_REF_IN_ATTR_VALUE,
+        // clang-format on
     };
 
 public:

@@ -7,7 +7,16 @@
 
 class HTMLToken {
 public:
-    enum TokenType { UNSET, Character, StartTag, EndTag, EndOfFile };
+    enum TokenType {
+        // clang-format off
+        UNSET,
+        DOCTYPE,
+        Comment,
+        CharacterBuffer,
+        StartTag, EndTag,
+        EndOfFile,
+        // cland-format on
+    };
     struct Attribute {
         codepoint_buf_t name;
         codepoint_buf_t value;

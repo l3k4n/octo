@@ -79,12 +79,12 @@ void HTMLLexer::dataState() {
             EMIT_TOKEN();
         } else {
             parseError();
-            CREATE_TOKEN(HTMLToken::Character);
+            CREATE_TOKEN(HTMLToken::CharacterBuffer);
             APPEND_TO_CHARACTER_TOKEN(cc);
             EMIT_TOKEN();
         }
     } else {
-        CREATE_TOKEN(HTMLToken::Character);
+        CREATE_TOKEN(HTMLToken::CharacterBuffer);
         APPEND_TO_CHARACTER_TOKEN(cc);
         {
             // append any following character tokens to be emitted all at once
@@ -118,7 +118,7 @@ void HTMLLexer::tagOpenState() {
         m_state = BOGUS_COMMENT;
     } else {
         parseError();
-        CREATE_TOKEN(HTMLToken::Character);
+        CREATE_TOKEN(HTMLToken::CharacterBuffer);
         APPEND_TO_CHARACTER_TOKEN('<');
         RECONSUME_TOKEN_IN_STATE(cc, DATA);
         EMIT_TOKEN();
@@ -141,7 +141,7 @@ void HTMLLexer::endTagOpenState() {
         m_state = DATA;
     } else if (cc == '\0' && m_in.eof()) {
         parseError();
-        CREATE_TOKEN(HTMLToken::Character);
+        CREATE_TOKEN(HTMLToken::CharacterBuffer);
         APPEND_TO_CHARACTER_TOKEN('<');
         APPEND_TO_CHARACTER_TOKEN('/');
         RECONSUME_TOKEN_IN_STATE(cc, DATA);
