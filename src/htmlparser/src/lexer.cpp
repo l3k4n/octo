@@ -30,7 +30,7 @@
     DCHECK(m_token.type() == HTMLToken::StartTag || m_token.type() == HTMLToken::EndTag); \
     m_token.appendToCurrentAttrValue(cc)
 #define APPEND_TO_CHARACTER_TOKEN(cc)               \
-    DCHECK(m_token.type() == HTMLToken::Character); \
+    DCHECK(m_token.type() == HTMLToken::CharacterBuffer); \
     m_token.appendToData(cc)
 
 #define STATE_CASE(state, handler) \
