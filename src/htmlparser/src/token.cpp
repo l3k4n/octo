@@ -8,9 +8,9 @@ HTMLToken::TokenType HTMLToken::type() const { return m_type; }
 
 bool HTMLToken::selfClosing() const { return m_selfClosing; }
 
-const codepoint_buf_t& HTMLToken::data() const { return m_data; }
+codepoint_buf_t& HTMLToken::data() { return m_data; }
 
-const std::vector<HTMLToken::Attribute>& HTMLToken::attributes() const { return m_attributes; }
+std::vector<HTMLToken::Attribute>& HTMLToken::attributes() { return m_attributes; }
 
 void HTMLToken::setType(TokenType t) { m_type = t; }
 

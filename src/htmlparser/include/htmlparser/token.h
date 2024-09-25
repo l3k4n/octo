@@ -24,8 +24,8 @@ public:
 
     TokenType type() const;
     bool selfClosing() const;
-    const codepoint_buf_t& data() const;
-    const std::vector<Attribute>& attributes() const;
+    codepoint_buf_t& data();
+    std::vector<Attribute>& attributes();
 
     void setType(TokenType t);
     void createAttribute();

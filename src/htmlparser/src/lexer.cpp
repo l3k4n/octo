@@ -42,7 +42,7 @@ HTMLLexer::HTMLLexer(HTMLInputPreprocessor& in) : m_in(in) {}
 
 void HTMLLexer::parseError() {}
 
-const HTMLToken& HTMLLexer::next() {
+HTMLToken& HTMLLexer::next() {
     m_token.reset();
     m_emit_token = false;
 

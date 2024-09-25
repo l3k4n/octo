@@ -22,7 +22,7 @@ class HTMLLexer {
 public:
     HTMLLexer(HTMLInputPreprocessor& in);
     HTMLLexer(HTMLLexer&) = delete;
-    const HTMLToken& next();
+    HTMLToken& next();
 
 private:
     void parseError();
