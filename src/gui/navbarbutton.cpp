@@ -1,7 +1,7 @@
 #include "gui/navbarbutton.h"
 
-QPixmap createColoredPixmap(const QString &iconPath, const QString &sourceColor,
-                            const QString &targetColor) {
+QPixmap createColoredPixmap(const QString& iconPath, const QString& sourceColor,
+                            const QString& targetColor) {
     auto pixmap = QPixmap(iconPath);
     auto mask = pixmap.createMaskFromColor(QColor(sourceColor), Qt::MaskOutColor);
     pixmap.fill(QColor(targetColor));
@@ -9,7 +9,6 @@ QPixmap createColoredPixmap(const QString &iconPath, const QString &sourceColor,
 
     return pixmap;
 }
-
 
 NavBarButton::NavBarButton(const QString& iconPath, QWidget* parent) : QPushButton(parent) {
     QIcon icon;

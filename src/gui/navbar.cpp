@@ -6,11 +6,11 @@
 
 #include "gui/navbarbutton.h"
 
-NavBar::NavBar(QWidget *parent) : QWidget(parent) {
-    NavBarButton *navBackBtn = new NavBarButton(":icons/navigate-back.png", this);
-    NavBarButton *navNextBtn = new NavBarButton(":icons/navigate-next.png", this);
-    NavBarButton *navRefreshBtn = new NavBarButton(":icons/refresh.png", this);
-    QLineEdit *addressBar = new QLineEdit;
+NavBar::NavBar(QWidget* parent) : QWidget(parent) {
+    NavBarButton* navBackBtn = new NavBarButton(":icons/navigate-back.png", this);
+    NavBarButton* navNextBtn = new NavBarButton(":icons/navigate-next.png", this);
+    NavBarButton* navRefreshBtn = new NavBarButton(":icons/refresh.png", this);
+    QLineEdit* addressBar = new QLineEdit;
 
     navBackBtn->setFixedSize(btnSize);
     navNextBtn->setFixedSize(btnSize);
@@ -26,7 +26,7 @@ NavBar::NavBar(QWidget *parent) : QWidget(parent) {
     navNextBtn->setEnabled(false);
     addressBar->setPlaceholderText("Enter address");
 
-    QHBoxLayout *navbarLayout = new QHBoxLayout(this);
+    QHBoxLayout* navbarLayout = new QHBoxLayout(this);
     navbarLayout->setContentsMargins(0, 0, 0, 0);
     navbarLayout->setSpacing(5);
     navbarLayout->addWidget(navBackBtn);
@@ -46,14 +46,14 @@ NavBar::NavBar(QWidget *parent) : QWidget(parent) {
     setLayout(navbarLayout);
 }
 
-void NavBar::paintEvent(QPaintEvent *) {
+void NavBar::paintEvent(QPaintEvent*) {
     QStyleOption opt;
     opt.initFrom(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
 
-void NavBar::setUrl(const QString &url) { addressBar->setText(url); }
+void NavBar::setUrl(const QString& url) { addressBar->setText(url); }
 
 void NavBar::setBackButtonEnabled(bool enabled) { navBackBtn->setEnabled(enabled); };
 

@@ -5,3 +5,5 @@ IndentWidth: 4
 TabWidth: 8
 UseTab: Never
 AccessModifierOffset: -4
+DerivePointerAlignment: false
+PointerAlignment: Left

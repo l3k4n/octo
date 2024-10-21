@@ -7,7 +7,7 @@ class TabPage : public QWidget {
     Q_OBJECT;
 
 public:
-    TabPage(QWidget *parent = nullptr);
+    TabPage(QWidget* parent = nullptr);
 };
 
 #endif  // !GUI_TAB_PAGE_H

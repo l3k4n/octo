@@ -9,8 +9,8 @@ class TabBar : public QTabBar {
     Q_OBJECT;
 
 public:
-    TabBar(QWidget *parent = nullptr);
-    void paintEvent(QPaintEvent *) override;
+    TabBar(QWidget* parent = nullptr);
+    void paintEvent(QPaintEvent*) override;
 };
 
 #endif  // !GUI_TAB_BAR_H

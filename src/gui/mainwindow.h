@@ -12,7 +12,6 @@ public:
 public slots:
     void createTab();
     void tabCloseRequested(int idx);
-
 };
 
 #endif  // !GUI_MAIN_WINDOW_H
