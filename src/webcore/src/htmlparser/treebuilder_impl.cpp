@@ -9,12 +9,12 @@
 TreeBuilderImpl::TreeBuilderImpl(DOM::Document& doc) : m_document(doc) {}
 
 DOM::Element* TreeBuilderImpl::topElement() {
-    DCHECK(!m_open_elements.empty());
+    if (m_open_elements.empty()) return nullptr;
     return m_open_elements.front();
 }
 
 DOM::Element* TreeBuilderImpl::currentElement() {
-    DCHECK(!m_open_elements.empty());
+    if (m_open_elements.empty()) return nullptr;
     return m_open_elements.back();
 }
 
@@ -26,6 +26,7 @@ unsigned long TreeBuilderImpl::stackSize() { return m_open_elements.size(); }
 
 DOM::Element* TreeBuilderImpl::stackItem(unsigned int idx) {
     DCHECK(idx < m_open_elements.size())
+    if (m_open_elements.empty()) return nullptr;
     return m_open_elements[idx];
 }
 
@@ -77,13 +78,15 @@ void TreeBuilderImpl::pushStackItem(DOM::Element* element) { m_open_elements.pus
 
 void TreeBuilderImpl::popStackItem() { m_open_elements.pop_back(); }
 
-// TODO: check if it should include or exclude the element
 void TreeBuilderImpl::popUpToStackItem(DOM::Element* element) {
     DCHECK(!m_open_elements.empty());
     DCHECK(element);
 
     while (!m_open_elements.empty()) {
-        if (currentElement() == element) break;
+        if (currentElement() == element) {
+            m_open_elements.pop_back();
+            break;
+        }
         m_open_elements.pop_back();
     }
 }
@@ -92,7 +95,11 @@ void TreeBuilderImpl::popUpToStackItemTagName(HTML::HTMLTagName tagName) {
     DCHECK(!m_open_elements.empty());
 
     while (!m_open_elements.empty()) {
-        if (currentElement()->tagName == tagName) break;
+        DOM::Element* elem = currentElement();
+        if (elem && elem->tagName == tagName) {
+            m_open_elements.pop_back();
+            break;
+        }
         m_open_elements.pop_back();
     }
 }
@@ -101,7 +108,11 @@ void TreeBuilderImpl::popUpToHeadingElement() {
     DCHECK(!m_open_elements.empty());
 
     while (!m_open_elements.empty()) {
-        if (isHeadingElement(currentElement()->tagName)) break;
+        DOM::Element* elem = currentElement();
+        if (elem && isHeadingElement(elem->tagName)) {
+            m_open_elements.pop_back();
+            break;
+        }
         m_open_elements.pop_back();
     }
 }

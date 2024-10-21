@@ -49,11 +49,11 @@ public:
     void pushStackItem(DOM::Element*);
     // pop current element from the stack
     void popStackItem();
-    // pop all stack items until element is found
+    // pop all stack items up to and including element
     void popUpToStackItem(DOM::Element*);
-    // pop all stack items until matching tag name is found
+    // pop all stack items up to and including matching tag name
     void popUpToStackItemTagName(HTML::HTMLTagName);
-    // pop all up to first instance of any one of H1 - H6
+    // pop all stack items up to and including first heading tag
     void popUpToHeadingElement();
 
     bool isElementInScope(HTML::HTMLTagName);
