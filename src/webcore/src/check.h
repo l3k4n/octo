@@ -1,7 +1,8 @@
-#ifndef HTMLPARSER_CHECK_H
-#define HTMLPARSER_CHECK_H
+#ifndef WEBCORE_CHECK_H
+#define WEBCORE_CHECK_H
 
 #ifdef DCHECK_IS_ON
+#include <iostream>
 #define DCHECK(expr)                                      \
     if (!(expr)) {                                        \
         std::cerr << __FILE__ << ":" << __LINE__ << ": "; \
@@ -12,4 +13,4 @@
 #define DCHECK(expr) (void(0));
 #endif
 
-#endif  // !HTMLPARSER_CHECK_H
+#endif  // !WEBCORE_CHECK_H

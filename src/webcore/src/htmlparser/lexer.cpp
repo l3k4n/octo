@@ -66,6 +66,8 @@ HTMLToken& HTMLLexer::next() {
     return m_token;
 }
 
+bool HTMLLexer::eof() { return m_in.eof(); }
+
 void HTMLLexer::dataState() {
     codepoint_t cc = m_in.advance();
 

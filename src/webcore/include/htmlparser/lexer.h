@@ -23,6 +23,7 @@ public:
     HTMLLexer(HTMLInputPreprocessor& in);
     HTMLLexer(HTMLLexer&) = delete;
     HTMLToken& next();
+    bool eof();
 
 private:
     void parseError();
