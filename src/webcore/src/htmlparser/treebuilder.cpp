@@ -17,7 +17,7 @@ using HTMLName = HTML::HTMLTagName::HTMLName;
 #define TRACE_MODE(mode) LOG_F(3, "%s: %s", __func__, stringify_mode(mode).c_str());
 #define PARSE_ERR()                                                   \
     LOG_F(3, "PARSE_ERR: at '%s' with 'Token(%s)' in '%s'", __func__, \
-          stringify_token(token).c_str(), stringify_mode(m_insertion_mode).c_str());
+          stringify_token(token).c_str(), stringify_mode(m_insertion_mode).c_str())
 
 std::string stringify_token(TreeBuilderToken& token) {
     switch (token.type()) {
@@ -231,7 +231,22 @@ void HTMLTreeBuilder::processStartTagToken(TreeBuilderToken token) {
             processStartTagTokenInBody(token);
             break;
         case AFTER_BODY:
+            if (token.tokenTagName() == HTML::HTMLTagName::HtmlTag) {
+                processStartTagTokenInBody(token);
+                break;
+            } else {
+                switchInsertionMode(IN_BODY);
+                break;
+            }
         case AFTER_AFTER_BODY:
+            if (token.tokenTagName() == HTML::HTMLTagName::HtmlTag) {
+                processStartTagTokenInBody(token);
+                break;
+            } else {
+                PARSE_ERR();
+                switchInsertionMode(IN_BODY);
+                break;
+            }
         case TEXT:
             break;
     }
@@ -371,7 +386,17 @@ void HTMLTreeBuilder::processEndTagToken(TreeBuilderToken token) {
                 break;
             }
         case AFTER_BODY:
+            if (token.tokenTagName() == HTML::HTMLTagName::HtmlTag) {
+                switchInsertionMode(AFTER_AFTER_BODY);
+                break;
+            } else {
+                PARSE_ERR();
+                switchInsertionMode(IN_BODY);
+                break;
+            }
         case AFTER_AFTER_BODY:
+            switchInsertionMode(IN_BODY);
+            break;
         case TEXT:
             break;
     }
@@ -495,10 +520,10 @@ void HTMLTreeBuilder::processStartTagTokenInHead(TreeBuilderToken token) {
             m_builder.popStackItem();
             break;
         case HTMLName::TitleTag:
-            // Follow the generic RCDATA element parsing algorithm.
+            // TODO: Follow the generic RCDATA element parsing algorithm.
             break;
         case HTMLName::StyleTag:
-            // Follow the generic raw text element parsing algorithm.
+            // TODO: Follow the generic raw text element parsing algorithm.
             break;
         case HTMLName::HeadTag:
             break;
