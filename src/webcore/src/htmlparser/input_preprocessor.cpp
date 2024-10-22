@@ -88,6 +88,7 @@ codepoint_t& HTMLInputPreprocessor::peek() {
     return m_peeked_codepoint.value();
 }
 
+// NOTE: codepoint must match the last removed codepoint or putback will fail
 void HTMLInputPreprocessor::put_back(codepoint_t codepoint) {
     // put back peeked codepoint first, if it exists.
     if (m_peeked_codepoint.has_value()) put_back(take_peeked_codepoint());
