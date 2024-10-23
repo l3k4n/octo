@@ -89,8 +89,7 @@ void TreeBuilderToken::copyAttrsToElement(DOM::Element* element) const {
     if (!m_is_token_real) return;
 
     for (auto& attr : m_real_token->attributes()) {
-        element->setAttribute(DOM::DOMString(attr.name.begin(), attr.name.end()),
-                              DOM::DOMString(attr.value.begin(), attr.value.end()));
+        element->setAttribute(attr.first, attr.second);
     }
 }
 
@@ -99,9 +98,8 @@ void TreeBuilderToken::copyUniqueAttrsToElement(DOM::Element* element) const {
     if (!m_is_token_real) return;
 
     for (auto& attr : m_real_token->attributes()) {
-        auto name = DOM::DOMString(attr.name.begin(), attr.name.end());
-        if (element->hasAttribute(name)) continue;
-        element->setAttribute(name, DOM::DOMString(attr.value.begin(), attr.value.end()));
+        if (element->hasAttribute(attr.first)) continue;
+        element->setAttribute(attr.first, attr.second);
     }
 }
 

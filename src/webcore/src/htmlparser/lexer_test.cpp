@@ -26,8 +26,8 @@ struct LexerFixture {
     REQUIRE(token.attributes().size() == attrCount);
 
 #define ExpectAttribute(attr, attrName, attrVal) \
-    REQUIRE(attr.name == attrName);              \
-    REQUIRE(attr.value == attrVal);
+    REQUIRE(attr.first == attrName);             \
+    REQUIRE(attr.second == attrVal);
 
 TEST_CASE_PERSISTENT_FIXTURE(LexerFixture, "Tests with MyFixture") {
     REQUIRE(!lexer.eof());

@@ -1,45 +1,38 @@
 #ifndef HTMLPARSER_TOKEN_H
 #define HTMLPARSER_TOKEN_H
 
+#include <utility>
 #include <vector>
 
+#include "dom/domstring.h"
 #include "htmlparser/unicode.h"
 
 class HTMLToken {
+    friend class LexerImpl;
+
 public:
+    typedef std::vector<std::pair<DOM::DOMString, DOM::DOMString>> TokenAttrList;
+
     enum TokenType {
-        // clang-format off
         UNSET,
         DOCTYPE,
         Comment,
         CharacterBuffer,
-        StartTag, EndTag,
+        StartTag,
+        EndTag,
         EndOfFile,
-        // cland-format on
-    };
-    struct Attribute {
-        codepoint_buf_t name;
-        codepoint_buf_t value;
     };
 
     TokenType type() const;
     bool selfClosing() const;
     codepoint_buf_t& data();
-    std::vector<Attribute>& attributes();
-
-    void setType(TokenType t);
-    void createAttribute();
-    void appendToData(codepoint_t c);
-    void appendToCurrentAttrName(codepoint_t c);
-    void appendToCurrentAttrValue(codepoint_t c);
-    void resetToEOF();
-    void reset();
+    TokenAttrList& attributes();
 
 private:
-    std::vector<Attribute> m_attributes;
-    codepoint_buf_t m_data;
-    TokenType m_type = TokenType::UNSET;
     bool m_selfClosing = false;
+    TokenType m_type = TokenType::UNSET;
+    codepoint_buf_t m_data;
+    TokenAttrList m_attributes;
 };
 
 #endif  // !HTMLPARSER_TOKEN_H
