@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "dom/domstring.h"
-#include "htmlparser/unicode.h"
+#include "unicode.h"
 
 class HTMLToken {
     friend class LexerImpl;

@@ -5,7 +5,7 @@
 #include <istream>
 #include <optional>
 
-#include "htmlparser/unicode.h"
+#include "unicode.h"
 
 class HTMLInputPreprocessor {
 public:

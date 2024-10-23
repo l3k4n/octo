@@ -1,7 +1,7 @@
-#include "htmlparser/lexer_impl.h"
+#include "lexer_impl.h"
 
 #include "check.h"
-#include "htmlparser/token.h"
+#include "token.h"
 
 void LexerImpl::initToken(HTMLToken::TokenType type) { m_token.m_type = type; };
 

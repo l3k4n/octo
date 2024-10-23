@@ -1,6 +1,6 @@
-#include "htmlparser/token.h"
+#include "token.h"
 
-#include "htmlparser/unicode.h"
+#include "unicode.h"
 
 HTMLToken::TokenType HTMLToken::type() const { return m_type; }
 

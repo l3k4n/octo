@@ -1,10 +1,10 @@
-#include "htmlparser/lexer.h"
+#include "lexer.h"
 
 #include <sstream>
 
 #include "catch2/catch_test_macros.hpp"
-#include "htmlparser/input_preprocessor.h"
-#include "htmlparser/token.h"
+#include "preprocessor.h"
+#include "token.h"
 
 struct LexerFixture {
     LexerFixture()

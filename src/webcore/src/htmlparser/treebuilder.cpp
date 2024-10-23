@@ -1,4 +1,4 @@
-#include "htmlparser/treebuilder.h"
+#include "treebuilder.h"
 
 #include "check.h"
 #include "dom/document.h"
@@ -6,9 +6,9 @@
 #include "html/htmlformelement.h"
 #include "html/htmlheadelement.h"
 #include "html/tagname.h"
-#include "htmlparser/token.h"
-#include "htmlparser/treebuilder_token.h"
-#include "htmlparser/unicode.h"
+#include "token.h"
+#include "treebuilder_token.h"
+#include "unicode.h"
 #include "loguru/loguru.hpp"
 
 using HTMLName = HTML::HTMLTagName::HTMLName;

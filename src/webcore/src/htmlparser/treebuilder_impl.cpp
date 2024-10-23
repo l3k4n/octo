@@ -1,4 +1,4 @@
-#include "htmlparser/treebuilder_impl.h"
+#include "treebuilder_impl.h"
 
 #include "check.h"
 #include "dom/document.h"

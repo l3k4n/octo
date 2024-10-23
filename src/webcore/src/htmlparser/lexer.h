@@ -1,10 +1,10 @@
 #ifndef HTMLPARSER_LEXER_H
 #define HTMLPARSER_LEXER_H
 
-#include "htmlparser/input_preprocessor.h"
-#include "htmlparser/lexer_impl.h"
-#include "htmlparser/token.h"
-#include "htmlparser/unicode.h"
+#include "preprocessor.h"
+#include "lexer_impl.h"
+#include "token.h"
+#include "unicode.h"
 
 class HTMLLexer {
     enum LexerState {

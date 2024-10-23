@@ -1,9 +1,9 @@
-#include "htmlparser/input_preprocessor.h"
+#include "preprocessor.h"
 
 #include <sstream>
 
 #include "catch2/catch_test_macros.hpp"
-#include "htmlparser/unicode.h"
+#include "unicode.h"
 
 TEST_CASE("preprocessor properly handles peek and putback", "[HTMLInputPreprocessor]") {
     std::istringstream input("ABC");

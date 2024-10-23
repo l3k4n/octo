@@ -3,8 +3,8 @@
 
 #include "dom/element.h"
 #include "html/tagname.h"
-#include "htmlparser/token.h"
-#include "htmlparser/unicode.h"
+#include "token.h"
+#include "unicode.h"
 
 class FakeTokenDataAccessErr {};
 

@@ -2,9 +2,9 @@
 #define HTMLPARSER_TREEBUILDER_H
 
 #include "dom/document.h"
-#include "htmlparser/lexer.h"
-#include "htmlparser/treebuilder_impl.h"
-#include "htmlparser/treebuilder_token.h"
+#include "lexer.h"
+#include "treebuilder_impl.h"
+#include "treebuilder_token.h"
 
 class HTMLTreeBuilder {
 public:

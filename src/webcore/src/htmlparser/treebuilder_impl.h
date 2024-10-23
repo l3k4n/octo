@@ -8,8 +8,8 @@
 #include "html/htmlelement.h"
 #include "html/htmlformelement.h"
 #include "html/htmlheadelement.h"
-#include "htmlparser/treebuilder_token.h"
-#include "htmlparser/unicode.h"
+#include "treebuilder_token.h"
+#include "unicode.h"
 
 class TreeBuilderImpl {
 public:

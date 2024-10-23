@@ -1,12 +1,12 @@
-#include "htmlparser/treebuilder_token.h"
+#include "treebuilder_token.h"
 
 #include <unordered_map>
 
 #include "check.h"
 #include "dom/domstring.h"
 #include "html/tagname.h"
-#include "htmlparser/token.h"
-#include "htmlparser/unicode.h"
+#include "token.h"
+#include "unicode.h"
 
 #define Name HTML::HTMLTagName
 static const std::unordered_map<DOM::DOMString, HTML::HTMLTagName::HTMLName> TagMap = {

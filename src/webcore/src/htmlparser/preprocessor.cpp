@@ -1,10 +1,10 @@
-#include "htmlparser/input_preprocessor.h"
+#include "preprocessor.h"
 
 #include <cstdint>
 #include <istream>
 #include <optional>
 
-#include "htmlparser/unicode.h"
+#include "unicode.h"
 
 HTMLInputPreprocessor::HTMLInputPreprocessor(std::istream& in) : m_in(in) {}
 

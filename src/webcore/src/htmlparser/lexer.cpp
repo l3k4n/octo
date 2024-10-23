@@ -1,12 +1,12 @@
-#include "htmlparser/lexer.h"
+#include "lexer.h"
 
 #include <cctype>
 #include <iostream>
 #include <ostream>
 
-#include "htmlparser/input_preprocessor.h"
-#include "htmlparser/token.h"
-#include "htmlparser/unicode.h"
+#include "preprocessor.h"
+#include "token.h"
+#include "unicode.h"
 
 #define PARSE_ERR() ;
 #define IS_EOF(cc) cc == '\0' && m_in.eof()

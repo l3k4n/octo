@@ -1,4 +1,4 @@
-#include "htmlparser/token.h"
+#include "token.h"
 
 class LexerImpl {
 public:
