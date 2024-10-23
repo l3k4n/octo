@@ -1,6 +1,7 @@
 set(HTMLPARSER_SOURCES 
   htmlparser/input_preprocessor.cpp
   htmlparser/lexer.cpp
+  htmlparser/lexer_impl.cpp
   htmlparser/token.cpp
   htmlparser/treebuilder.cpp
   htmlparser/treebuilder_impl.cpp

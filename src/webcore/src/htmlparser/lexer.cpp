@@ -1,346 +1,344 @@
 #include "htmlparser/lexer.h"
 
+#include <cctype>
 #include <iostream>
 #include <ostream>
 
-#include "check.h"
 #include "htmlparser/input_preprocessor.h"
 #include "htmlparser/token.h"
 #include "htmlparser/unicode.h"
 
-#define ToLowerCase(cc) cc + 0x20
-#define CREATE_TOKEN(tokenType)                                      \
-    DCHECK(m_token.data().empty() && m_token.attributes().empty() && \
-           m_token.type() == HTMLToken::UNSET);                      \
-    m_token.setType(tokenType);
-#define EMIT_TOKEN()     \
-    m_emit_token = true; \
-    return;
-#define RECONSUME_TOKEN_IN_STATE(cc, state) \
-    if (!m_in.eof()) m_in.put_back(cc);     \
-    m_state = state;
+#define PARSE_ERR() ;
+#define IS_EOF(cc) cc == '\0' && m_in.eof()
+#define IS_NULL(cc) cc == '\0' && !m_in.eof()
+#define IS_WHITESPACE(cc) cc == ' ' || cc == '\n' || cc == '\t' || cc == '\f'
 
-#define APPEND_TO_TAG_NAME(cc)                                                            \
-    DCHECK(m_token.type() == HTMLToken::StartTag || m_token.type() == HTMLToken::EndTag); \
-    m_token.appendToData(cc);
-#define APPEND_TO_CURRENT_ATTR_NAME(cc)                                                   \
-    DCHECK(m_token.type() == HTMLToken::StartTag || m_token.type() == HTMLToken::EndTag); \
-    m_token.appendToCurrentAttrName(cc)
-#define APPEND_TO_CURRENT_ATTR_VAL(cc)                                                    \
-    DCHECK(m_token.type() == HTMLToken::StartTag || m_token.type() == HTMLToken::EndTag); \
-    m_token.appendToCurrentAttrValue(cc)
-#define APPEND_TO_CHARACTER_TOKEN(cc)                     \
-    DCHECK(m_token.type() == HTMLToken::CharacterBuffer); \
-    m_token.appendToData(cc)
+#define EMIT_TOKEN_AND_RECONSUME(cc, state) \
+    emitToken();                            \
+    reconsumeCharacter(cc, state);
 
-#define STATE_CASE(state, handler) \
-    case state:                    \
-        handler();                 \
-        break;
+#define IGNORE_TRAILING_WHITESPACE() \
+    while (!m_in.eof() && (IS_WHITESPACE(m_in.peek()))) m_in.advance();
 
 HTMLLexer::HTMLLexer(HTMLInputPreprocessor& in) : m_in(in) {}
 
-void HTMLLexer::parseError() {}
-
 HTMLToken& HTMLLexer::next() {
-    m_token.reset();
-    m_emit_token = false;
+    m_impl.resetToken();
+    m_emit_scheduled = false;
 
-    while (!m_emit_token) {
+    while (!m_emit_scheduled) {
         switch (m_state) {
-            STATE_CASE(DATA, dataState);
-            STATE_CASE(TAG_OPEN, tagOpenState);
-            STATE_CASE(END_TAG_OPEN, endTagOpenState);
-            STATE_CASE(TAG_NAME, tagNameState);
-            STATE_CASE(BEFORE_ATTR_NAME, beforeAttrNameState);
-            STATE_CASE(ATTR_NAME, attrNameState);
-            STATE_CASE(BEFORE_ATTR_VALUE, beforeAttrValueState);
-            STATE_CASE(ATTR_VALUE_DBL_QUOTED, attrValueDblQuotedState);
-            STATE_CASE(AFTER_ATTR_VALUE_QUOTED, afterAttrValueQuotedState);
-            STATE_CASE(AFTER_ATTR_NAME, afterAttrNameState);
+                // clang-format off
+            case DATA:                     processDataState(); break;
+            case TAG_OPEN:                 processTagOpenState(); break;
+            case END_TAG_OPEN:             processEndTagOpenState(); break;
+            case TAG_NAME:                 processTagNameState(); break;
+            case BEFORE_ATTR_NAME:         processBeforeAttrNameState(); break;
+            case ATTR_NAME:                processAttrNameState(); break;
+            case BEFORE_ATTR_VALUE:        processBeforeAttrValueState(); break;
+            case ATTR_VALUE_DBL_QUOTED:    processAttrValueDblQuotedState(); break;
+            case ATTR_VALUE_SINGLE_QUOTED: processAttrValueSingleQuotedState(); break;
+            case AFTER_ATTR_VALUE_QUOTED:  processAfterAttrValueQuotedState(); break;
+            case AFTER_ATTR_NAME:          processAfterAttrNameState(); break;
             default:
                 std::cout << "unhandled state " << m_state << '\n' << std::flush;
+                // clang-format on
         }
     }
 
-    return m_token;
+    return m_impl.token();
 }
 
-bool HTMLLexer::eof() { return m_in.eof(); }
-
-void HTMLLexer::dataState() {
+bool HTMLLexer::eof() const { return m_in.eof(); }
+void HTMLLexer::processDataState() {
     codepoint_t cc = m_in.advance();
 
     if (cc == '&') {
-        m_state = CHAR_REF_IN_DATA;
+        switchState(CHAR_REF_IN_DATA);
     } else if (cc == '<') {
-        m_state = TAG_OPEN;
-    } else if (cc == '\0') {
-        if (m_in.eof()) {
-            m_token.resetToEOF();
-            EMIT_TOKEN();
-        } else {
-            parseError();
-            CREATE_TOKEN(HTMLToken::CharacterBuffer);
-            APPEND_TO_CHARACTER_TOKEN(cc);
-            EMIT_TOKEN();
-        }
+        switchState(TAG_OPEN);
+    } else if (IS_NULL(cc)) {
+        PARSE_ERR();
+        m_impl.initToken(HTMLToken::CharacterBuffer);
+        m_impl.appendToCharacterBuffer(cc);
+        emitToken();
+    } else if (IS_EOF(cc)) {
+        m_impl.initToken(HTMLToken::EndOfFile);
+        emitToken();
     } else {
-        CREATE_TOKEN(HTMLToken::CharacterBuffer);
-        APPEND_TO_CHARACTER_TOKEN(cc);
-        {
-            // append any following character tokens to be emitted all at once
-            codepoint_t _cc = m_in.peek();
-            while (_cc != '&' && _cc != '<' && _cc != '\0') {
-                APPEND_TO_CHARACTER_TOKEN(m_in.advance());
-                _cc = m_in.peek();
-            }
+        m_impl.initToken(HTMLToken::CharacterBuffer);
+        m_impl.appendToCharacterBuffer(cc);
+        cc = m_in.peek();
+        while (!m_in.eof() && cc != '&' && cc != '<' && cc != '\0') {
+            m_impl.appendToCharacterBuffer(m_in.advance());
+            cc = m_in.peek();
         }
-        EMIT_TOKEN();
+        emitToken();
     }
 }
 
-void HTMLLexer::tagOpenState() {
+void HTMLLexer::processTagOpenState() {
     codepoint_t cc = m_in.advance();
 
     if (cc == '!') {
-        m_state = MARKUP_DECL_OPEN;
+        switchState(MARKUP_DECL_OPEN);
     } else if (cc == '/') {
-        m_state = END_TAG_OPEN;
+        switchState(END_TAG_OPEN);
     } else if (cc >= 'a' && cc <= 'z') {
-        CREATE_TOKEN(HTMLToken::StartTag);
-        APPEND_TO_TAG_NAME(cc)
-        m_state = TAG_NAME;
+        m_impl.initToken(HTMLToken::StartTag);
+        m_impl.appendToTagName(cc);
+        switchState(TAG_NAME);
     } else if (cc >= 'A' && cc <= 'Z') {
-        CREATE_TOKEN(HTMLToken::StartTag);
-        APPEND_TO_TAG_NAME(ToLowerCase(cc))
-        m_state = TAG_NAME;
+        m_impl.initToken(HTMLToken::StartTag);
+        m_impl.appendToTagName(std::tolower(cc));
+        switchState(TAG_NAME);
     } else if (cc == '?') {
-        parseError();
-        m_state = BOGUS_COMMENT;
+        PARSE_ERR();
+        switchState(BOGUS_COMMENT);
     } else {
-        parseError();
-        CREATE_TOKEN(HTMLToken::CharacterBuffer);
-        APPEND_TO_CHARACTER_TOKEN('<');
-        RECONSUME_TOKEN_IN_STATE(cc, DATA);
-        EMIT_TOKEN();
+        PARSE_ERR();
+        m_impl.initToken(HTMLToken::CharacterBuffer);
+        m_impl.appendToCharacterBuffer('<');
+        EMIT_TOKEN_AND_RECONSUME(cc, DATA);
     }
 }
 
-void HTMLLexer::endTagOpenState() {
+void HTMLLexer::processEndTagOpenState() {
     codepoint_t cc = m_in.advance();
 
     if (cc >= 'a' && cc <= 'z') {
-        CREATE_TOKEN(HTMLToken::EndTag);
-        APPEND_TO_TAG_NAME(cc);
-        m_state = TAG_NAME;
+        m_impl.initToken(HTMLToken::EndTag);
+        m_impl.appendToTagName(cc);
+        switchState(TAG_NAME);
     } else if (cc >= 'A' && cc <= 'Z') {
-        CREATE_TOKEN(HTMLToken::EndTag);
-        APPEND_TO_TAG_NAME(ToLowerCase(cc));
-        m_state = TAG_NAME;
+        m_impl.initToken(HTMLToken::EndTag);
+        m_impl.appendToTagName(std::tolower(cc));
+        switchState(TAG_NAME);
     } else if (cc == '>') {
-        parseError();
-        m_state = DATA;
-    } else if (cc == '\0' && m_in.eof()) {
-        parseError();
-        CREATE_TOKEN(HTMLToken::CharacterBuffer);
-        APPEND_TO_CHARACTER_TOKEN('<');
-        APPEND_TO_CHARACTER_TOKEN('/');
-        RECONSUME_TOKEN_IN_STATE(cc, DATA);
-        EMIT_TOKEN();
+        PARSE_ERR();
+        switchState(DATA);
+    } else if (IS_EOF(cc)) {
+        PARSE_ERR();
+        m_impl.initToken(HTMLToken::CharacterBuffer);
+        m_impl.appendToCharacterBuffer('<');
+        m_impl.appendToCharacterBuffer('/');
+        EMIT_TOKEN_AND_RECONSUME(cc, DATA);
     } else {
-        parseError();
-        m_state = BOGUS_COMMENT;
+        PARSE_ERR();
+        switchState(BOGUS_COMMENT);
     }
 }
 
-void HTMLLexer::tagNameState() {
+void HTMLLexer::processTagNameState() {
     codepoint_t cc = m_in.advance();
 
-    if (cc == '\t' || cc == '\n' || cc == '\f' || cc == ' ') {
-        m_state = BEFORE_ATTR_NAME;
+    if (IS_WHITESPACE(cc)) {
+        switchState(BEFORE_ATTR_NAME);
     } else if (cc == '/') {
-        m_state = SELF_CLOSING_START_TAG;
+        switchState(SELF_CLOSING_START_TAG);
     } else if (cc == '>') {
-        m_state = DATA;
-        EMIT_TOKEN();
+        switchState(DATA);
+        emitToken();
     } else if (cc >= 'A' && cc <= 'Z') {
-        APPEND_TO_TAG_NAME(ToLowerCase(cc));
-    } else if (cc == '\0') {
-        if (m_in.eof()) {
-            parseError();
-            RECONSUME_TOKEN_IN_STATE(cc, DATA);
-        } else {
-            parseError();
-            APPEND_TO_TAG_NAME(REPLACEMENT_CHAR);
+        m_impl.appendToTagName(std::tolower(cc));
+        cc = m_in.peek();
+        while (!m_in.eof() && cc >= 'A' && cc <= 'Z') {
+            m_impl.appendToTagName(std::tolower(m_in.advance()));
+            cc = m_in.peek();
         }
+    } else if (IS_EOF(cc)) {
+        PARSE_ERR();
+        reconsumeCharacter(cc, DATA);
+    } else if (IS_NULL(cc)) {
+        PARSE_ERR();
+        m_impl.appendToTagName(REPLACEMENT_CHAR);
     } else {
-        APPEND_TO_TAG_NAME(cc);
+        m_impl.appendToTagName(cc);
     }
 }
 
-void HTMLLexer::beforeAttrNameState() {
+void HTMLLexer::processBeforeAttrNameState() {
     codepoint_t cc = m_in.advance();
 
-    if (cc == '\t' || cc == '\n' || cc == '\f' || cc == ' ') {
-        // character ignored
+    if (IS_WHITESPACE(cc)) {
+        IGNORE_TRAILING_WHITESPACE();
     } else if (cc == '/') {
-        m_state = SELF_CLOSING_START_TAG;
+        switchState(SELF_CLOSING_START_TAG);
     } else if (cc == '>') {
-        m_state = DATA;
-        EMIT_TOKEN();
+        switchState(DATA);
+        emitToken();
     } else if (cc >= 'A' && cc <= 'Z') {
-        m_token.createAttribute();
-        APPEND_TO_CURRENT_ATTR_NAME(ToLowerCase(cc));
-        m_state = ATTR_NAME;
-    } else if (cc == '\0') {
-        if (m_in.eof()) {
-            parseError();
-            RECONSUME_TOKEN_IN_STATE(cc, DATA)
-        } else {
-            parseError();
-            m_token.createAttribute();
-            APPEND_TO_CURRENT_ATTR_NAME(REPLACEMENT_CHAR);
-            m_state = ATTR_NAME;
-        }
+        m_impl.createAttribute();
+        m_impl.appendToAttributeName(std::tolower(cc));
+        switchState(ATTR_NAME);
+    } else if (IS_EOF(cc)) {
+        PARSE_ERR();
+        reconsumeCharacter(cc, DATA);
+    } else if (IS_NULL(cc)) {
+        PARSE_ERR();
+        m_impl.createAttribute();
+        m_impl.appendToAttributeName(REPLACEMENT_CHAR);
+        switchState(ATTR_NAME);
     } else {
-        if (cc == '"' || cc == '\'' || cc == '<' || cc == '=') parseError();
-        m_token.createAttribute();
-        APPEND_TO_CURRENT_ATTR_NAME(cc);
-        m_state = ATTR_NAME;
+        if (cc == '"' || cc == '\'' || cc == '<' || cc == '=') PARSE_ERR();
+        m_impl.createAttribute();
+        m_impl.appendToAttributeName(cc);
+        switchState(ATTR_NAME);
     }
 }
 
-void HTMLLexer::attrNameState() {
+void HTMLLexer::processAttrNameState() {
     codepoint_t cc = m_in.advance();
 
-    if (cc == '\t' || cc == '\n' || cc == '\f' || cc == ' ') {
-        m_state = AFTER_ATTR_NAME;
+    if (IS_WHITESPACE(cc)) {
+        switchState(AFTER_ATTR_NAME);
     } else if (cc == '/') {
-        m_state = SELF_CLOSING_START_TAG;
+        switchState(SELF_CLOSING_START_TAG);
     } else if (cc == '=') {
-        m_state = BEFORE_ATTR_VALUE;
+        switchState(BEFORE_ATTR_VALUE);
     } else if (cc == '>') {
-        m_state = DATA;
-        EMIT_TOKEN();
+        switchState(DATA);
+        emitToken();
     } else if (cc >= 'A' && cc <= 'Z') {
-        APPEND_TO_CURRENT_ATTR_NAME(ToLowerCase(cc));
-        m_state = ATTR_NAME;
-    } else if (cc == '\0') {
-        if (m_in.eof()) {
-            parseError();
-            RECONSUME_TOKEN_IN_STATE(cc, DATA)
-        } else {
-            parseError();
-            APPEND_TO_CURRENT_ATTR_NAME(REPLACEMENT_CHAR);
-            m_state = ATTR_NAME;
-        }
+        m_impl.appendToAttributeName(std::tolower(cc));
+        switchState(ATTR_NAME);
+    } else if (IS_EOF(cc)) {
+        PARSE_ERR();
+        reconsumeCharacter(cc, DATA);
+    } else if (IS_NULL(cc)) {
+        PARSE_ERR();
+        m_impl.appendToAttributeName(REPLACEMENT_CHAR);
+        switchState(ATTR_NAME);
     } else {
-        if (cc == '"' || cc == '\'' || cc == '<') parseError();
-        APPEND_TO_CURRENT_ATTR_NAME(cc);
+        if (cc == '"' || cc == '\'' || cc == '<') PARSE_ERR();
+        m_impl.appendToAttributeName(cc);
     }
 }
 
-void HTMLLexer::beforeAttrValueState() {
+void HTMLLexer::processBeforeAttrValueState() {
     codepoint_t cc = m_in.advance();
 
-    if (cc == '\t' || cc == '\n' || cc == '\f' || cc == ' ') {
-        // ignored
+    if (IS_WHITESPACE(cc)) {
+        IGNORE_TRAILING_WHITESPACE();
     } else if (cc == '"') {
-        m_state = ATTR_VALUE_DBL_QUOTED;
+        switchState(ATTR_VALUE_DBL_QUOTED);
     } else if (cc == '&') {
-        m_state = ATTR_VALUE_UNQUOTED;
+        switchState(ATTR_VALUE_UNQUOTED);
     } else if (cc == '\'') {
-        m_state = ATTR_VALUE_SINGLE_QUOTED;
-    } else if (cc == '\0') {
-        if (m_in.eof()) {
-            parseError();
-            RECONSUME_TOKEN_IN_STATE(cc, DATA)
-        } else {
-            parseError();
-            APPEND_TO_CURRENT_ATTR_VAL(REPLACEMENT_CHAR);
-            m_state = ATTR_VALUE_UNQUOTED;
-        }
+        switchState(ATTR_VALUE_SINGLE_QUOTED);
+    } else if (IS_EOF(cc)) {
+        PARSE_ERR();
+        reconsumeCharacter(cc, DATA);
+    } else if (IS_NULL(cc)) {
+        PARSE_ERR();
+        m_impl.appendToAttributeValue(REPLACEMENT_CHAR);
+        switchState(ATTR_VALUE_UNQUOTED);
     } else if (cc == '>') {
-        parseError();
-        m_state = DATA;
-        EMIT_TOKEN();
+        PARSE_ERR();
+        switchState(DATA);
+        emitToken();
     } else {
-        if (cc == '<' || cc == '=' || cc == '`') parseError();
-        APPEND_TO_CURRENT_ATTR_VAL(cc);
-        m_state = ATTR_VALUE_UNQUOTED;
+        if (cc == '<' || cc == '=' || cc == '`') PARSE_ERR();
+        m_impl.appendToAttributeValue(cc);
+        switchState(ATTR_VALUE_UNQUOTED);
     }
 };
 
-void HTMLLexer::attrValueDblQuotedState() {
+void HTMLLexer::processAttrValueDblQuotedState() {
     codepoint_t cc = m_in.advance();
 
     if (cc == '"') {
-        m_state = AFTER_ATTR_VALUE_QUOTED;
+        switchState(AFTER_ATTR_VALUE_QUOTED);
     } else if (cc == '&') {
-        m_additional_allowed_ch = '"';
-        m_state = CHAR_REF_IN_ATTR_VALUE;
-    } else if (cc == '\0') {
-        if (m_in.eof()) {
-            parseError();
-            RECONSUME_TOKEN_IN_STATE(cc, DATA)
-        } else {
-            parseError();
-            APPEND_TO_CURRENT_ATTR_VAL(REPLACEMENT_CHAR);
-        }
+        setAdditionalAllowedChar('"');
+        switchState(CHAR_REF_IN_ATTR_VALUE);
+    } else if (IS_EOF(cc)) {
+        PARSE_ERR();
+        reconsumeCharacter(cc, DATA);
+    } else if (IS_NULL(cc)) {
+        PARSE_ERR();
+        m_impl.appendToAttributeValue(REPLACEMENT_CHAR);
     } else {
-        APPEND_TO_CURRENT_ATTR_VAL(cc);
+        m_impl.appendToAttributeValue(cc);
     }
 };
 
-void HTMLLexer::afterAttrValueQuotedState() {
+void HTMLLexer::processAttrValueSingleQuotedState() {
     codepoint_t cc = m_in.advance();
 
-    if (cc == '\t' || cc == '\n' || cc == '\f' || cc == ' ') {
-        m_state = BEFORE_ATTR_NAME;
-    } else if (cc == '/') {
-        m_state = SELF_CLOSING_START_TAG;
-    } else if (cc == '>') {
-        m_state = DATA;
-        EMIT_TOKEN();
-    } else if (cc == '\0' && m_in.eof()) {
-        parseError();
-        RECONSUME_TOKEN_IN_STATE(cc, DATA);
+    if (cc == '\'') {
+        switchState(AFTER_ATTR_VALUE_QUOTED);
+    } else if (cc == '&') {
+        setAdditionalAllowedChar('\'');
+        switchState(CHAR_REF_IN_ATTR_VALUE);
+    } else if (IS_EOF(cc)) {
+        PARSE_ERR();
+        reconsumeCharacter(cc, DATA);
+    } else if (IS_NULL(cc)) {
+        PARSE_ERR();
+        m_impl.appendToAttributeValue(REPLACEMENT_CHAR);
     } else {
-        parseError();
-        RECONSUME_TOKEN_IN_STATE(cc, BEFORE_ATTR_NAME)
-    }
-};
-
-void HTMLLexer::afterAttrNameState() {
-    codepoint_t cc = m_in.advance();
-
-    if (cc == '\t' || cc == '\n' || cc == '\f' || cc == ' ') {
-        // ignored
-    } else if (cc == '/') {
-        m_state = SELF_CLOSING_START_TAG;
-    } else if (cc == '=') {
-        m_state = BEFORE_ATTR_VALUE;
-    } else if (cc == '>') {
-        m_state = DATA;
-        EMIT_TOKEN();
-    } else if (cc >= 'A' && cc <= 'Z') {
-        APPEND_TO_CURRENT_ATTR_NAME(ToLowerCase(cc));
-        m_state = ATTR_NAME;
-    } else if (cc == '\0') {
-        if (m_in.eof()) {
-            parseError();
-            RECONSUME_TOKEN_IN_STATE(cc, DATA)
-        } else {
-            parseError();
-            m_token.createAttribute();
-            APPEND_TO_CURRENT_ATTR_NAME(REPLACEMENT_CHAR);
-            m_state = ATTR_NAME;
-        }
-    } else {
-        if (cc == '"' || cc == '\'' || cc == '<') parseError();
-        m_token.createAttribute();
-        APPEND_TO_CURRENT_ATTR_NAME(cc);
-        m_state = ATTR_NAME;
+        m_impl.appendToAttributeValue(cc);
     }
 }
+
+void HTMLLexer::processAfterAttrValueQuotedState() {
+    codepoint_t cc = m_in.advance();
+
+    if (IS_WHITESPACE(cc)) {
+        switchState(BEFORE_ATTR_NAME);
+    } else if (cc == '/') {
+        switchState(SELF_CLOSING_START_TAG);
+    } else if (cc == '>') {
+        switchState(DATA);
+        emitToken();
+    } else if (cc == '\0' && m_in.eof()) {
+        PARSE_ERR();
+        reconsumeCharacter(cc, DATA);
+    } else {
+        PARSE_ERR();
+        reconsumeCharacter(cc, BEFORE_ATTR_NAME);
+    }
+};
+
+void HTMLLexer::processAfterAttrNameState() {
+    codepoint_t cc = m_in.advance();
+
+    if (IS_WHITESPACE(cc)) {
+        IGNORE_TRAILING_WHITESPACE();
+    } else if (cc == '/') {
+        switchState(SELF_CLOSING_START_TAG);
+    } else if (cc == '=') {
+        switchState(BEFORE_ATTR_VALUE);
+    } else if (cc == '>') {
+        switchState(DATA);
+        emitToken();
+    } else if (cc >= 'A' && cc <= 'Z') {
+        m_impl.appendToAttributeName(std::tolower(cc));
+        switchState(ATTR_NAME);
+    } else if (IS_EOF(cc)) {
+        PARSE_ERR();
+        reconsumeCharacter(cc, DATA);
+    } else if (IS_NULL(cc)) {
+        PARSE_ERR();
+        m_impl.createAttribute();
+        m_impl.appendToAttributeName(REPLACEMENT_CHAR);
+        switchState(ATTR_NAME);
+    } else {
+        if (cc == '"' || cc == '\'' || cc == '<') PARSE_ERR();
+        m_impl.createAttribute();
+        m_impl.appendToAttributeName(cc);
+        switchState(ATTR_NAME);
+    }
+}
+
+void HTMLLexer::switchState(LexerState state) { m_state = state; }
+
+void HTMLLexer::setAdditionalAllowedChar(codepoint_t ch) { m_additional_allowed_ch = ch; }
+
+void HTMLLexer::reconsumeCharacter(codepoint_t cc, LexerState state) {
+    m_in.put_back(cc);
+    switchState(state);
+}
+
+void HTMLLexer::emitToken() { m_emit_scheduled = true; }
