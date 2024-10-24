@@ -6,7 +6,6 @@ set(HTMLPARSER_SOURCES
   htmlparser/treebuilder.cpp
   htmlparser/treebuilder_impl.cpp
   htmlparser/treebuilder_token.cpp
-  htmlparser/unicode.cpp
 )
 
 set(HTMLPARSER_TEST_SOURCES 
@@ -16,7 +15,6 @@ set(HTMLPARSER_TEST_SOURCES
   # htmlparser/treebuilder_test.cpp
   # htmlparser/treebuilder_impl_test.cpp
   # htmlparser/treebuilder_token_test.cpp
-  # htmlparser/unicode_test.cpp
 )
 
 set(DOM_SOURCES 
@@ -53,4 +51,4 @@ set(HTML_SOURCES
 
 target_sources(webcore PRIVATE ${HTMLPARSER_SOURCES} ${HTML_SOURCES} ${DOM_SOURCES})
 target_sources(parsertest PRIVATE ${HTMLPARSER_TEST_SOURCES})
-target_compile_options(webcore PRIVATE -Wimplicit-fallthrough -DDCHECK_IS_ON)
+target_compile_options(webcore PRIVATE -Wimplicit-fallthrough -Wconversion -Werror -DDCHECK_IS_ON)

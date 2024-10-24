@@ -2,14 +2,14 @@
 
 #include "check.h"
 #include "dom/document.h"
+#include "dom/usvstring.h"
 #include "html/htmlelement.h"
 #include "html/htmlformelement.h"
 #include "html/htmlheadelement.h"
 #include "html/tagname.h"
+#include "loguru/loguru.hpp"
 #include "token.h"
 #include "treebuilder_token.h"
-#include "unicode.h"
-#include "loguru/loguru.hpp"
 
 using HTMLName = HTML::HTMLTagName::HTMLName;
 
@@ -23,9 +23,9 @@ std::string stringify_token(TreeBuilderToken& token) {
     switch (token.type()) {
             // clang-format off
         case HTMLToken::StartTag:
-            return std::string("StartTag, ") + HTML::HTMLTagName(token.tokenTagName()).toDOMString();
+            return std::string("StartTag, ") + std::to_string(token.tokenTagName());
         case HTMLToken::EndTag:
-            return std::string("EndTag, ") + HTML::HTMLTagName(token.tokenTagName()).toDOMString();
+            return std::string("EndTag, ") + std::to_string(token.tokenTagName());
         case HTMLToken::UNSET: return "UNSET";
         case HTMLToken::DOCTYPE: return "DOCTYPE";
         case HTMLToken::Comment: return "Comment";
@@ -48,6 +48,7 @@ std::string stringify_mode(HTMLTreeBuilder::InsertionMode mode) {
             case HTMLTreeBuilder::AFTER_BODY: return "AFTER_BODY";
             case HTMLTreeBuilder::AFTER_AFTER_BODY: return "AFTER_AFTER_BODY";
             case HTMLTreeBuilder::TEXT: return "TEXT";
+            default: return "UNKNOWN_MODE";
             // clang-format on
     }
 }
@@ -103,13 +104,13 @@ void HTMLTreeBuilder::processCharacterBufferToken(TreeBuilderToken token) {
             if (!token.isBufferEmpty()) processAnythingElseForBeforeHead(token);
             break;
         case IN_HEAD: {
-            codepoint_buf_t whitespaceBuffer = token.extractBufferWhiteSpace();
+            DOM::USVString whitespaceBuffer = token.extractBufferWhiteSpace();
             if (!whitespaceBuffer.empty()) m_builder.insertBufferAsTextNode(whitespaceBuffer);
             if (!token.isBufferEmpty()) processAnythingElseForInHead(token);
             break;
         }
         case AFTER_HEAD: {
-            codepoint_buf_t whitespaceBuffer = token.extractBufferWhiteSpace();
+            DOM::USVString whitespaceBuffer = token.extractBufferWhiteSpace();
             if (!whitespaceBuffer.empty()) m_builder.insertBufferAsTextNode(whitespaceBuffer);
             if (!token.isBufferEmpty()) processAnythingElseForAfterHead(token);
             break;

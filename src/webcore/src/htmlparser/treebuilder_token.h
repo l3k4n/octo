@@ -2,9 +2,9 @@
 #define HTMLPARSER_TREEBUILDER_TOKEN_H
 
 #include "dom/element.h"
+#include "dom/usvstring.h"
 #include "html/tagname.h"
 #include "token.h"
-#include "unicode.h"
 
 class FakeTokenDataAccessErr {};
 
@@ -22,7 +22,7 @@ struct TreeBuilderToken {
 
     HTMLToken::TokenType type() const;
     HTML::HTMLTagName::HTMLName tokenTagName() const;
-    codepoint_buf_t* buffer() const;
+    DOM::USVString* buffer() const;
     // checks if character buffer is empty
     bool isBufferEmpty() const;
 
@@ -34,7 +34,7 @@ struct TreeBuilderToken {
     // removes whitespace from the start of the buffer
     void trimBufferWhiteSpace();
     // removes whitespace from the start of the buffer and returns it in a new buffer
-    codepoint_buf_t extractBufferWhiteSpace();
+    DOM::USVString extractBufferWhiteSpace();
 
 private:
     bool m_is_token_real;

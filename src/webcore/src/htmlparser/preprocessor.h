@@ -10,7 +10,6 @@
 class HTMLInputPreprocessor {
 public:
     HTMLInputPreprocessor(std::istream& in);
-    bool set_continuation_byte(uint8_t& byte);
     codepoint_t advance();
     codepoint_t& peek();
     void put_back(codepoint_t codepoint);
@@ -19,6 +18,10 @@ public:
 private:
     codepoint_t get_next_codepoint();
     codepoint_t take_peeked_codepoint();
+    bool read_continuation_byte_into(uint8_t& byte);
+    bool validate_codepoint_2(uint8_t*);
+    bool validate_codepoint_3(uint8_t*);
+    bool validate_codepoint_4(uint8_t*);
 
     std::optional<codepoint_t> m_peeked_codepoint;
     std::istream& m_in;

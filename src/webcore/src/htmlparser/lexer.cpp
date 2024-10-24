@@ -20,6 +20,8 @@
 #define IGNORE_TRAILING_WHITESPACE() \
     while (!m_in.eof() && (IS_WHITESPACE(m_in.peek()))) m_in.advance();
 
+#define TO_LOWER(cc) static_cast<codepoint_t>(std::tolower(static_cast<int>(cc)))
+
 HTMLLexer::HTMLLexer(HTMLInputPreprocessor& in) : m_in(in) {}
 
 HTMLToken& HTMLLexer::next() {
@@ -90,7 +92,7 @@ void HTMLLexer::processTagOpenState() {
         switchState(TAG_NAME);
     } else if (cc >= 'A' && cc <= 'Z') {
         m_impl.initToken(HTMLToken::StartTag);
-        m_impl.appendToTagName(std::tolower(cc));
+        m_impl.appendToTagName(TO_LOWER(cc));
         switchState(TAG_NAME);
     } else if (cc == '?') {
         PARSE_ERR();
@@ -112,7 +114,7 @@ void HTMLLexer::processEndTagOpenState() {
         switchState(TAG_NAME);
     } else if (cc >= 'A' && cc <= 'Z') {
         m_impl.initToken(HTMLToken::EndTag);
-        m_impl.appendToTagName(std::tolower(cc));
+        m_impl.appendToTagName(TO_LOWER(cc));
         switchState(TAG_NAME);
     } else if (cc == '>') {
         PARSE_ERR();
@@ -140,10 +142,10 @@ void HTMLLexer::processTagNameState() {
         switchState(DATA);
         emitToken();
     } else if (cc >= 'A' && cc <= 'Z') {
-        m_impl.appendToTagName(std::tolower(cc));
+        m_impl.appendToTagName(TO_LOWER(cc));
         cc = m_in.peek();
         while (!m_in.eof() && cc >= 'A' && cc <= 'Z') {
-            m_impl.appendToTagName(std::tolower(m_in.advance()));
+            m_impl.appendToTagName(TO_LOWER(m_in.advance()));
             cc = m_in.peek();
         }
     } else if (IS_EOF(cc)) {
@@ -169,7 +171,7 @@ void HTMLLexer::processBeforeAttrNameState() {
         emitToken();
     } else if (cc >= 'A' && cc <= 'Z') {
         m_impl.createAttribute();
-        m_impl.appendToAttributeName(std::tolower(cc));
+        m_impl.appendToAttributeName(TO_LOWER(cc));
         switchState(ATTR_NAME);
     } else if (IS_EOF(cc)) {
         PARSE_ERR();
@@ -200,7 +202,7 @@ void HTMLLexer::processAttrNameState() {
         switchState(DATA);
         emitToken();
     } else if (cc >= 'A' && cc <= 'Z') {
-        m_impl.appendToAttributeName(std::tolower(cc));
+        m_impl.appendToAttributeName(TO_LOWER(cc));
         switchState(ATTR_NAME);
     } else if (IS_EOF(cc)) {
         PARSE_ERR();
@@ -314,7 +316,7 @@ void HTMLLexer::processAfterAttrNameState() {
         switchState(DATA);
         emitToken();
     } else if (cc >= 'A' && cc <= 'Z') {
-        m_impl.appendToAttributeName(std::tolower(cc));
+        m_impl.appendToAttributeName(TO_LOWER(cc));
         switchState(ATTR_NAME);
     } else if (IS_EOF(cc)) {
         PARSE_ERR();

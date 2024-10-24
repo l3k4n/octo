@@ -1,41 +1,17 @@
 #include "treebuilder_token.h"
 
-#include <unordered_map>
-
 #include "check.h"
-#include "dom/domstring.h"
+#include "dom/usvstring.h"
 #include "html/tagname.h"
 #include "token.h"
-#include "unicode.h"
 
-#define Name HTML::HTMLTagName
-static const std::unordered_map<DOM::DOMString, HTML::HTMLTagName::HTMLName> TagMap = {
-    {"html", Name::HtmlTag},     {"head", Name::HeadTag},   {"title", Name::TitleTag},
-    {"link", Name::LinkTag},     {"style", Name::StyleTag}, {"h1", Name::H1Tag},
-    {"h2", Name::H2Tag},         {"h3", Name::H3Tag},       {"h4", Name::H4Tag},
-    {"h5", Name::H5Tag},         {"h6", Name::H6Tag},       {"body", Name::BodyTag},
-    {"div", Name::DivTag},       {"p", Name::PTag},         {"span", Name::SpanTag},
-    {"button", Name::ButtonTag}, {"form", Name::FormTag},   {"input", Name::InputTag},
-    {"a", Name::ATag},           {"img", Name::ImgTag},     {"image", Name::ImageTag},
-};
-#undef Name
-
-HTML::HTMLTagName::HTMLName getTagNameEnum(HTMLToken& token) {
-    if (token.type() != HTMLToken::StartTag && token.type() != HTMLToken::EndTag)
-        return HTML::HTMLTagName::UnknownTag;
-    if (token.data().empty()) return HTML::HTMLTagName::UnknownTag;
-
-    // TODO: this is really inefficient
-    auto it = TagMap.find(DOM::DOMString(token.data().begin(), token.data().end()));
-    if (it == TagMap.end()) {
-        return HTML::HTMLTagName::UnknownTag;
-    } else {
-        return it->second;
-    }
-}
+// TODO: token might not be a tag token, but constructors try to get tag names for them. This is
+// wrong
 
 TreeBuilderToken::TreeBuilderToken(HTMLToken* token)
-    : m_is_token_real(true), m_token_name(getTagNameEnum(*token)), m_real_token(token) {
+    : m_is_token_real(true),
+      m_token_name(HTML::HTMLTagName::GetMappedName(DOM::DOMString(token->data()))),
+      m_real_token(token) {
     DCHECK(type() != HTMLToken::UNSET);
 }
 
@@ -65,7 +41,7 @@ HTML::HTMLTagName::HTMLName TreeBuilderToken::tokenTagName() const {
     return m_token_name;
 }
 
-codepoint_buf_t* TreeBuilderToken::buffer() const {
+DOM::USVString* TreeBuilderToken::buffer() const {
     DCHECK(type() == HTMLToken::CharacterBuffer);
 
     if (!m_is_token_real) return nullptr;
@@ -113,14 +89,14 @@ void TreeBuilderToken::trimBufferWhiteSpace() {
     buf.erase(buf.begin(), it);
 }
 
-codepoint_buf_t TreeBuilderToken::extractBufferWhiteSpace() {
+DOM::USVString TreeBuilderToken::extractBufferWhiteSpace() {
     DCHECK(type() == HTMLToken::CharacterBuffer);
-    if (!m_is_token_real) return codepoint_buf_t();
+    if (!m_is_token_real) return DOM::USVString();
 
     auto buf = m_real_token->data();
     auto it = buf.begin();
     while (*it == '\t' || *it == '\n' || *it == '\f' || *it == '\r' || *it == ' ') ++it;
-    codepoint_buf_t extracted(buf.begin(), it);
+    DOM::USVString extracted(buf.begin(), it);
     buf.erase(buf.begin(), it);
 
     return extracted;

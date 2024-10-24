@@ -5,7 +5,7 @@
 using DOM::AttrList;
 
 // TODO(HACK): find a better way to do this
-const DOM::DOMString emptyValue = "";
+const DOM::DOMString emptyValue = u"";
 
 bool AttrList::has(const DOMString& name) const {
     for (auto& attr : *this) {

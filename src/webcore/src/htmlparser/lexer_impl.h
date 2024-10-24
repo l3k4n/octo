@@ -1,4 +1,5 @@
 #include "token.h"
+#include "unicode.h"
 
 class LexerImpl {
 public:

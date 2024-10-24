@@ -5,7 +5,7 @@
 
 namespace DOM {
 
-typedef std::string DOMString;
+typedef std::u16string DOMString;
 
 }  // namespace DOM
 

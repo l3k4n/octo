@@ -22,12 +22,12 @@ struct LexerFixture {
 
 #define ExpectToken(tokenType, tokenData, attrCount)          \
     REQUIRE(token.type() == HTMLToken::TokenType::tokenType); \
-    REQUIRE(token.data() == tokenData);                       \
+    REQUIRE(token.data() == u##tokenData);                    \
     REQUIRE(token.attributes().size() == attrCount);
 
 #define ExpectAttribute(attr, attrName, attrVal) \
-    REQUIRE(attr.first == attrName);             \
-    REQUIRE(attr.second == attrVal);
+    REQUIRE(attr.first == u##attrName);          \
+    REQUIRE(attr.second == u##attrVal);
 
 TEST_CASE_PERSISTENT_FIXTURE(LexerFixture, "Tests with MyFixture") {
     REQUIRE(!lexer.eof());

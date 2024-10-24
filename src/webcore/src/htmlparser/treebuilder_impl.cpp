@@ -4,6 +4,7 @@
 #include "dom/document.h"
 #include "dom/domstring.h"
 #include "dom/element.h"
+#include "dom/usvstring.h"
 #include "html/tagname.h"
 
 TreeBuilderImpl::TreeBuilderImpl(DOM::Document& doc) : m_document(doc) {}
@@ -45,19 +46,18 @@ DOM::Element* TreeBuilderImpl::createElement(TreeBuilderToken token) {
     return element;
 }
 
-void TreeBuilderImpl::insertBufferAsTextNode(const codepoint_buf_t& buf) {
+void TreeBuilderImpl::insertBufferAsTextNode(const DOM::USVString& buf) {
     if (buf.empty()) return;
 
     // append new text node if lastchild is not a text node
     if (currentElement()->lastChild()->nodeType != DOM::NodeType::TEXT_NODE) {
-        currentElement()->append(createTextNode(DOM::DOMString(buf.begin(), buf.end())));
+        currentElement()->append(createTextNode(DOM::DOMString(buf)));
         return;
     }
 
     // append the whitespace to text node
     DOM::Text* textNode = static_cast<DOM::Text*>(currentElement()->lastChild());
-    // TODO: impl Text::insertData, Text::length
-    textNode->insertData(textNode->length(), DOM::DOMString(buf.begin(), buf.end()));
+    textNode->insertData(textNode->length(), DOM::DOMString(buf));
 }
 
 void TreeBuilderImpl::insertHTMLElement(HTML::HTMLElement* element) {

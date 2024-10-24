@@ -25,13 +25,16 @@ public:
     ~HTMLTagName();
 
     operator int() const;
+    operator DOM::DOMString() const;
     bool operator==(const DOM::DOMString& other) const;
     bool operator==(HTMLName other) const;
     bool operator==(const HTMLTagName& other) const;
     bool operator!=(const DOM::DOMString& other) const;
     bool operator!=(HTMLName other) const;
     bool operator!=(const HTMLTagName& other) const;
-    DOM::DOMString toDOMString() const;
+
+    static HTMLName GetMappedName(DOM::DOMString);
+    static DOM::DOMString GetMappedName(HTMLName);
 
 private:
     union {

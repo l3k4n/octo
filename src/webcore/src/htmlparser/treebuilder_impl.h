@@ -5,11 +5,11 @@
 
 #include "dom/domstring.h"
 #include "dom/text.h"
+#include "dom/usvstring.h"
 #include "html/htmlelement.h"
 #include "html/htmlformelement.h"
 #include "html/htmlheadelement.h"
 #include "treebuilder_token.h"
-#include "unicode.h"
 
 class TreeBuilderImpl {
 public:
@@ -37,7 +37,7 @@ public:
     DOM::Element* createElement(TreeBuilderToken token);
     // extracts continuous whitespace characters from the start of the buffer and inserts it as a
     // Text Node in the current element
-    void insertBufferAsTextNode(const codepoint_buf_t&);
+    void insertBufferAsTextNode(const DOM::USVString&);
     // inserts element into current element and adds it to the open element stack
     void insertHTMLElement(HTML::HTMLElement* element);
     // inserts element into document and adds it to the open element stack

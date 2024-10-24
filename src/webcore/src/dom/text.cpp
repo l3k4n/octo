@@ -5,9 +5,9 @@
 
 using DOM::Text;
 
-Text::Text() : Node(NodeType::TEXT_NODE, "#text") {}
+Text::Text() : Node(NodeType::TEXT_NODE, u"#text") {}
 
-Text::Text(DOMString text) : Node(NodeType::TEXT_NODE, "#text"), m_wholeText(text) {}
+Text::Text(DOMString text) : Node(NodeType::TEXT_NODE, u"#text"), m_wholeText(text) {}
 
 Text Text::splitText(unsigned long offset) {
     DOMString substr = m_wholeText.substr(0, offset);

@@ -4,14 +4,13 @@
 #include <utility>
 #include <vector>
 
-#include "dom/domstring.h"
-#include "unicode.h"
+#include "dom/usvstring.h"
 
 class HTMLToken {
     friend class LexerImpl;
 
 public:
-    typedef std::vector<std::pair<DOM::DOMString, DOM::DOMString>> TokenAttrList;
+    typedef std::vector<std::pair<DOM::USVString, DOM::USVString>> TokenAttrList;
 
     enum TokenType {
         UNSET,
@@ -25,13 +24,13 @@ public:
 
     TokenType type() const;
     bool selfClosing() const;
-    codepoint_buf_t& data();
+    DOM::USVString& data();
     TokenAttrList& attributes();
 
 private:
     bool m_selfClosing = false;
     TokenType m_type = TokenType::UNSET;
-    codepoint_buf_t m_data;
+    DOM::USVString m_data;
     TokenAttrList m_attributes;
 };
 

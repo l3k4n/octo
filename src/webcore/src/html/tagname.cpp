@@ -1,8 +1,33 @@
 #include "html/tagname.h"
 
+#include <unordered_map>
+
 #include "check.h"
+#include "dom/domstring.h"
 
 using HTML::HTMLTagName;
+
+#define Name HTML::HTMLTagName
+static const std::unordered_map<HTML::HTMLTagName::HTMLName, DOM::DOMString> TagMap = {
+    {Name::HtmlTag, u"html"},     {Name::HeadTag, u"head"},   {Name::TitleTag, u"title"},
+    {Name::LinkTag, u"link"},     {Name::StyleTag, u"style"}, {Name::H1Tag, u"h1"},
+    {Name::H2Tag, u"h2"},         {Name::H3Tag, u"h3"},       {Name::H4Tag, u"h4"},
+    {Name::H5Tag, u"h5"},         {Name::H6Tag, u"h6"},       {Name::BodyTag, u"body"},
+    {Name::DivTag, u"div"},       {Name::PTag, u"p"},         {Name::SpanTag, u"span"},
+    {Name::ButtonTag, u"button"}, {Name::FormTag, u"form"},   {Name::InputTag, u"input"},
+    {Name::ATag, u"a"},           {Name::ImgTag, u"img"},     {Name::ImageTag, u"image"},
+};
+
+static const std::unordered_map<DOM::DOMString, HTML::HTMLTagName::HTMLName> ReverseTagMap = {
+    {u"html", Name::HtmlTag},     {u"head", Name::HeadTag},   {u"title", Name::TitleTag},
+    {u"link", Name::LinkTag},     {u"style", Name::StyleTag}, {u"h1", Name::H1Tag},
+    {u"h2", Name::H2Tag},         {u"h3", Name::H3Tag},       {u"h4", Name::H4Tag},
+    {u"h5", Name::H5Tag},         {u"h6", Name::H6Tag},       {u"body", Name::BodyTag},
+    {u"div", Name::DivTag},       {u"p", Name::PTag},         {u"span", Name::SpanTag},
+    {u"button", Name::ButtonTag}, {u"form", Name::FormTag},   {u"input", Name::InputTag},
+    {u"a", Name::ATag},           {u"img", Name::ImgTag},     {u"image", Name::ImageTag},
+};
+#undef Name
 
 HTMLTagName::HTMLTagName(HTMLName _knownName) : isKnownTag(true), knownTag(_knownName) {
     // unknown tag only exists to make the class usable in switch statements
@@ -31,6 +56,11 @@ HTMLTagName::operator int() const {
     return UnknownTag;
 }
 
+HTMLTagName::operator DOM::DOMString() const {
+    if (isKnownTag) GetMappedName(knownTag);
+    return *unknownTag;
+}
+
 bool HTMLTagName::operator==(const DOM::DOMString& other) const {
     if (isKnownTag) return false;
     return *unknownTag == other;
@@ -53,35 +83,14 @@ bool HTMLTagName::operator!=(HTMLName other) const { return !operator==(other); 
 
 bool HTMLTagName::operator!=(const HTMLTagName& other) const { return !operator==(other); }
 
-DOM::DOMString HTMLTagName::toDOMString() const {
-    if (!isKnownTag) return *unknownTag;
+DOM::DOMString HTMLTagName::GetMappedName(HTMLName name) {
+    auto it = TagMap.find(name);
+    if (it == TagMap.end()) return u"UNKNOWN";
+    return it->second;
+}
 
-    switch (knownTag) {
-            // clang-format off
-            case HtmlTag:    return "HTML";
-            case HeadTag:    return "HEAD";
-            case TitleTag:   return "TITLE";
-            case LinkTag:    return "LINK";
-            case BodyTag:    return "BODY";
-            case DivTag:     return "DIV";
-            case PTag:       return "P";
-            case FormTag:    return "FORM";
-            case ButtonTag:  return "BUTTON";
-            case StyleTag:   return "STYLE";
-            case H1Tag:      return "H1";
-            case H2Tag:      return "H2";
-            case H3Tag:      return "H3";
-            case H4Tag:      return "H4";
-            case H5Tag:      return "H5";
-            case H6Tag:      return "H6";
-            case ATag:       return "A";
-            case InputTag:   return "INPUT";
-            case ImgTag:     return "IMG";
-            case ImageTag:   return "IMG";
-            case SpanTag:   return "SPAN";
-            case UnknownTag:
-                DCHECK(false);
-                return *unknownTag;
-            // clang-format on
-    }
+HTMLTagName::HTMLName HTMLTagName::GetMappedName(DOM::DOMString name) {
+    auto it = ReverseTagMap.find(name);
+    if (it == ReverseTagMap.end()) return HTMLName::UnknownTag;
+    return it->second;
 }

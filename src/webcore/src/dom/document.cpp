@@ -27,7 +27,7 @@
 using DOM::Document, DOM::DOMString, DOM::Text;
 using namespace HTML;
 
-Document::Document() : Node(NodeType::DOCUMENT_NODE, "#document") {}
+Document::Document() : Node(NodeType::DOCUMENT_NODE, u"#document") {}
 
 DOM::Element* Document::createElement(HTML::HTMLTagName tagName) const {
     HTML::HTMLElement* element;

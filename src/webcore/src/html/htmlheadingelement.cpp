@@ -19,6 +19,7 @@ HTML::HTMLTagName HTMLHeadingElement::getTagName(HeadingLevel level) {
         case H5:
             return HTMLTagName::H5Tag;
         case H6:
+        default:
             return HTMLTagName::H6Tag;
     }
 }

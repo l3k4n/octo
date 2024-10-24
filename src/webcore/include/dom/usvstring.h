@@ -1,11 +1,11 @@
 #ifndef DOM_USVSTRING_H
 #define DOM_USVSTRING_H
 
-#include "htmlparser/unicode.h"
+#include <string>
 
 namespace DOM {
 
-typedef codepoint_buf_t USVString;
+typedef std::u16string USVString;
 
 }  // namespace DOM
 
