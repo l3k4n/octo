@@ -5,21 +5,6 @@
 #include "catch2/catch_test_macros.hpp"
 #include "unicode.h"
 
-TEST_CASE("preprocessor properly handles peek and putback", "[HTMLInputPreprocessor]") {
-    std::istringstream input("ABC");
-    HTMLInputPreprocessor preprocessor(input);
-
-    REQUIRE(preprocessor.peek() == 'A');
-    REQUIRE(preprocessor.advance() == 'A');
-    REQUIRE(preprocessor.peek() == 'B');
-
-    preprocessor.put_back('A');
-
-    REQUIRE(preprocessor.peek() == 'A');
-    REQUIRE(preprocessor.advance() == 'A');
-    REQUIRE(preprocessor.peek() == 'B');
-}
-
 TEST_CASE("preprocessor correctly processes valid UTF-8 input", "[HTMLInputPreprocessor]") {
     SECTION("ascii input") {
         std::istringstream input("Hello");

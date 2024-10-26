@@ -1,8 +1,8 @@
 #ifndef HTMLPARSER_LEXER_H
 #define HTMLPARSER_LEXER_H
 
-#include "preprocessor.h"
 #include "lexer_impl.h"
+#include "preprocessor.h"
 #include "token.h"
 #include "unicode.h"
 
@@ -34,17 +34,18 @@ public:
     bool eof() const;
 
 private:
-    void processDataState();
-    void processTagOpenState();
-    void processEndTagOpenState();
-    void processTagNameState();
-    void processBeforeAttrNameState();
-    void processAttrNameState();
-    void processBeforeAttrValueState();
-    void processAttrValueDblQuotedState();
-    void processAttrValueSingleQuotedState();
-    void processAfterAttrValueQuotedState();
-    void processAfterAttrNameState();
+    void process(codepoint_t cc);
+    void processDataState(codepoint_t cc);
+    void processTagOpenState(codepoint_t cc);
+    void processEndTagOpenState(codepoint_t cc);
+    void processTagNameState(codepoint_t cc);
+    void processBeforeAttrNameState(codepoint_t cc);
+    void processAttrNameState(codepoint_t cc);
+    void processBeforeAttrValueState(codepoint_t cc);
+    void processAttrValueDblQuotedState(codepoint_t cc);
+    void processAttrValueSingleQuotedState(codepoint_t cc);
+    void processAfterAttrValueQuotedState(codepoint_t cc);
+    void processAfterAttrNameState(codepoint_t cc);
 
     void switchState(LexerState);
     void setAdditionalAllowedChar(codepoint_t);
@@ -53,6 +54,7 @@ private:
 
 private:
     bool m_emit_scheduled = false;
+    bool m_reconsume_scheduled = false;
     codepoint_t m_additional_allowed_ch = REPLACEMENT_CHAR;
     LexerState m_state = DATA;
     HTMLInputPreprocessor& m_in;

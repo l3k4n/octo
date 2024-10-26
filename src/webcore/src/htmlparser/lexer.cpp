@@ -27,24 +27,12 @@ HTMLLexer::HTMLLexer(HTMLInputPreprocessor& in) : m_in(in) {}
 HTMLToken& HTMLLexer::next() {
     m_impl.resetToken();
     m_emit_scheduled = false;
-
     while (!m_emit_scheduled) {
-        switch (m_state) {
-                // clang-format off
-            case DATA:                     processDataState(); break;
-            case TAG_OPEN:                 processTagOpenState(); break;
-            case END_TAG_OPEN:             processEndTagOpenState(); break;
-            case TAG_NAME:                 processTagNameState(); break;
-            case BEFORE_ATTR_NAME:         processBeforeAttrNameState(); break;
-            case ATTR_NAME:                processAttrNameState(); break;
-            case BEFORE_ATTR_VALUE:        processBeforeAttrValueState(); break;
-            case ATTR_VALUE_DBL_QUOTED:    processAttrValueDblQuotedState(); break;
-            case ATTR_VALUE_SINGLE_QUOTED: processAttrValueSingleQuotedState(); break;
-            case AFTER_ATTR_VALUE_QUOTED:  processAfterAttrValueQuotedState(); break;
-            case AFTER_ATTR_NAME:          processAfterAttrNameState(); break;
-            default:
-                std::cout << "unhandled state " << m_state << '\n' << std::flush;
-                // clang-format on
+        if (!m_reconsume_scheduled) {
+            process(m_in.advance());
+        } else {
+            m_reconsume_scheduled = false;
+            process(m_in.current());
         }
     }
 
@@ -52,9 +40,27 @@ HTMLToken& HTMLLexer::next() {
 }
 
 bool HTMLLexer::eof() const { return m_in.eof(); }
-void HTMLLexer::processDataState() {
-    codepoint_t cc = m_in.advance();
 
+void HTMLLexer::process(codepoint_t cc) {
+    // clang-format off
+    switch (m_state) {
+        case DATA:                     processDataState(cc); break;
+        case TAG_OPEN:                 processTagOpenState(cc); break;
+        case END_TAG_OPEN:             processEndTagOpenState(cc); break;
+        case TAG_NAME:                 processTagNameState(cc); break;
+        case BEFORE_ATTR_NAME:         processBeforeAttrNameState(cc); break;
+        case ATTR_NAME:                processAttrNameState(cc); break;
+        case BEFORE_ATTR_VALUE:        processBeforeAttrValueState(cc); break;
+        case ATTR_VALUE_DBL_QUOTED:    processAttrValueDblQuotedState(cc); break;
+        case ATTR_VALUE_SINGLE_QUOTED: processAttrValueSingleQuotedState(cc); break;
+        case AFTER_ATTR_VALUE_QUOTED:  processAfterAttrValueQuotedState(cc); break;
+        case AFTER_ATTR_NAME:          processAfterAttrNameState(cc); break;
+        default: std::cout << "unhandled state " << m_state << '\n' << std::flush;
+    }
+    // clang-format on
+}
+
+void HTMLLexer::processDataState(codepoint_t cc) {
     if (cc == '&') {
         switchState(CHAR_REF_IN_DATA);
     } else if (cc == '<') {
@@ -79,9 +85,7 @@ void HTMLLexer::processDataState() {
     }
 }
 
-void HTMLLexer::processTagOpenState() {
-    codepoint_t cc = m_in.advance();
-
+void HTMLLexer::processTagOpenState(codepoint_t cc) {
     if (cc == '!') {
         switchState(MARKUP_DECL_OPEN);
     } else if (cc == '/') {
@@ -105,9 +109,7 @@ void HTMLLexer::processTagOpenState() {
     }
 }
 
-void HTMLLexer::processEndTagOpenState() {
-    codepoint_t cc = m_in.advance();
-
+void HTMLLexer::processEndTagOpenState(codepoint_t cc) {
     if (cc >= 'a' && cc <= 'z') {
         m_impl.initToken(HTMLToken::EndTag);
         m_impl.appendToTagName(cc);
@@ -131,9 +133,7 @@ void HTMLLexer::processEndTagOpenState() {
     }
 }
 
-void HTMLLexer::processTagNameState() {
-    codepoint_t cc = m_in.advance();
-
+void HTMLLexer::processTagNameState(codepoint_t cc) {
     if (IS_WHITESPACE(cc)) {
         switchState(BEFORE_ATTR_NAME);
     } else if (cc == '/') {
@@ -159,9 +159,7 @@ void HTMLLexer::processTagNameState() {
     }
 }
 
-void HTMLLexer::processBeforeAttrNameState() {
-    codepoint_t cc = m_in.advance();
-
+void HTMLLexer::processBeforeAttrNameState(codepoint_t cc) {
     if (IS_WHITESPACE(cc)) {
         IGNORE_TRAILING_WHITESPACE();
     } else if (cc == '/') {
@@ -189,9 +187,7 @@ void HTMLLexer::processBeforeAttrNameState() {
     }
 }
 
-void HTMLLexer::processAttrNameState() {
-    codepoint_t cc = m_in.advance();
-
+void HTMLLexer::processAttrNameState(codepoint_t cc) {
     if (IS_WHITESPACE(cc)) {
         switchState(AFTER_ATTR_NAME);
     } else if (cc == '/') {
@@ -217,9 +213,7 @@ void HTMLLexer::processAttrNameState() {
     }
 }
 
-void HTMLLexer::processBeforeAttrValueState() {
-    codepoint_t cc = m_in.advance();
-
+void HTMLLexer::processBeforeAttrValueState(codepoint_t cc) {
     if (IS_WHITESPACE(cc)) {
         IGNORE_TRAILING_WHITESPACE();
     } else if (cc == '"') {
@@ -246,9 +240,7 @@ void HTMLLexer::processBeforeAttrValueState() {
     }
 };
 
-void HTMLLexer::processAttrValueDblQuotedState() {
-    codepoint_t cc = m_in.advance();
-
+void HTMLLexer::processAttrValueDblQuotedState(codepoint_t cc) {
     if (cc == '"') {
         switchState(AFTER_ATTR_VALUE_QUOTED);
     } else if (cc == '&') {
@@ -265,9 +257,7 @@ void HTMLLexer::processAttrValueDblQuotedState() {
     }
 };
 
-void HTMLLexer::processAttrValueSingleQuotedState() {
-    codepoint_t cc = m_in.advance();
-
+void HTMLLexer::processAttrValueSingleQuotedState(codepoint_t cc) {
     if (cc == '\'') {
         switchState(AFTER_ATTR_VALUE_QUOTED);
     } else if (cc == '&') {
@@ -284,9 +274,7 @@ void HTMLLexer::processAttrValueSingleQuotedState() {
     }
 }
 
-void HTMLLexer::processAfterAttrValueQuotedState() {
-    codepoint_t cc = m_in.advance();
-
+void HTMLLexer::processAfterAttrValueQuotedState(codepoint_t cc) {
     if (IS_WHITESPACE(cc)) {
         switchState(BEFORE_ATTR_NAME);
     } else if (cc == '/') {
@@ -303,9 +291,7 @@ void HTMLLexer::processAfterAttrValueQuotedState() {
     }
 };
 
-void HTMLLexer::processAfterAttrNameState() {
-    codepoint_t cc = m_in.advance();
-
+void HTMLLexer::processAfterAttrNameState(codepoint_t cc) {
     if (IS_WHITESPACE(cc)) {
         IGNORE_TRAILING_WHITESPACE();
     } else if (cc == '/') {
@@ -339,7 +325,7 @@ void HTMLLexer::switchState(LexerState state) { m_state = state; }
 void HTMLLexer::setAdditionalAllowedChar(codepoint_t ch) { m_additional_allowed_ch = ch; }
 
 void HTMLLexer::reconsumeCharacter(codepoint_t cc, LexerState state) {
-    m_in.put_back(cc);
+    m_reconsume_scheduled = true;
     switchState(state);
 }
 

@@ -6,14 +6,23 @@
 
 #include "unicode.h"
 
+#define IN_RANGE(byte, low, high) (low <= byte && byte <= high)
+#define OUT_OF_RANGE(byte, low, high) (low > byte || byte > high)
+
 HTMLInputPreprocessor::HTMLInputPreprocessor(std::istream& in) : m_in(in) {}
 
 codepoint_t HTMLInputPreprocessor::advance() {
-    if (m_peeked_codepoint.has_value()) return take_peeked_codepoint();
-    return get_next_codepoint();
+    if (m_peeked_codepoint.has_value()) {
+        m_current = m_peeked_codepoint.value();
+        m_peeked_codepoint.reset();
+    } else {
+        m_current = get_next_codepoint();
+    }
+
+    return current();
 }
 
-codepoint_t& HTMLInputPreprocessor::peek() {
+codepoint_t HTMLInputPreprocessor::peek() {
     if (!m_peeked_codepoint.has_value()) {
         m_peeked_codepoint = get_next_codepoint();
     }
@@ -21,30 +30,7 @@ codepoint_t& HTMLInputPreprocessor::peek() {
     return m_peeked_codepoint.value();
 }
 
-#define IN_RANGE(byte, low, high) (low <= byte && byte <= high)
-#define OUT_OF_RANGE(byte, low, high) (low > byte || byte > high)
-
-// NOTE: codepoint must match the last removed codepoint or putback will fail
-void HTMLInputPreprocessor::put_back(codepoint_t codepoint) {
-    // put back peeked codepoint first, if it exists.
-    if (m_peeked_codepoint.has_value()) put_back(take_peeked_codepoint());
-
-    if (codepoint <= 0x7F) {
-        m_in.putback(static_cast<char>(codepoint));
-    } else if (codepoint <= 0x7FF) {
-        m_in.putback(static_cast<char>(0b11000000 | (codepoint >> 6)));
-        m_in.putback(static_cast<char>(0b10000000 | (codepoint & 0b111111)));
-    } else if (codepoint <= 0xFFFF) {
-        m_in.putback(static_cast<char>(0b11100000 | (codepoint >> 12)));
-        m_in.putback(static_cast<char>(0b10000000 | ((codepoint >> 6) & 0b111111)));
-        m_in.putback(static_cast<char>(0b10000000 | (codepoint & 0b111111)));
-    } else if (codepoint <= 0x10FFFF) {
-        m_in.putback(static_cast<char>(0b11110000 | (codepoint >> 18)));
-        m_in.putback(static_cast<char>(0b10000000 | ((codepoint >> 12) & 0b111111)));
-        m_in.putback(static_cast<char>(0b10000000 | ((codepoint >> 6) & 0b111111)));
-        m_in.putback(static_cast<char>(0b10000000 | (codepoint & 0b111111)));
-    }
-}
+codepoint_t HTMLInputPreprocessor::current() { return m_current; }
 
 bool HTMLInputPreprocessor::eof() const { return m_in.eof(); }
 
@@ -73,12 +59,6 @@ codepoint_t HTMLInputPreprocessor::get_next_codepoint() {
     }
 
     return REPLACEMENT_CHAR;
-}
-
-codepoint_t HTMLInputPreprocessor::take_peeked_codepoint() {
-    codepoint_t codepoint = m_peeked_codepoint.value();
-    m_peeked_codepoint.reset();
-    return codepoint;
 }
 
 inline bool HTMLInputPreprocessor::read_continuation_byte_into(uint8_t& byte) {
