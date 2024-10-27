@@ -1,7 +1,7 @@
 #include "lexer_impl.h"
 
 #include "check.h"
-#include "htmlparser/unicode.h"
+#include "unicode.h"
 #include "token.h"
 
 template <typename UTF16Container>

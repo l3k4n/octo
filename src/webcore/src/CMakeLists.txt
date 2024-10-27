@@ -11,10 +11,15 @@ set(HTMLPARSER_SOURCES
 set(HTMLPARSER_TEST_SOURCES 
   htmlparser/preprocessor_test.cpp
   htmlparser/lexer_test.cpp
-  # htmlparser/token_test.cpp
-  # htmlparser/treebuilder_test.cpp
-  # htmlparser/treebuilder_impl_test.cpp
-  # htmlparser/treebuilder_token_test.cpp
+)
+
+set(CSSPARSER_SOURCES
+  cssparser/lexer.cpp
+  cssparser/token.cpp
+)
+
+set(CSSPARSER_TEST_SOURCES
+  cssparser/lexer_test.cpp
 )
 
 set(DOM_SOURCES 
@@ -49,6 +54,19 @@ set(HTML_SOURCES
   html/tagname.cpp
 )
 
-target_sources(webcore PRIVATE ${HTMLPARSER_SOURCES} ${HTML_SOURCES} ${DOM_SOURCES})
-target_sources(parsertest PRIVATE ${HTMLPARSER_TEST_SOURCES})
-target_compile_options(webcore PRIVATE -Wimplicit-fallthrough -Wconversion -Werror -DDCHECK_IS_ON)
+set(INTERNAL_SOURCES
+  internal/generic_input_stream.cpp
+)
+
+target_sources(webcore PRIVATE
+  ${HTMLPARSER_SOURCES}
+  ${HTML_SOURCES}
+  ${DOM_SOURCES}
+  ${CSSPARSER_SOURCES}
+  ${INTERNAL_SOURCES}
+)
+target_sources(parsertest PRIVATE 
+  ${HTMLPARSER_TEST_SOURCES}
+  ${CSSPARSER_TEST_SOURCES}
+)
+target_compile_options(webcore PRIVATE -Wimplicit-fallthrough -Wconversion -Werror -DDCHECK_IS_ON -Winline)
