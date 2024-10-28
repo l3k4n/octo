@@ -1,10 +1,10 @@
 #ifndef HTMLPARSER_LEXER_H
 #define HTMLPARSER_LEXER_H
 
+#include <unicode/umachine.h>
+#include "internal/generic_input_stream.h"
 #include "lexer_impl.h"
-#include "preprocessor.h"
 #include "token.h"
-#include "unicode.h"
 
 class HTMLLexer {
     enum LexerState {
@@ -28,36 +28,35 @@ class HTMLLexer {
     };
 
 public:
-    HTMLLexer(HTMLInputPreprocessor& in);
+    HTMLLexer(GenericInputStream& in);
     HTMLLexer(HTMLLexer&) = delete;
     HTMLToken& next();
     bool eof() const;
 
 private:
-    void process(codepoint_t cc);
-    void processDataState(codepoint_t cc);
-    void processTagOpenState(codepoint_t cc);
-    void processEndTagOpenState(codepoint_t cc);
-    void processTagNameState(codepoint_t cc);
-    void processBeforeAttrNameState(codepoint_t cc);
-    void processAttrNameState(codepoint_t cc);
-    void processBeforeAttrValueState(codepoint_t cc);
-    void processAttrValueDblQuotedState(codepoint_t cc);
-    void processAttrValueSingleQuotedState(codepoint_t cc);
-    void processAfterAttrValueQuotedState(codepoint_t cc);
-    void processAfterAttrNameState(codepoint_t cc);
+    void process(UChar32 cc);
+    void processDataState(UChar32 cc);
+    void processTagOpenState(UChar32 cc);
+    void processEndTagOpenState(UChar32 cc);
+    void processTagNameState(UChar32 cc);
+    void processBeforeAttrNameState(UChar32 cc);
+    void processAttrNameState(UChar32 cc);
+    void processBeforeAttrValueState(UChar32 cc);
+    void processAttrValueDblQuotedState(UChar32 cc);
+    void processAttrValueSingleQuotedState(UChar32 cc);
+    void processAfterAttrValueQuotedState(UChar32 cc);
+    void processAfterAttrNameState(UChar32 cc);
 
     void switchState(LexerState);
-    void setAdditionalAllowedChar(codepoint_t);
-    void reconsumeCharacter(codepoint_t, LexerState);
+    void setAdditionalAllowedChar(UChar32);
+    void reconsumeCharacter(UChar32, LexerState);
     void emitToken();
 
 private:
     bool m_emit_scheduled = false;
-    bool m_reconsume_scheduled = false;
-    codepoint_t m_additional_allowed_ch = REPLACEMENT_CHAR;
+    UChar32 m_additional_allowed_ch = REPLACEMENT_CHAR;
     LexerState m_state = DATA;
-    HTMLInputPreprocessor& m_in;
+    GenericInputStream m_in;
     LexerImpl m_impl;
 };
 

@@ -1,17 +1,18 @@
+#include <unicode/umachine.h>
+
 #include "token.h"
-#include "unicode.h"
 
 class LexerImpl {
 public:
     void initToken(HTMLToken::TokenType type);
     HTMLToken& token();
 
-    void appendToCharacterBuffer(codepoint_t cc);
-    void appendToTagName(codepoint_t cc);
+    void appendToCharacterBuffer(UChar32 cc);
+    void appendToTagName(UChar32 cc);
 
     void createAttribute();
-    void appendToAttributeName(codepoint_t cc);
-    void appendToAttributeValue(codepoint_t cc);
+    void appendToAttributeName(UChar32 cc);
+    void appendToAttributeValue(UChar32 cc);
 
     void resetToken();
 

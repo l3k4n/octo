@@ -1,5 +1,4 @@
 set(HTMLPARSER_SOURCES 
-  htmlparser/preprocessor.cpp
   htmlparser/lexer.cpp
   htmlparser/lexer_impl.cpp
   htmlparser/token.cpp
@@ -9,7 +8,6 @@ set(HTMLPARSER_SOURCES
 )
 
 set(HTMLPARSER_TEST_SOURCES 
-  htmlparser/preprocessor_test.cpp
   htmlparser/lexer_test.cpp
 )
 

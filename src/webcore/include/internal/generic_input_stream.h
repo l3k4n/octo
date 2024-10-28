@@ -12,6 +12,7 @@
 
 #define EOF_CHAR 0
 #define INVALID_CHAR -1
+#define REPLACEMENT_CHAR 0xFFFD
 
 class GenericInputStream {
 public:

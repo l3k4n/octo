@@ -2,7 +2,10 @@
 
 GenericInputStream::GenericInputStream(const std::string& str)
     : m_data(icu::UnicodeString::fromUTF8(str)) {
+    // normlize line breaks
     m_data.findAndReplace("\r\n", "\n");
+    // strip null
+    m_data.findAndReplace(icu::UnicodeString("\0", 1), "");
 }
 
 UChar32 GenericInputStream::advance(int32_t n) {

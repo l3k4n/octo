@@ -1,21 +1,15 @@
 #include "lexer.h"
 
-#include <sstream>
-
 #include "catch2/catch_test_macros.hpp"
-#include "preprocessor.h"
+#include "internal/generic_input_stream.h"
 #include "token.h"
 
 struct LexerFixture {
-    LexerFixture()
-        : input(
-              "<bODy><div attr1 attr2 = \"value\"attr3='value' attr4 = 'value'>< / div></Div   >"),
-          preprocessor(input),
-          lexer(preprocessor),
-          token(lexer.next()) {}
+    LexerFixture() : preprocessor(input), lexer(preprocessor), token(lexer.next()) {}
 
-    std::istringstream input;
-    HTMLInputPreprocessor preprocessor;
+    const std::string input =
+        "<bODy><div attr1 attr2 = \"value\"attr3='value' attr4 = 'value'>< / div></Div   >";
+    GenericInputStream preprocessor;
     mutable HTMLLexer lexer;
     HTMLToken& token;
 };
