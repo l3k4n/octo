@@ -1,10 +1,10 @@
 #ifndef HTML_ANCHORELEMENT_H
 #define HTML_ANCHORELEMENT_H
 
-#include "dom/domstring.h"
-#include "dom/domtokenlist.h"
-#include "dom/usvstring.h"
-#include "html/htmlelement.h"
+#include "webcore/dom/domstring.h"
+#include "webcore/dom/domtokenlist.h"
+#include "webcore/dom/usvstring.h"
+#include "htmlelement.h"
 namespace HTML {
 
 class HTMLAnchorElement : public HTMLElement {

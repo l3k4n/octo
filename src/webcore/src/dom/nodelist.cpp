@@ -1,6 +1,6 @@
-#include "dom/nodelist.h"
+#include "webcore/dom/nodelist.h"
 
-#include "dom/node.h"
+#include "webcore/dom/node.h"
 
 using DOM::NodeList;
 

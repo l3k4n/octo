@@ -1,7 +1,7 @@
-#include "dom/node.h"
+#include "webcore/dom/node.h"
 
-#include "check.h"
-#include "dom/element.h"
+#include "webcore/internal/check.h"
+#include "webcore/dom/element.h"
 
 using DOM::Node;
 

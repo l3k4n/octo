@@ -2,7 +2,7 @@
 
 #include <unicode/umachine.h>
 
-#include "check.h"
+#include "webcore/internal/check.h"
 #include "token.h"
 
 template <typename UTF16Container>

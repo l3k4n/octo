@@ -1,7 +1,7 @@
-#include "dom/attr.h"
+#include "webcore/dom/attr.h"
 
-#include "dom/domstring.h"
-#include "dom/node.h"
+#include "webcore/dom/domstring.h"
+#include "webcore/dom/node.h"
 
 using DOM::Attr;
 

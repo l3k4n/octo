@@ -4,7 +4,7 @@
 #include <utility>
 #include <vector>
 
-#include "dom/usvstring.h"
+#include "webcore/dom/usvstring.h"
 
 class HTMLToken {
     friend class LexerImpl;

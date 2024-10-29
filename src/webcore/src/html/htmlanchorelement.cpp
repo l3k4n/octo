@@ -1,6 +1,6 @@
-#include "html/htmlanchorelement.h"
+#include "webcore/html/htmlanchorelement.h"
 
-#include "html/tagname.h"
+#include "webcore/html/tagname.h"
 
 using HTML::HTMLAnchorElement;
 

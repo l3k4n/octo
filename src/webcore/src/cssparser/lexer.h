@@ -4,7 +4,7 @@
 #include <string>
 #include <string_view>
 
-#include "internal/generic_input_stream.h"
+#include "webcore/internal/generic_input_stream.h"
 #include "token.h"
 
 class CssLexer {

@@ -2,7 +2,7 @@
 #define HTMLPARSER_LEXER_H
 
 #include <unicode/umachine.h>
-#include "internal/generic_input_stream.h"
+#include "webcore/internal/generic_input_stream.h"
 #include "lexer_impl.h"
 #include "token.h"
 

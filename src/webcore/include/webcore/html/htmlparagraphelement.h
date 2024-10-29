@@ -1,7 +1,7 @@
 #ifndef HTML_PARAGRAPHELEMENT_H
 #define HTML_PARAGRAPHELEMENT_H
 
-#include "html/htmlelement.h"
+#include "htmlelement.h"
 
 namespace HTML {
 

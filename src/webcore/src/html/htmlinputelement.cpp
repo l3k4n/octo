@@ -1,6 +1,6 @@
-#include "html/htmlinputelement.h"
+#include "webcore/html/htmlinputelement.h"
 
-#include "html/tagname.h"
+#include "webcore/html/tagname.h"
 
 using HTML::HTMLInputElement;
 

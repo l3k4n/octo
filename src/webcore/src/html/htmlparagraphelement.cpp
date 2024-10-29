@@ -1,6 +1,6 @@
-#include "html/htmlparagraphelement.h"
+#include "webcore/html/htmlparagraphelement.h"
 
-#include "html/tagname.h"
+#include "webcore/html/tagname.h"
 
 using HTML::HTMLParagraphElement;
 

@@ -1,6 +1,6 @@
-#include "html/htmldivelement.h"
+#include "webcore/html/htmldivelement.h"
 
-#include "html/tagname.h"
+#include "webcore/html/tagname.h"
 
 using HTML::HTMLDivElement;
 

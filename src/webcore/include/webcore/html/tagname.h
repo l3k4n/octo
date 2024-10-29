@@ -1,7 +1,7 @@
 #ifndef HTML_TAGS_H
 #define HTML_TAGS_H
 
-#include "dom/domstring.h"
+#include "webcore/dom/domstring.h"
 
 namespace HTML {
 

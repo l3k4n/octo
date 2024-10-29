@@ -1,9 +1,9 @@
 #ifndef HTML_ELEMENT_H
 #define HTML_ELEMENT_H
 
-#include "dom/domstring.h"
-#include "dom/element.h"
-#include "html/tagname.h"
+#include "webcore/dom/domstring.h"
+#include "webcore/dom/element.h"
+#include "tagname.h"
 
 namespace HTML {
 

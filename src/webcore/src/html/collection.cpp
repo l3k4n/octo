@@ -1,6 +1,6 @@
-#include "html/collection.h"
+#include "webcore/html/collection.h"
 
-#include "dom/element.h"
+#include "webcore/dom/element.h"
 
 using HTML::HTMLCollection;
 

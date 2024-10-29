@@ -1,9 +1,9 @@
 #ifndef HTMLPARSER_TREEBUILDER_TOKEN_H
 #define HTMLPARSER_TREEBUILDER_TOKEN_H
 
-#include "dom/element.h"
-#include "dom/usvstring.h"
-#include "html/tagname.h"
+#include "webcore/dom/element.h"
+#include "webcore/dom/usvstring.h"
+#include "webcore/html/tagname.h"
 #include "token.h"
 
 class FakeTokenDataAccessErr {};

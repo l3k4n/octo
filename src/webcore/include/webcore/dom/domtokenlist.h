@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "dom/domstring.h"
+#include "domstring.h"
 
 namespace DOM {
 

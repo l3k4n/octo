@@ -1,7 +1,7 @@
 #ifndef HTMLPARSER_TREEBUILDER_H
 #define HTMLPARSER_TREEBUILDER_H
 
-#include "dom/document.h"
+#include "webcore/dom/document.h"
 #include "lexer.h"
 #include "treebuilder_impl.h"
 #include "treebuilder_token.h"

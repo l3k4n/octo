@@ -1,9 +1,9 @@
-#include "html/tagname.h"
+#include "webcore/html/tagname.h"
 
 #include <unordered_map>
 
-#include "check.h"
-#include "dom/domstring.h"
+#include "webcore/internal/check.h"
+#include "webcore/dom/domstring.h"
 
 using HTML::HTMLTagName;
 

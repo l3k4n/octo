@@ -1,8 +1,8 @@
 #ifndef DOM_TEXT_H
 #define DOM_TEXT_H
 
-#include "dom/domstring.h"
-#include "dom/node.h"
+#include "domstring.h"
+#include "node.h"
 
 namespace DOM {
 

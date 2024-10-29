@@ -2,7 +2,7 @@
 #define DOM_ELEMENT_H
 
 #include "attrlist.h"
-#include "html/tagname.h"
+#include "webcore/html/tagname.h"
 #include "node.h"
 
 namespace DOM {

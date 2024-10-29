@@ -1,6 +1,6 @@
-#include "html/htmlstyleelement.h"
+#include "webcore/html/htmlstyleelement.h"
 
-#include "html/tagname.h"
+#include "webcore/html/tagname.h"
 
 using HTML::HTMLStyleElement;
 

@@ -3,8 +3,8 @@
 
 #include <cstdint>
 
-#include "html/htmlelement.h"
-#include "html/tagname.h"
+#include "htmlelement.h"
+#include "tagname.h"
 namespace HTML {
 
 class HTMLHeadingElement : public HTMLElement {

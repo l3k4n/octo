@@ -1,9 +1,9 @@
 #ifndef HTML_BUTTONELEMENT_H
 #define HTML_BUTTONELEMENT_H
 
-#include "dom/nodelist.h"
-#include "dom/usvstring.h"
-#include "html/htmlelement.h"
+#include "webcore/dom/nodelist.h"
+#include "webcore/dom/usvstring.h"
+#include "htmlelement.h"
 
 namespace HTML {
 

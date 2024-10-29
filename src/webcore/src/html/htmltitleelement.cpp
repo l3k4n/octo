@@ -1,6 +1,6 @@
-#include "html/htmltitleelement.h"
+#include "webcore/html/htmltitleelement.h"
 
-#include "html/tagname.h"
+#include "webcore/html/tagname.h"
 
 using HTML::HTMLTitleElement;
 

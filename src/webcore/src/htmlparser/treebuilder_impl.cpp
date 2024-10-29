@@ -1,11 +1,11 @@
 #include "treebuilder_impl.h"
 
-#include "check.h"
-#include "dom/document.h"
-#include "dom/domstring.h"
-#include "dom/element.h"
-#include "dom/usvstring.h"
-#include "html/tagname.h"
+#include "webcore/internal/check.h"
+#include "webcore/dom/document.h"
+#include "webcore/dom/domstring.h"
+#include "webcore/dom/element.h"
+#include "webcore/dom/usvstring.h"
+#include "webcore/html/tagname.h"
 
 TreeBuilderImpl::TreeBuilderImpl(DOM::Document& doc) : m_document(doc) {}
 

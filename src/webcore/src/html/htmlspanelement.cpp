@@ -1,6 +1,6 @@
-#include "html/htmlspanelement.h"
+#include "webcore/html/htmlspanelement.h"
 
-#include "html/tagname.h"
+#include "webcore/html/tagname.h"
 
 using HTML::HTMLSpanElement;
 

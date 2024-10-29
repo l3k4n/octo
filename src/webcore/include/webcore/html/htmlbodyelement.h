@@ -1,7 +1,7 @@
 #ifndef HTML_BODYELEMENT_H
 #define HTML_BODYELEMENT_H
 
-#include "html/htmlelement.h"
+#include "htmlelement.h"
 namespace HTML {
 
 class HTMLBodyElement : public HTMLElement {

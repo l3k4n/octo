@@ -1,7 +1,7 @@
 #ifndef HTML_SPANELEMENT_H
 #define HTML_SPANELEMENT_H
 
-#include "html/htmlelement.h"
+#include "htmlelement.h"
 namespace HTML {
 
 class HTMLSpanElement : public HTMLElement {

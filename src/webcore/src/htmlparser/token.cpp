@@ -1,6 +1,6 @@
 #include "token.h"
 
-#include "dom/usvstring.h"
+#include "webcore/dom/usvstring.h"
 
 HTMLToken::TokenType HTMLToken::type() const { return m_type; }
 

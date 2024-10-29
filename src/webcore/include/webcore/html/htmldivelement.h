@@ -1,7 +1,7 @@
 #ifndef HTML_DIVELEMENT_H
 #define HTML_DIVELEMENT_H
 
-#include "html/htmlelement.h"
+#include "htmlelement.h"
 namespace HTML {
 
 class HTMLDivElement : public HTMLElement {

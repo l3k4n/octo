@@ -1,8 +1,8 @@
 #ifndef HTML_HTLMTITLEELEMENT_H
 #define HTML_HTLMTITLEELEMENT_H
 
-#include "dom/domstring.h"
-#include "html/htmlelement.h"
+#include "webcore/dom/domstring.h"
+#include "htmlelement.h"
 
 namespace HTML {
 

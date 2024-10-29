@@ -1,9 +1,9 @@
 #ifndef HTML_IMAGEELEMENT_H
 #define HTML_IMAGEELEMENT_H
 
-#include "dom/domstring.h"
-#include "dom/usvstring.h"
-#include "html/htmlelement.h"
+#include "webcore/dom/domstring.h"
+#include "webcore/dom/usvstring.h"
+#include "htmlelement.h"
 
 namespace HTML {
 

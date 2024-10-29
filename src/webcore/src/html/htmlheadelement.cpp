@@ -1,7 +1,7 @@
-#include "html/htmlheadelement.h"
+#include "webcore/html/htmlheadelement.h"
 
-#include "html/htmlelement.h"
-#include "html/tagname.h"
+#include "webcore/html/htmlelement.h"
+#include "webcore/html/tagname.h"
 
 using HTML::HTMLHeadElement;
 

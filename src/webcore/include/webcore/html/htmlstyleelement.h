@@ -1,7 +1,7 @@
 #ifndef HTML_STYLEELEMENT_H
 #define HTML_STYLEELEMENT_H
 
-#include "html/htmlelement.h"
+#include "htmlelement.h"
 
 namespace HTML {
 

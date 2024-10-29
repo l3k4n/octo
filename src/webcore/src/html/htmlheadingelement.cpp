@@ -1,6 +1,6 @@
-#include "html/htmlheadingelement.h"
+#include "webcore/html/htmlheadingelement.h"
 
-#include "html/tagname.h"
+#include "webcore/html/tagname.h"
 
 using HTML::HTMLHeadingElement;
 

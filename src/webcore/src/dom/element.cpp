@@ -1,9 +1,9 @@
-#include "dom/element.h"
+#include "webcore/dom/element.h"
 
-#include "dom/attr.h"
-#include "dom/domstring.h"
-#include "dom/node.h"
-#include "html/tagname.h"
+#include "webcore/dom/attr.h"
+#include "webcore/dom/domstring.h"
+#include "webcore/dom/node.h"
+#include "webcore/html/tagname.h"
 
 using DOM::Element, DOM::DOMString;
 

@@ -1,6 +1,6 @@
-#include "html/htmlbodyelement.h"
+#include "webcore/html/htmlbodyelement.h"
 
-#include "html/tagname.h"
+#include "webcore/html/tagname.h"
 
 using HTML::HTMLBodyElement;
 

@@ -1,7 +1,7 @@
 #include "lexer.h"
 
 #include "catch2/catch_test_macros.hpp"
-#include "internal/generic_input_stream.h"
+#include "webcore/internal/generic_input_stream.h"
 #include "token.h"
 
 struct LexerFixture {

@@ -1,6 +1,6 @@
-#include "html/htmlunknownelement.h"
+#include "webcore/html/htmlunknownelement.h"
 
-#include "html/tagname.h"
+#include "webcore/html/tagname.h"
 
 using HTML::HTMLUnknownElement;
 

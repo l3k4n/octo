@@ -1,6 +1,6 @@
-#include "dom/attrlist.h"
+#include "webcore/dom/attrlist.h"
 
-#include "dom/attr.h"
+#include "webcore/dom/attr.h"
 
 using DOM::AttrList;
 
