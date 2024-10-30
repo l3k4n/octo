@@ -1,9 +1,9 @@
 #include "treebuilder_token.h"
 
-#include "webcore/internal/check.h"
+#include "token.h"
 #include "webcore/dom/usvstring.h"
 #include "webcore/html/tagname.h"
-#include "token.h"
+#include "webcore/internal/check.h"
 
 // TODO: token might not be a tag token, but constructors try to get tag names for them. This is
 // wrong

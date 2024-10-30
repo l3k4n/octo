@@ -2,8 +2,8 @@
 #define DOM_NODE_H
 
 #include "domstring.h"
-#include "webcore/html/collection.h"
 #include "nodelist.h"
+#include "webcore/html/collection.h"
 
 namespace DOM {
 

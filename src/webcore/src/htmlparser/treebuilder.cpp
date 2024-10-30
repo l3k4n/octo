@@ -1,15 +1,15 @@
 #include "treebuilder.h"
 
-#include "webcore/internal/check.h"
+#include "loguru/loguru.hpp"
+#include "token.h"
+#include "treebuilder_token.h"
 #include "webcore/dom/document.h"
 #include "webcore/dom/usvstring.h"
 #include "webcore/html/htmlelement.h"
 #include "webcore/html/htmlformelement.h"
 #include "webcore/html/htmlheadelement.h"
 #include "webcore/html/tagname.h"
-#include "loguru/loguru.hpp"
-#include "token.h"
-#include "treebuilder_token.h"
+#include "webcore/internal/check.h"
 
 using HTMLName = HTML::HTMLTagName::HTMLName;
 

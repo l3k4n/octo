@@ -1,10 +1,10 @@
 #ifndef HTML_LINKELEMENT_H
 #define HTML_LINKELEMENT_H
 
+#include "htmlelement.h"
 #include "webcore/dom/domstring.h"
 #include "webcore/dom/domtokenlist.h"
 #include "webcore/dom/usvstring.h"
-#include "htmlelement.h"
 
 namespace HTML {
 

@@ -8,7 +8,7 @@
 #include <string>
 #include <string_view>
 
-#include "internal/check.h"
+#include "check.h"
 
 #define EOF_CHAR 0
 #define INVALID_CHAR -1

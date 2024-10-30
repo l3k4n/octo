@@ -1,10 +1,10 @@
 #ifndef HTMLPARSER_TREEBUILDER_H
 #define HTMLPARSER_TREEBUILDER_H
 
-#include "webcore/dom/document.h"
 #include "lexer.h"
 #include "treebuilder_impl.h"
 #include "treebuilder_token.h"
+#include "webcore/dom/document.h"
 
 class HTMLTreeBuilder {
 public:

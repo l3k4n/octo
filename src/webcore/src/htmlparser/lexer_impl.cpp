@@ -2,8 +2,8 @@
 
 #include <unicode/umachine.h>
 
-#include "webcore/internal/check.h"
 #include "token.h"
+#include "webcore/internal/check.h"
 
 template <typename UTF16Container>
 void push_back_codepoint(UTF16Container& container, UChar32 codepoint) {

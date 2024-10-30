@@ -4,8 +4,6 @@
 
 CssToken::CssToken(CssTokenType token_type) : m_token_type(token_type) {}
 
-CssToken::CssToken(CssTokenType token_type, UChar32 value) : m_token_type(token_type) {}
-
 CssToken::CssToken(CssTokenType token_type, std::u16string_view value)
     : m_token_type(token_type), m_value(value) {}
 

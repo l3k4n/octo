@@ -1,8 +1,8 @@
 #ifndef DOM_DOCUMENT_H
 #define DOM_DOCUMENT_H
 
-#include "webcore/html/tagname.h"
 #include "node.h"
+#include "webcore/html/tagname.h"
 
 namespace DOM {
 

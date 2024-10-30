@@ -1,10 +1,10 @@
 #ifndef HTML_FORMELEMENT_H
 #define HTML_FORMELEMENT_H
 
-#include "webcore/dom/domstring.h"
-#include "webcore/dom/usvstring.h"
 #include "collection.h"
 #include "htmlelement.h"
+#include "webcore/dom/domstring.h"
+#include "webcore/dom/usvstring.h"
 
 namespace HTML {
 

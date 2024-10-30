@@ -2,9 +2,10 @@
 #define HTMLPARSER_LEXER_H
 
 #include <unicode/umachine.h>
-#include "webcore/internal/generic_input_stream.h"
+
 #include "lexer_impl.h"
 #include "token.h"
+#include "webcore/internal/generic_input_stream.h"
 
 class HTMLLexer {
     enum LexerState {

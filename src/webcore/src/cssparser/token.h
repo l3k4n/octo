@@ -36,7 +36,6 @@ public:
     enum class TypeFlag { UNSET, ID, Integer, Number };
 
     explicit CssToken(CssTokenType type);
-    explicit CssToken(CssTokenType type, UChar32 value);
     explicit CssToken(CssTokenType type, std::u16string_view);
 
     TypeFlag typeFlag();

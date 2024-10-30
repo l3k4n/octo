@@ -1,6 +1,5 @@
 #include "webcore/dom/document.h"
 
-#include "webcore/internal/check.h"
 #include "webcore/dom/domstring.h"
 #include "webcore/dom/node.h"
 #include "webcore/dom/text.h"
@@ -23,6 +22,7 @@
 #include "webcore/html/htmltitleelement.h"
 #include "webcore/html/htmlunknownelement.h"
 #include "webcore/html/tagname.h"
+#include "webcore/internal/check.h"
 
 using DOM::Document, DOM::DOMString, DOM::Text;
 using namespace HTML;

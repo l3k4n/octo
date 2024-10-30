@@ -2,8 +2,8 @@
 
 #include <unordered_map>
 
-#include "webcore/internal/check.h"
 #include "webcore/dom/domstring.h"
+#include "webcore/internal/check.h"
 
 using HTML::HTMLTagName;
 

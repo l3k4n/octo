@@ -6,8 +6,8 @@
 #include <iostream>
 #include <ostream>
 
-#include "webcore/internal/generic_input_stream.h"
 #include "token.h"
+#include "webcore/internal/generic_input_stream.h"
 
 #define PARSE_ERR() ;
 #define IS_WHITESPACE(cc) cc == ' ' || cc == '\n' || cc == '\t' || cc == '\f'

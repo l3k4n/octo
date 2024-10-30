@@ -4,8 +4,8 @@
 #include <string>
 #include <string_view>
 
-#include "webcore/internal/generic_input_stream.h"
 #include "token.h"
+#include "webcore/internal/generic_input_stream.h"
 
 class CssLexer {
 public:
@@ -27,6 +27,7 @@ private:
     CssToken consumeStringToken();
     CssToken consumeNumericToken();
     CssToken consumeIdentLikeToken();
+    CssToken consumeCurrentCharAsDelim();
 
 private:
     GenericInputStream m_in;

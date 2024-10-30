@@ -31,7 +31,7 @@ CssToken CssLexer::next() {
                 }
                 return hashToken;
             }
-            return CssToken(Delim, m_in.current());
+            return consumeCurrentCharAsDelim();
         case '\'':
             return consumeStringToken();
         case '(':
@@ -43,7 +43,7 @@ CssToken CssLexer::next() {
                 reconsumeCurrent();
                 return consumeNumericToken();
             }
-            return CssToken(Delim, m_in.current());
+            return consumeCurrentCharAsDelim();
         case ',':
             return CssToken(Comma);
         case '-':
@@ -57,13 +57,13 @@ CssToken CssLexer::next() {
                 reconsumeCurrent();
                 return consumeIdentLikeToken();
             }
-            return CssToken(Delim, m_in.current());
+            return consumeCurrentCharAsDelim();
         case '.':
             if (streamStartsWithNumber()) {
                 reconsumeCurrent();
                 return consumeNumericToken();
             }
-            return CssToken(Delim, m_in.current());
+            return consumeCurrentCharAsDelim();
         case ':':
             return CssToken(Colon);
         case ';':
@@ -73,16 +73,16 @@ CssToken CssLexer::next() {
                 m_in.advance(3);
                 return CssToken(CDO);
             }
-            return CssToken(Delim, m_in.current());
+            return consumeCurrentCharAsDelim();
         case '@':
             if (next3CodepointsStartsIdentSequence()) {
                 return CssToken(AtKeyword, consumeIdentSequence());
             }
-            return CssToken(Delim, m_in.current());
+            return consumeCurrentCharAsDelim();
         case '[':
             return CssToken(LeftBracket);
         case '\\':
-            return CssToken(Delim, m_in.current());
+            return consumeCurrentCharAsDelim();
         case ']':
             return CssToken(RightBracket);
         case '{':
@@ -99,7 +99,7 @@ CssToken CssLexer::next() {
             } else if (m_in.eof()) {
                 return CssToken(EndOfFile);
             } else {
-                return CssToken(Delim, m_in.current());
+                return consumeCurrentCharAsDelim();
             }
     }
 }
@@ -222,3 +222,7 @@ CssToken CssLexer::consumeNumericToken() {
     }
 }
 CssToken CssLexer::consumeIdentLikeToken() { return CssToken(Ident, consumeIdentSequence()); }
+
+CssToken CssLexer::consumeCurrentCharAsDelim() {
+    return CssToken(Delim, m_in.createStringView(m_in.pos() - 1, m_in.pos()));
+}
