@@ -1,9 +1,9 @@
-#include "lexer_impl.h"
+#include "webcore/internal/htmlparser/lexer_impl.h"
 
 #include <unicode/umachine.h>
 
-#include "token.h"
 #include "webcore/internal/check.h"
+#include "webcore/internal/htmlparser/token.h"
 
 template <typename UTF16Container>
 void push_back_codepoint(UTF16Container& container, UChar32 codepoint) {

@@ -1,8 +1,8 @@
-#include "lexer.h"
+#include "webcore/internal/htmlparser/lexer.h"
 
 #include "catch2/catch_test_macros.hpp"
-#include "token.h"
-#include "webcore/internal/generic_input_stream.h"
+#include "webcore/internal/generic/inputstream.h"
+#include "webcore/internal/htmlparser/token.h"
 
 struct LexerFixture {
     LexerFixture() : preprocessor(input), lexer(preprocessor), token(lexer.next()) {}
@@ -23,7 +23,7 @@ struct LexerFixture {
     REQUIRE(attr.first == u##attrName);          \
     REQUIRE(attr.second == u##attrVal);
 
-TEST_CASE_PERSISTENT_FIXTURE(LexerFixture, "Tests with MyFixture") {
+TEST_CASE_PERSISTENT_FIXTURE(LexerFixture, "HTMLLexer emits proper tokens", "[htmlparser]") {
     REQUIRE(!lexer.eof());
 
     SECTION("properly handles mixed case tag name") { ExpectToken(StartTag, "body", 0); }

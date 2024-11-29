@@ -5,7 +5,7 @@
 
 #include "lexer_impl.h"
 #include "token.h"
-#include "webcore/internal/generic_input_stream.h"
+#include "webcore/internal/generic/inputstream.h"
 
 class HTMLLexer {
     enum LexerState {

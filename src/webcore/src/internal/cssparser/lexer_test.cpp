@@ -40,7 +40,7 @@ auto src = R"(abcdef {
                }
                )";
 
-TEST_CASE("hello", "[main]") {
+TEST_CASE("CSSLexer emits proper tokens", "[cssparser]") {
     CssLexer lexer(src);
 
     Expect2(Ident, "abcdef");

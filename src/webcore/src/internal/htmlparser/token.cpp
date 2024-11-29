@@ -1,4 +1,4 @@
-#include "token.h"
+#include "webcore/internal/htmlparser/token.h"
 
 #include "webcore/dom/usvstring.h"
 

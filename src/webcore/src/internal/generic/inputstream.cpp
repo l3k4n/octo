@@ -1,4 +1,4 @@
-#include "webcore/internal/generic_input_stream.h"
+#include "webcore/internal/generic/inputstream.h"
 
 GenericInputStream::GenericInputStream(const std::string& str)
     : m_data(icu::UnicodeString::fromUTF8(str)) {

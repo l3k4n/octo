@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "webcore/internal/htmlparser/lexer.h"
 
 #include <unicode/umachine.h>
 
@@ -6,8 +6,8 @@
 #include <iostream>
 #include <ostream>
 
-#include "token.h"
-#include "webcore/internal/generic_input_stream.h"
+#include "webcore/internal/generic/inputstream.h"
+#include "webcore/internal/htmlparser/token.h"
 
 #define PARSE_ERR() ;
 #define IS_WHITESPACE(cc) cc == ' ' || cc == '\n' || cc == '\t' || cc == '\f'
