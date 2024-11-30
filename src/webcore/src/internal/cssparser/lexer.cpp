@@ -224,5 +224,9 @@ CssToken CssLexer::consumeNumericToken() {
 CssToken CssLexer::consumeIdentLikeToken() { return CssToken(Ident, consumeIdentSequence()); }
 
 CssToken CssLexer::consumeCurrentCharAsDelim() {
-    return CssToken(Delim, m_in.createStringView(m_in.pos() - 1, m_in.pos()));
+    auto end = m_in.pos();
+    reconsumeCurrent();
+    auto start = m_in.pos();
+    m_in.moveTo(end);
+    return CssToken(Delim, m_in.createStringView(start, end));
 }

@@ -16,15 +16,25 @@
 
 class GenericInputStream {
 public:
+    struct Position {
+        friend GenericInputStream;
+
+    private:
+        Position(int32_t p) : pos(p) {}
+        int32_t pos;
+    };
+
     GenericInputStream(const std::string&);
 
     // Advances the stream to the next codepoint.
     // if `n` < 0 it returns -1, if `n` goes out of bounds, it returns 0.
     // Note: `advance(0)` is equivalent to `current()`.
     UChar32 advance(int32_t n = 1);
-    // Advances the stream upto and including `ch`, making `current()` return `ch`.
-    // if `ch` is not found, the stream will advance to the end.
+    // Puts `ch` back into the stream.
+    // Note: `ch` must be the last character consumed.
     void advanceUntil(UChar32 ch);
+    // changes stream position to `stream_pos`
+    inline void moveTo(Position stream_pos) { m_pos = stream_pos.pos; }
     // Puts `ch` back into the stream.
     // Note: `ch` must be the last character consumed.
     inline void putback(UChar32 ch) {
@@ -44,9 +54,14 @@ public:
         return m_data.char32At(m_data.moveIndex32(m_pos, n) - 1);
     }
     inline bool eof() const { return m_pos >= m_data.length(); }
-    inline int32_t pos() const { return m_pos; }
-    inline std::u16string_view createStringView(int32_t start, int32_t end) {
-        return std::u16string_view(&m_data.getBuffer()[start], static_cast<size_t>(end - start));
+    // Returns stream position right after character returned by last call to advance.
+    inline Position pos() const { return Position(m_pos); }
+
+    // Create a string view containing all characters  between `start` and `end`
+    inline std::u16string_view createStringView(Position start, Position end) {
+        DCHECK(start < end);
+        return std::u16string_view(&m_data.getBuffer()[start.pos],
+                                   static_cast<size_t>(end.pos - start.pos));
     }
 
 private:
