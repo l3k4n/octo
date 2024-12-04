@@ -1,7 +1,7 @@
-#include "lexer.h"
+#include "webcore/internal/cssparser/lexer.h"
 
 #include "catch2/catch_test_macros.hpp"
-#include "token.h"
+#include "webcore/internal/cssparser/token.h"
 
 #define Expect(type)                      \
     do {                                  \

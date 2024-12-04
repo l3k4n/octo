@@ -1,9 +1,9 @@
-#include "lexer.h"
+#include "webcore/internal/cssparser/lexer.h"
 
 #include <string>
 #include <string_view>
 
-#include "token.h"
+#include "webcore/internal/cssparser/token.h"
 
 #define IS_LETTER(cc) ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z'))
 #define IS_DIGIT(cc) (cc >= '0' && cc <= '9')
@@ -17,12 +17,22 @@ CssToken CssLexer::next() {
     consumeComments();
 
     switch (m_in.advance()) {
+            // clang-format off
         case '\n':
         case '\t':
-        case ' ':
-            return consumeWhiteSpaceToken();
-        case '"':
-            return consumeStringToken();
+        case ' ':  return consumeWhiteSpaceToken();
+
+        case '"':  return consumeStringToken();
+        case ',':  return CssToken(Comma);
+        case ':':  return CssToken(Colon);
+        case ';':  return CssToken(SemiColon);
+        case '[':  return CssToken(LeftBracket);
+        case '\\': return consumeCurrentCharAsDelim();
+        case ']':  return CssToken(RightBracket);
+        case '{':  return CssToken(LeftBrace);
+        case '}':  return CssToken(RightBrace);
+            // clang-format on
+
         case '#':
             if (IS_IDENT(m_in.peek())) {
                 auto hashToken = CssToken(CssTokenType::Hash, consumeIdentSequence());
@@ -32,20 +42,12 @@ CssToken CssLexer::next() {
                 return hashToken;
             }
             return consumeCurrentCharAsDelim();
-        case '\'':
-            return consumeStringToken();
-        case '(':
-            return CssToken(LeftParen);
-        case ')':
-            return CssToken(RightParen);
         case '+':
             if (streamStartsWithNumber()) {
                 reconsumeCurrent();
                 return consumeNumericToken();
             }
             return consumeCurrentCharAsDelim();
-        case ',':
-            return CssToken(Comma);
         case '-':
             if (streamStartsWithNumber()) {
                 reconsumeCurrent();
@@ -64,10 +66,6 @@ CssToken CssLexer::next() {
                 return consumeNumericToken();
             }
             return consumeCurrentCharAsDelim();
-        case ':':
-            return CssToken(Colon);
-        case ';':
-            return CssToken(SemiColon);
         case '<':
             if (m_in.peek() == '!' && m_in.peek(2) == '-' && m_in.peek(3) == '-') {
                 m_in.advance(3);
@@ -79,25 +77,15 @@ CssToken CssLexer::next() {
                 return CssToken(AtKeyword, consumeIdentSequence());
             }
             return consumeCurrentCharAsDelim();
-        case '[':
-            return CssToken(LeftBracket);
-        case '\\':
-            return consumeCurrentCharAsDelim();
-        case ']':
-            return CssToken(RightBracket);
-        case '{':
-            return CssToken(LeftBrace);
-        case '}':
-            return CssToken(RightBrace);
         default:
-            if (IS_DIGIT(m_in.current())) {
+            if (m_in.eof()) {
+                return CssToken(EndOfFile);
+            } else if (IS_DIGIT(m_in.current())) {
                 reconsumeCurrent();
                 return consumeNumericToken();
             } else if (IS_IDENT_START(m_in.current())) {
                 reconsumeCurrent();
                 return consumeIdentLikeToken();
-            } else if (m_in.eof()) {
-                return CssToken(EndOfFile);
             } else {
                 return consumeCurrentCharAsDelim();
             }
