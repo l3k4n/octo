@@ -33,24 +33,27 @@ enum CssTokenType {
 
 class CssToken {
 public:
-    enum class TypeFlag { UNSET, ID, Integer, Number };
+    // simple token
+    CssToken(CssTokenType type, std::u16string_view value);
+    // valueless token
+    CssToken(CssTokenType type);
+    // delim token
+    CssToken(CssTokenType type, char delimeter);
+    // numeric token
+    CssToken(CssTokenType type, std::u16string_view value, std::u16string_view unit);
 
-    explicit CssToken(CssTokenType type);
-    explicit CssToken(CssTokenType type, std::u16string_view);
-
-    TypeFlag typeFlag();
+    CssTokenType type();
     std::u16string_view unit();
     std::u16string_view value();
-    CssTokenType tokenType();
+    char delim();
 
-    void setTypeFlag(TypeFlag);
-    void setUnit(std::u16string_view);
+    bool operator==(CssTokenType);
+    inline constexpr operator CssTokenType() { return m_token_type; }
 
 private:
-    CssTokenType m_token_type = CssTokenType::Delim;
-    TypeFlag m_type_flag = CssToken::TypeFlag::UNSET;
-    std::u16string m_value;
-    std::u16string m_unit;
+    const CssTokenType m_token_type;
+    const std::u16string m_value;
+    const std::u16string m_unit;
 };
 
 #endif  // !CSSPARSER_TOKEN_H

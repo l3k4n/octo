@@ -34,13 +34,7 @@ CssToken CssLexer::next() {
             // clang-format on
 
         case '#':
-            if (IS_IDENT(m_in.peek())) {
-                auto hashToken = CssToken(CssTokenType::Hash, consumeIdentSequence());
-                if (next3CodepointsStartsIdentSequence()) {
-                    hashToken.setTypeFlag(CssToken::TypeFlag::ID);
-                }
-                return hashToken;
-            }
+            if (IS_IDENT(m_in.peek())) return CssToken(CssTokenType::Hash, consumeIdentSequence());
             return consumeCurrentCharAsDelim();
         case '+':
             if (streamStartsWithNumber()) {
@@ -178,7 +172,6 @@ CssToken CssLexer::consumeStringToken() {
 }
 
 CssToken CssLexer::consumeNumericToken() {
-    CssToken::TypeFlag typeFlag = CssToken::TypeFlag::Integer;
     auto start = m_in.pos();
 
     // consume sign
@@ -186,27 +179,17 @@ CssToken CssLexer::consumeNumericToken() {
     // consume digits before decimal point
     while (IS_DIGIT(m_in.peek())) m_in.advance();
     // consume decimal place IF it is followed by a digit
-    if (m_in.peek() == '.' && IS_DIGIT(m_in.peek(2))) {
-        typeFlag = CssToken::TypeFlag::Number;
-        m_in.advance();
-    }
+    if (m_in.peek() == '.' && IS_DIGIT(m_in.peek(2))) m_in.advance();
     // consume digits after decimal point
     while (IS_DIGIT(m_in.peek())) m_in.advance();
 
     if (next3CodepointsStartsIdentSequence()) {
-        // consume unit
-        auto dimensionToken =
-            CssToken(CssTokenType::Dimension, m_in.createStringView(start, m_in.pos()));
-        dimensionToken.setTypeFlag(typeFlag);
-        dimensionToken.setUnit(consumeIdentSequence());
-        return dimensionToken;
+        return CssToken(Dimension, m_in.createStringView(start, m_in.pos()),
+                        consumeIdentSequence());
     } else if (m_in.peek() == '%') {
-        return CssToken(CssTokenType::Percentage, m_in.createStringView(start, m_in.pos()));
+        return CssToken(Percentage, m_in.createStringView(start, m_in.pos()));
     } else {
-        auto numberToken =
-            CssToken(CssTokenType::Dimension, m_in.createStringView(start, m_in.pos()));
-        numberToken.setTypeFlag(typeFlag);
-        return numberToken;
+        return CssToken(Number, m_in.createStringView(start, m_in.pos()));
     }
 }
 CssToken CssLexer::consumeIdentLikeToken() { return CssToken(Ident, consumeIdentSequence()); }
