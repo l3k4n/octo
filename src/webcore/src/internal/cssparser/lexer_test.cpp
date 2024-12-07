@@ -3,28 +3,28 @@
 #include "catch2/catch_test_macros.hpp"
 #include "webcore/internal/cssparser/token.h"
 
-#define Expect(type)                      \
+#define Expect(_type)                     \
     do {                                  \
         auto tok = lexer.next();          \
-        REQUIRE(tok.tokenType() == type); \
+        REQUIRE(tok.type() == _type);     \
         REQUIRE(tok.value().size() == 0); \
         REQUIRE(tok.unit().size() == 0);  \
     } while (false)
 
-#define Expect2(type, val)                \
-    do {                                  \
-        auto tok = lexer.next();          \
-        REQUIRE(tok.tokenType() == type); \
-        REQUIRE(tok.value() == u##val);   \
-        REQUIRE(tok.unit().size() == 0);  \
+#define Expect2(_type, val)              \
+    do {                                 \
+        auto tok = lexer.next();         \
+        REQUIRE(tok.type() == _type);    \
+        REQUIRE(tok.value() == u##val);  \
+        REQUIRE(tok.unit().size() == 0); \
     } while (false)
 
-#define Expect3(type, val, unt)           \
-    do {                                  \
-        auto tok = lexer.next();          \
-        REQUIRE(tok.tokenType() == type); \
-        REQUIRE(tok.value() == u##val);   \
-        REQUIRE(tok.unit() == u##unt);    \
+#define Expect3(_type, val, unt)        \
+    do {                                \
+        auto tok = lexer.next();        \
+        REQUIRE(tok.type() == _type);   \
+        REQUIRE(tok.value() == u##val); \
+        REQUIRE(tok.unit() == u##unt);  \
     } while (false)
 
 auto src = R"(abcdef {
@@ -40,8 +40,15 @@ auto src = R"(abcdef {
                }
                )";
 
+class TestLexer : CssLexer {
+public:
+    TestLexer(const std::string& in) : CssLexer(in) {}
+
+    using CssLexer::next;
+};
+
 TEST_CASE("CSSLexer emits proper tokens", "[cssparser]") {
-    CssLexer lexer(src);
+    TestLexer lexer(src);
 
     Expect2(Ident, "abcdef");
     Expect(WhiteSpace);

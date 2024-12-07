@@ -51,9 +51,9 @@ public:
     inline constexpr operator CssTokenType() { return m_token_type; }
 
 private:
-    const CssTokenType m_token_type;
-    const std::u16string m_value;
-    const std::u16string m_unit;
+    CssTokenType m_token_type;
+    std::u16string m_value;
+    std::u16string m_unit;
 };
 
 #endif  // !CSSPARSER_TOKEN_H

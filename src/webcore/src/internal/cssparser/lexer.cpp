@@ -183,13 +183,13 @@ CssToken CssLexer::consumeNumericToken() {
     // consume digits after decimal point
     while (IS_DIGIT(m_in.peek())) m_in.advance();
 
+    auto value = m_in.createStringView(start, m_in.pos());
     if (next3CodepointsStartsIdentSequence()) {
-        return CssToken(Dimension, m_in.createStringView(start, m_in.pos()),
-                        consumeIdentSequence());
+        return CssToken(Dimension, value, consumeIdentSequence());
     } else if (m_in.peek() == '%') {
-        return CssToken(Percentage, m_in.createStringView(start, m_in.pos()));
+        return CssToken(Percentage, value);
     } else {
-        return CssToken(Number, m_in.createStringView(start, m_in.pos()));
+        return CssToken(Number, value);
     }
 }
 CssToken CssLexer::consumeIdentLikeToken() { return CssToken(Ident, consumeIdentSequence()); }

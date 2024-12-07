@@ -8,7 +8,7 @@
 #include "webcore/internal/generic/inputstream.h"
 
 class CssLexer {
-public:
+protected:
     CssLexer(const std::string& in);
     CssToken next();
 
