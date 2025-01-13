@@ -1,5 +1,7 @@
-#include "webcore/internal/cssparser/lexer.h"
+#include "webcore/internal/cssparser/tokenstream.h"
 
+#include <cstdio>
+#include <cstdlib>
 #include <string>
 #include <string_view>
 
@@ -11,10 +13,47 @@
 #define IS_IDENT_START(cc) (IS_LETTER(cc) || IS_NON_ASCII(cc) || cc == '_')
 #define IS_IDENT(cc) (IS_IDENT_START(cc) || IS_DIGIT(cc) || cc == '-')
 
-CssLexer::CssLexer(const std::string& str) : m_in(str) {}
+CssTokenStream::CssTokenStream(const std::string& str) : m_in(str) {}
 
-CssToken CssLexer::next() {
+CssToken& CssTokenStream::peek() {
+    if (!m_peeked) m_peeked = consumeToken();
+    return *m_peeked;
+}
+
+CssToken CssTokenStream::next() {
+    if (m_peeked) {
+        auto value = m_peeked.value();
+        m_peeked.reset();
+        return value;
+    }
+
+    return consumeToken();
+}
+
+void CssTokenStream::skipWhitespace() {
+    if (peek() != WhiteSpace) return;
+    next();
+
+    auto prev_pos = m_in.pos();
+    while (consumeToken() == WhiteSpace) prev_pos = m_in.pos();
+    m_in.moveTo(prev_pos);
+}
+
+bool CssTokenStream::discard(CssTokenType t) {
+    if (peek() != t) return false;
+    next();
+    return true;
+}
+
+bool CssTokenStream::eof() {
+    if (m_peeked) return *m_peeked == EndOfFile;
+    return m_in.eof();
+}
+
+CssToken CssTokenStream::consumeToken() {
     consumeComments();
+
+    if (m_in.eof()) return CssToken(EndOfFile);
 
     switch (m_in.advance()) {
             // clang-format off
@@ -72,9 +111,7 @@ CssToken CssLexer::next() {
             }
             return consumeCurrentCharAsDelim();
         default:
-            if (m_in.eof()) {
-                return CssToken(EndOfFile);
-            } else if (IS_DIGIT(m_in.current())) {
+            if (IS_DIGIT(m_in.current())) {
                 reconsumeCurrent();
                 return consumeNumericToken();
             } else if (IS_IDENT_START(m_in.current())) {
@@ -86,9 +123,9 @@ CssToken CssLexer::next() {
     }
 }
 
-void CssLexer::reconsumeCurrent() { m_in.putback(m_in.current()); }
+void CssTokenStream::reconsumeCurrent() { m_in.putback(m_in.current()); }
 
-bool CssLexer::streamStartsWithNumber() {
+bool CssTokenStream::streamStartsWithNumber() {
     switch (m_in.current()) {
         case '+':
         case '-':
@@ -103,7 +140,7 @@ bool CssLexer::streamStartsWithNumber() {
     }
 }
 
-bool CssLexer::streamStartsWithIdentSequence() {
+bool CssTokenStream::streamStartsWithIdentSequence() {
     switch (m_in.current()) {
         case '-':
             if (IS_IDENT_START(m_in.peek()) || m_in.peek() == '-') return true;
@@ -114,7 +151,7 @@ bool CssLexer::streamStartsWithIdentSequence() {
     }
 }
 
-bool CssLexer::next3CodepointsStartsIdentSequence() {
+bool CssTokenStream::next3CodepointsStartsIdentSequence() {
     switch (m_in.peek()) {
         case '-':
             if (IS_IDENT_START(m_in.peek(2)) || m_in.peek(2) == '-') return true;
@@ -125,7 +162,7 @@ bool CssLexer::next3CodepointsStartsIdentSequence() {
     }
 }
 
-void CssLexer::consumeComments() {
+void CssTokenStream::consumeComments() {
 match_new_comment:
     // if next 2 codepoints are not '\' and '*', this is not a comment
     if (m_in.peek() != '/' || m_in.peek(2) != '*') return;
@@ -141,13 +178,13 @@ match_comment_end_token:
     goto match_comment_end_token;
 }
 
-std::u16string_view CssLexer::consumeIdentSequence() {
+std::u16string_view CssTokenStream::consumeIdentSequence() {
     auto start = m_in.pos();
     while (!m_in.eof() && IS_IDENT(m_in.peek())) m_in.advance();
     return m_in.createStringView(start, m_in.pos());
 }
 
-CssToken CssLexer::consumeWhiteSpaceToken() {
+CssToken CssTokenStream::consumeWhiteSpaceToken() {
     while (!m_in.eof() && (m_in.peek() == '\n' || m_in.peek() == '\t' || m_in.peek() == ' ')) {
         m_in.advance();
     }
@@ -155,7 +192,7 @@ CssToken CssLexer::consumeWhiteSpaceToken() {
     return CssToken(WhiteSpace);
 }
 
-CssToken CssLexer::consumeStringToken() {
+CssToken CssTokenStream::consumeStringToken() {
     auto endToken = '"';
     auto start = m_in.pos();
 
@@ -171,7 +208,7 @@ CssToken CssLexer::consumeStringToken() {
     }
 }
 
-CssToken CssLexer::consumeNumericToken() {
+CssToken CssTokenStream::consumeNumericToken() {
     auto start = m_in.pos();
 
     // consume sign
@@ -192,9 +229,10 @@ CssToken CssLexer::consumeNumericToken() {
         return CssToken(Number, value);
     }
 }
-CssToken CssLexer::consumeIdentLikeToken() { return CssToken(Ident, consumeIdentSequence()); }
 
-CssToken CssLexer::consumeCurrentCharAsDelim() {
+CssToken CssTokenStream::consumeIdentLikeToken() { return CssToken(Ident, consumeIdentSequence()); }
+
+CssToken CssTokenStream::consumeCurrentCharAsDelim() {
     auto end = m_in.pos();
     reconsumeCurrent();
     auto start = m_in.pos();

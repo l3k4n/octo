@@ -15,8 +15,6 @@ UChar32 GenericInputStream::advance(int32_t n) {
     return current();
 }
 
-// Advances the stream upto and including `ch`, making `current()` return `ch`.
-// if `ch` is not found, the stream will advance to the end.
 void GenericInputStream::advanceUntil(UChar32 ch) {
     auto new_pos = m_data.indexOf(ch, m_pos);
     if (new_pos == -1) {

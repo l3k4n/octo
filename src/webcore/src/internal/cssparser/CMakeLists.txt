@@ -1,10 +1,10 @@
 set(CSSPARSER_SOURCES
-  lexer.cpp
   token.cpp
+  tokenstream.cpp
 )
 
 set(CSSPARSER_TEST_SOURCES
-  lexer_test.cpp
+  tokenstream_test.cpp
 )
 
 target_sources(webcore PRIVATE ${CSSPARSER_SOURCES})

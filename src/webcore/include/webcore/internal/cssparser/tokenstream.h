@@ -1,18 +1,22 @@
-#ifndef CSSPARSER_LEXER_H
-#define CSSPARSER_LEXER_H
+#ifndef CSSPARSER_TOKEN_STREAM_H
+#define CSSPARSER_TOKEN_STREAM_H
 
-#include <string>
-#include <string_view>
+#include <optional>
 
-#include "token.h"
+#include "webcore/internal/cssparser/token.h"
 #include "webcore/internal/generic/inputstream.h"
 
-class CssLexer {
-protected:
-    CssLexer(const std::string& in);
+class CssTokenStream {
+public:
+    CssTokenStream(const std::string& in);
+    CssToken& peek();
     CssToken next();
+    void skipWhitespace();
+    bool eof();
+    bool discard(CssTokenType t);
 
 private:
+    CssToken consumeToken();
     void reconsumeCurrent();
     bool advanceIfNextMatch(UChar32, UChar32);
 
@@ -31,6 +35,7 @@ private:
 
 private:
     GenericInputStream m_in;
+    std::optional<CssToken> m_peeked;
 };
 
-#endif  // !CSSPARSER_LEXER_H
+#endif  // !CSSPARSER_TOKEN_STREAM_H

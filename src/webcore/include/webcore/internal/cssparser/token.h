@@ -3,7 +3,6 @@
 
 #include <unicode/umachine.h>
 
-#include <string>
 #include <string_view>
 
 enum CssTokenType {
@@ -37,8 +36,6 @@ public:
     CssToken(CssTokenType type, std::u16string_view value);
     // valueless token
     CssToken(CssTokenType type);
-    // delim token
-    CssToken(CssTokenType type, char delimeter);
     // numeric token
     CssToken(CssTokenType type, std::u16string_view value, std::u16string_view unit);
 
@@ -52,8 +49,8 @@ public:
 
 private:
     CssTokenType m_token_type;
-    std::u16string m_value;
-    std::u16string m_unit;
+    std::u16string_view m_value;
+    std::u16string_view m_unit;
 };
 
 #endif  // !CSSPARSER_TOKEN_H

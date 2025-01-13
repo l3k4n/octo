@@ -1,11 +1,11 @@
-#include "webcore/internal/cssparser/lexer.h"
+#include "webcore/internal/cssparser/tokenstream.h"
 
 #include "catch2/catch_test_macros.hpp"
 #include "webcore/internal/cssparser/token.h"
 
 #define Expect(_type)                     \
     do {                                  \
-        auto tok = lexer.next();          \
+        auto tok = stream.next();         \
         REQUIRE(tok.type() == _type);     \
         REQUIRE(tok.value().size() == 0); \
         REQUIRE(tok.unit().size() == 0);  \
@@ -13,7 +13,7 @@
 
 #define Expect2(_type, val)              \
     do {                                 \
-        auto tok = lexer.next();         \
+        auto tok = stream.next();        \
         REQUIRE(tok.type() == _type);    \
         REQUIRE(tok.value() == u##val);  \
         REQUIRE(tok.unit().size() == 0); \
@@ -21,7 +21,7 @@
 
 #define Expect3(_type, val, unt)        \
     do {                                \
-        auto tok = lexer.next();        \
+        auto tok = stream.next();       \
         REQUIRE(tok.type() == _type);   \
         REQUIRE(tok.value() == u##val); \
         REQUIRE(tok.unit() == u##unt);  \
@@ -37,19 +37,12 @@ auto src = R"(abcdef {
 
     ;}/* 
     color: blue;
-               }
-               )";
+               })";
 
-class TestLexer : CssLexer {
-public:
-    TestLexer(const std::string& in) : CssLexer(in) {}
+TEST_CASE("CSSTokenStream emits proper tokens", "[cssparser]") {
+    CssTokenStream stream(src);
 
-    using CssLexer::next;
-};
-
-TEST_CASE("CSSLexer emits proper tokens", "[cssparser]") {
-    TestLexer lexer(src);
-
+    // NOTE: comment tokens are discarded by the lexer
     Expect2(Ident, "abcdef");
     Expect(WhiteSpace);
     Expect(LeftBrace);

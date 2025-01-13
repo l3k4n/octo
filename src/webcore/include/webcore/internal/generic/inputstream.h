@@ -1,5 +1,5 @@
-#ifndef WEBCORE_INTERNAL_GENERIC_INPUT_STREAM
-#define WEBCORE_INTERNAL_GENERIC_INPUT_STREAM
+#ifndef WEBCORE_INTERNAL_GENERIC_INPUT_STREAM_H
+#define WEBCORE_INTERNAL_GENERIC_INPUT_STREAM_H
 
 #include <unicode/umachine.h>
 #include <unicode/unistr.h>
@@ -30,8 +30,8 @@ public:
     // if `n` < 0 it returns -1, if `n` goes out of bounds, it returns 0.
     // Note: `advance(0)` is equivalent to `current()`.
     UChar32 advance(int32_t n = 1);
-    // Puts `ch` back into the stream.
-    // Note: `ch` must be the last character consumed.
+    // Advances the stream upto and including `ch`, making `current()` return `ch`.
+    // if `ch` is not found, the stream will advance to the end.
     void advanceUntil(UChar32 ch);
     // changes stream position to `stream_pos`
     inline void moveTo(Position stream_pos) { m_pos = stream_pos.pos; }
@@ -69,4 +69,4 @@ private:
     int32_t m_pos = 0;
 };
 
-#endif  // !WEBCORE_INTERNAL_GENERIC_INPUT_STREAM
+#endif  // !WEBCORE_INTERNAL_GENERIC_INPUT_STREAM_H
