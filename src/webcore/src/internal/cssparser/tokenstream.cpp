@@ -5,6 +5,7 @@
 #include <string>
 #include <string_view>
 
+#include "webcore/internal/check.h"
 #include "webcore/internal/cssparser/token.h"
 
 #define IS_LETTER(cc) ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z'))
@@ -193,19 +194,40 @@ CssToken CssTokenStream::consumeWhiteSpaceToken() {
 }
 
 CssToken CssTokenStream::consumeStringToken() {
-    auto endToken = '"';
+    auto stringToken = '"';
+    DCHECK(m_in.current() == stringToken);
+
     auto start = m_in.pos();
+    auto badString = false;
 
-    while (true) {
-        m_in.advance();
+    while (!m_in.eof()) {
+        // m_in.advance();
 
-        if (m_in.current() == endToken || m_in.eof()) {
-            return CssToken(String, m_in.createStringView(start, m_in.pos()));
-        } else if (m_in.current() == '\n') {
-            reconsumeCurrent();
+        if (m_in.peek() == stringToken) {
+            auto posBeforeStringToken = m_in.pos();
+            m_in.advance();
+            return CssToken(String, m_in.createStringView(start, posBeforeStringToken));
+        } else if (m_in.peek() == '\n') {
             return CssToken(BadString);
+        } else {
+            m_in.advance();
         }
     }
+
+    return CssToken(String, m_in.createStringView(start, m_in.pos()));
+
+    // while (true) {
+    //     m_in.advance();
+    //
+    //     if (m_in.eof()) {
+    //         return CssToken(String, m_in.createStringView(start, m_in.pos()));
+    //     } else if (m_in.current() == endToken) {
+    //         return CssToken(String, m_in.createStringView(start, m_in.pos()));
+    //     } else if (m_in.current() == '\n') {
+    //         reconsumeCurrent();
+    //         return CssToken(BadString);
+    //     }
+    // }
 }
 
 CssToken CssTokenStream::consumeNumericToken() {

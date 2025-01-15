@@ -35,7 +35,7 @@ auto src = R"(abcdef {
     : red;
                margin   : 1px
 
-    ;}/* 
+    ;}"a string"/* 
     color: blue;
                })";
 
@@ -63,5 +63,6 @@ TEST_CASE("CSSTokenStream emits proper tokens", "[cssparser]") {
     Expect(WhiteSpace);
     Expect(SemiColon);
     Expect(RightBrace);
+    Expect2(String, "a string");
     Expect(EndOfFile);
 }
