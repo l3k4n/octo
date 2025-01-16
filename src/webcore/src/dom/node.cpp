@@ -1,7 +1,6 @@
 #include "webcore/dom/node.h"
 
 #include "webcore/dom/element.h"
-#include "webcore/internal/check.h"
 
 using DOM::Node;
 
@@ -22,45 +21,12 @@ Node* Node::parentNode() const { return m_parentNode; }
 
 DOM::Element* Node::parentElement() const { return m_parentElement; }
 
-void Node::setPreviousSibling(Node* node) { m_previousSibling = node; }
-
-void Node::setNextSibling(Node* node) { m_nextSibling = node; }
-
-void Node::setFirstChild(Node* node) { m_firstChild = node; }
-
-void Node::setLastChild(Node* node) { m_lastChild = node; }
-
 bool Node::hasChildNodes() const { return isValidChildNode() && firstChild(); };
 
 bool Node::isValidChildNode() const { return nodeType == ELEMENT_NODE || nodeType == TEXT_NODE; }
 
 bool Node::isValidParentNode() const {
     return nodeType == ELEMENT_NODE || nodeType == DOCUMENT_NODE;
-}
-
-void Node::setParent(Node* node) {
-    m_parentNode = node;
-    if (m_parentNode && m_parentNode->nodeType == NodeType::ELEMENT_NODE) {
-        m_parentElement = static_cast<Element*>(node);
-    }
-}
-
-void Node::removeParent(Node* node) const {
-    DCHECK(node);
-    if (!node->parentNode()) return;
-
-    auto parent = node->parentNode();
-    auto prev = node->previousSibling();
-    auto next = node->nextSibling();
-
-    // remove node and fix parent tree
-    if (parent->firstChild() == node) parent->setFirstChild(next);
-    if (parent->lastChild() == node) parent->setLastChild(prev);
-    if (prev) prev->setNextSibling(next);
-    if (next) next->setNextSibling(prev);
-    node->setPreviousSibling(nullptr);
-    node->setNextSibling(nullptr);
-    node->setParent(nullptr);
 }
 
 DOM::Element* Node::firstElementChild() const {
@@ -119,20 +85,37 @@ DOM::Element* Node::nextElementSibling() const {
     return nullptr;
 };
 
-void Node::append(Node* node) {
+// TODO: make sure node->...element ptrs are updated along with node ptrs
+void Node::appendChild(Node* node) {
     if (node->parentNode() == this) return;
 
-    removeParent(node);
-    node->setParent(this);
+    if (node->parentNode()) node->parentNode()->removeChild(node);
+    node->m_parentNode = this;
 
-    // no children
-    if (!lastChild()) {
-        setLastChild(node);
-        setFirstChild(node);
-        return;
+    if (!hasChildNodes()) {
+        m_lastChild = node;
+        m_firstChild = node;
+    } else {
+        m_lastChild->m_nextSibling = node;
+        node->m_previousSibling = m_lastChild;
+        m_lastChild = node;
     }
+}
 
-    node->setPreviousSibling(lastChild());
-    lastChild()->setNextSibling(node);
-    setLastChild(node);
+void Node::removeChild(Node* node) {
+    if (node->parentNode() != this) return;
+
+    auto prev = node->previousSibling();
+    auto next = node->nextSibling();
+
+    // update parent ptrs
+    if (m_firstChild == node) m_firstChild = next;
+    if (m_lastChild == node) m_lastChild = next;
+    node->m_parentNode = nullptr;
+
+    // update sibling ptrs
+    if (prev) prev->m_nextSibling = next;
+    if (next) next->m_previousSibling = prev;
+    node->m_previousSibling = nullptr;
+    node->m_nextSibling = nullptr;
 }

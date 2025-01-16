@@ -30,7 +30,6 @@ class Node {
 private:
     bool isValidParentNode() const;
     bool isValidChildNode() const;
-    void removeParent(Node* node) const;
 
 public:
     Node(NodeType _nodeType, DOMString _nodeName);
@@ -48,12 +47,8 @@ public:
     Element* previousElementSibling() const;
     Element* nextElementSibling() const;
 
-    void setPreviousSibling(Node*);
-    void setNextSibling(Node*);
-    void setFirstChild(Node*);
-    void setLastChild(Node*);
-    void setParent(Node*);
-    void append(Node* node);
+    void appendChild(Node* node);
+    void removeChild(Node* node);
 
     HTML::HTMLCollection children;
     NodeList childNodes;
@@ -61,12 +56,12 @@ public:
     const DOMString nodeName;
 
 protected:
-    Element* m_parentElement;
-    Node* m_parentNode;
-    Node* m_firstChild;
-    Node* m_lastChild;
-    Node* m_previousSibling;
-    Node* m_nextSibling;
+    Element* m_parentElement = nullptr;
+    Node* m_parentNode = nullptr;
+    Node* m_firstChild = nullptr;
+    Node* m_lastChild = nullptr;
+    Node* m_previousSibling = nullptr;
+    Node* m_nextSibling = nullptr;
 };
 
 }  // namespace DOM

@@ -3,6 +3,7 @@
 #include "webcore/dom/document.h"
 #include "webcore/dom/domstring.h"
 #include "webcore/dom/element.h"
+#include "webcore/dom/node.h"
 #include "webcore/dom/usvstring.h"
 #include "webcore/html/tagname.h"
 #include "webcore/internal/check.h"
@@ -49,24 +50,24 @@ DOM::Element* TreeBuilderImpl::createElement(TreeBuilderToken token) {
 void TreeBuilderImpl::insertBufferAsTextNode(const DOM::USVString& buf) {
     if (buf.empty()) return;
 
-    // append new text node if lastchild is not a text node
-    if (currentElement()->lastChild()->nodeType != DOM::NodeType::TEXT_NODE) {
-        currentElement()->append(createTextNode(DOM::DOMString(buf)));
-        return;
+    if (currentElement()->lastChild() &&
+        currentElement()->lastChild()->nodeType == DOM::TEXT_NODE) {
+        // merge with previous sibling if it is also a text node
+        DOM::Text* node = static_cast<DOM::Text*>(currentElement()->lastChild());
+        node->insertData(node->length(), DOM::DOMString(buf));
+    } else {
+        // insert as new text node
+        currentElement()->appendChild(createTextNode(DOM::DOMString(buf)));
     }
-
-    // append the whitespace to text node
-    DOM::Text* textNode = static_cast<DOM::Text*>(currentElement()->lastChild());
-    textNode->insertData(textNode->length(), DOM::DOMString(buf));
 }
 
 void TreeBuilderImpl::insertHTMLElement(HTML::HTMLElement* element) {
-    currentElement()->append(element);
+    currentElement()->appendChild(element);
     m_open_elements.push_back(element);
 }
 
 void TreeBuilderImpl::insertHTMLElementInDocument(HTML::HTMLElement* element) {
-    m_document.append(element);
+    m_document.appendChild(element);
 }
 
 void TreeBuilderImpl::createAndInsertElement(TreeBuilderToken token) {

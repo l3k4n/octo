@@ -29,14 +29,14 @@ static const std::unordered_map<DOM::DOMString, HTML::HTMLTagName::HTMLName> Rev
 };
 #undef Name
 
-HTMLTagName::HTMLTagName(HTMLName _knownName) : isKnownTag(true), knownTag(_knownName) {
+HTMLTagName::HTMLTagName(HTMLName _knownTag) : isKnownTag(true), knownTag(_knownTag) {
     // unknown tag only exists to make the class usable in switch statements
     // not as an actual known tag
     DCHECK(knownTag != UnknownTag);
 }
 
-HTMLTagName::HTMLTagName(DOM::DOMString _unknownName)
-    : isKnownTag(false), unknownTag(new DOM::DOMString(_unknownName)) {}
+HTMLTagName::HTMLTagName(DOM::DOMString _unknownTag)
+    : isKnownTag(false), unknownTag(new DOM::DOMString(_unknownTag)) {}
 
 HTMLTagName::HTMLTagName(const HTMLTagName& other) : isKnownTag(other.isKnownTag) {
     if (other.isKnownTag) {
@@ -57,7 +57,7 @@ HTMLTagName::operator int() const {
 }
 
 HTMLTagName::operator DOM::DOMString() const {
-    if (isKnownTag) GetMappedName(knownTag);
+    if (isKnownTag) return GetMappedName(knownTag);
     return *unknownTag;
 }
 
