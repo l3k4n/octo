@@ -12,6 +12,8 @@ public:
     bool has(const DOMString&) const;
     const DOMString& get(const DOMString&) const;
     void set(const DOMString&, const DOMString&, Element*);
+    using std::vector<Attr>::begin;
+    using std::vector<Attr>::end;
 };
 
 }  // namespace DOM
