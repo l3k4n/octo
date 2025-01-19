@@ -8,7 +8,9 @@ set(HTMLPARSER_SOURCES
 )
 
 set(HTMLPARSER_TEST_SOURCES 
+  jsonserializeddom.cpp
   lexer_test.cpp
+  treebuilder_test.cpp
 )
 
 target_sources(webcore PRIVATE ${HTMLPARSER_SOURCES})
