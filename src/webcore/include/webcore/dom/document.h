@@ -15,6 +15,7 @@ public:
 
     Element* createElement(HTML::HTMLTagName tagName) const;
     Text* createTextNode(DOMString data) const;
+    void accept(class DOMVisitor& v) override;
 };
 
 }  // namespace DOM

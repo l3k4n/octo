@@ -21,6 +21,7 @@
 #include "webcore/html/htmltitleelement.h"
 #include "webcore/html/htmlunknownelement.h"
 #include "webcore/html/tagname.h"
+#include "webcore/internal/visitor/domvisitor.h"
 
 using DOM::Document, DOM::DOMString, DOM::Text;
 using namespace HTML;
@@ -57,3 +58,5 @@ DOM::Element* Document::createElement(HTML::HTMLTagName tagName) const {
 }
 
 Text* Document::createTextNode(DOMString data) const { return new Text(); }
+
+void Document::accept(DOMVisitor& visitor) { visitor.visit(*this); }

@@ -4,6 +4,7 @@
 #include "domstring.h"
 #include "nodelist.h"
 #include "webcore/html/collection.h"
+#include "webcore/internal/visitor/domvisitor.h"
 
 namespace DOM {
 
@@ -46,10 +47,11 @@ public:
     Element* lastElementChild() const;
     Element* previousElementSibling() const;
     Element* nextElementSibling() const;
-
     void appendChild(Node* node);
     void removeChild(Node* node);
+    virtual void accept(DOMVisitor& v) = 0;
 
+    // TODO: make these methods
     HTML::HTMLCollection children;
     NodeList childNodes;
     const NodeType nodeType;

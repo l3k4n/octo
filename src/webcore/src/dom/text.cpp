@@ -23,3 +23,5 @@ void Text::insertData(unsigned long offset, const DOMString& data) {
 const DOM::DOMString& Text::wholeText() const { return m_wholeText; }
 
 unsigned long Text::length() const { return m_wholeText.length(); }
+
+void Text::accept(DOMVisitor& visitor) { return visitor.visit(*this); }

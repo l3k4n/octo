@@ -12,6 +12,8 @@ public:
     Attr(DOMString name, DOMString value, Element* ownerElement);
     const DOMString& name() const;
     Element* ownerElement() const;
+    void accept(class DOMVisitor& v) override;
+
     // TODO: make this a method
     DOMString value;
 

@@ -12,6 +12,8 @@ public:
     HTMLElement(const HTMLTagName& tagName);
     virtual ~HTMLElement() = 0;
 
+    void accept(class DOMVisitor& v) override;
+
     DOM::DOMString innerText;
     DOM::DOMString outerText;
 };

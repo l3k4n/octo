@@ -19,6 +19,7 @@ public:
     bool hasAttribute(const DOMString& name) const;
     bool matches(const DOMString& selectors) const;
 
+    // TODO: make these methods
     const HTML::HTMLTagName tagName;
     DOMString id;
     DOMString className;
