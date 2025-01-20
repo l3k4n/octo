@@ -23,9 +23,9 @@ std::string stringify_token(TreeBuilderToken& token) {
     switch (token.type()) {
             // clang-format off
         case HTMLToken::StartTag:
-            return std::string("StartTag, ") + std::to_string(token.tokenTagName());
+            return std::string("StartTag, ") + std::to_string(token.tag());
         case HTMLToken::EndTag:
-            return std::string("EndTag, ") + std::to_string(token.tokenTagName());
+            return std::string("EndTag, ") + std::to_string(token.tag());
         case HTMLToken::UNSET: return "UNSET";
         case HTMLToken::DOCTYPE: return "DOCTYPE";
         case HTMLToken::Comment: return "Comment";
@@ -176,7 +176,7 @@ void HTMLTreeBuilder::processStartTagToken(TreeBuilderToken token) {
             reprocessToken(token);
             break;
         case BEFORE_HTML:
-            if (token.tokenTagName() == HTMLName::HtmlTag) {
+            if (token.tag() == HTMLName::HtmlTag) {
                 DOM::Element* element = m_builder.createElement(token);
                 m_builder.insertHTMLElementInDocument(static_cast<HTML::HTMLElement*>(element));
                 m_builder.pushStackItem(element);
@@ -187,10 +187,10 @@ void HTMLTreeBuilder::processStartTagToken(TreeBuilderToken token) {
                 break;
             }
         case BEFORE_HEAD:
-            if (token.tokenTagName() == HTMLName::HtmlTag) {
+            if (token.tag() == HTMLName::HtmlTag) {
                 processStartTagTokenInBody(token);
                 break;
-            } else if (token.tokenTagName() == HTMLName::HeadTag) {
+            } else if (token.tag() == HTMLName::HeadTag) {
                 HTML::HTMLHeadElement* element =
                     static_cast<HTML::HTMLHeadElement*>(m_builder.createElement(token));
                 m_builder.insertHTMLElement(element);
@@ -205,16 +205,16 @@ void HTMLTreeBuilder::processStartTagToken(TreeBuilderToken token) {
             processStartTagTokenInHead(token);
             break;
         case AFTER_HEAD:
-            if (token.tokenTagName() == HTMLName::HtmlTag) {
+            if (token.tag() == HTMLName::HtmlTag) {
                 processStartTagTokenInBody(token);
                 break;
-            } else if (token.tokenTagName() == HTMLName::BodyTag) {
+            } else if (token.tag() == HTMLName::BodyTag) {
                 m_builder.createAndInsertElement(token);
                 switchInsertionMode(IN_BODY);
                 break;
-            } else if (token.tokenTagName() == HTMLName::LinkTag ||
-                       token.tokenTagName() == HTMLName::StyleTag ||
-                       token.tokenTagName() == HTMLName::TitleTag) {
+            } else if (token.tag() == HTMLName::LinkTag ||
+                       token.tag() == HTMLName::StyleTag ||
+                       token.tag() == HTMLName::TitleTag) {
                 PARSE_ERR();
                 DCHECK(m_builder.headElement());
                 m_builder.pushStackItem(m_builder.headElement());
@@ -222,7 +222,7 @@ void HTMLTreeBuilder::processStartTagToken(TreeBuilderToken token) {
                 DCHECK(m_builder.currentElement() == m_builder.headElement());
                 m_builder.popStackItem();
                 break;
-            } else if (token.tokenTagName() == HTMLName::HeadTag) {
+            } else if (token.tag() == HTMLName::HeadTag) {
                 break;
             } else {
                 processAnythingElseForAfterHead(token);
@@ -232,7 +232,7 @@ void HTMLTreeBuilder::processStartTagToken(TreeBuilderToken token) {
             processStartTagTokenInBody(token);
             break;
         case AFTER_BODY:
-            if (token.tokenTagName() == HTML::HTMLTagName::HtmlTag) {
+            if (token.tag() == HTML::HTMLTagName::HtmlTag) {
                 processStartTagTokenInBody(token);
                 break;
             } else {
@@ -240,7 +240,7 @@ void HTMLTreeBuilder::processStartTagToken(TreeBuilderToken token) {
                 break;
             }
         case AFTER_AFTER_BODY:
-            if (token.tokenTagName() == HTML::HTMLTagName::HtmlTag) {
+            if (token.tag() == HTML::HTMLTagName::HtmlTag) {
                 processStartTagTokenInBody(token);
                 break;
             } else {
@@ -260,9 +260,9 @@ void HTMLTreeBuilder::processEndTagToken(TreeBuilderToken token) {
             processAnythingElseForInitial(token);
             break;
         case BEFORE_HTML:
-            if (token.tokenTagName() == HTMLName::HeadTag ||
-                token.tokenTagName() == HTMLName::BodyTag ||
-                token.tokenTagName() == HTMLName::HtmlTag) {
+            if (token.tag() == HTMLName::HeadTag ||
+                token.tag() == HTMLName::BodyTag ||
+                token.tag() == HTMLName::HtmlTag) {
                 processAnythingElseForBeforeHtml(token);
                 break;
             } else {
@@ -270,9 +270,9 @@ void HTMLTreeBuilder::processEndTagToken(TreeBuilderToken token) {
                 break;
             }
         case BEFORE_HEAD:
-            if (token.tokenTagName() == HTMLName::HeadTag ||
-                token.tokenTagName() == HTMLName::BodyTag ||
-                token.tokenTagName() == HTMLName::HtmlTag) {
+            if (token.tag() == HTMLName::HeadTag ||
+                token.tag() == HTMLName::BodyTag ||
+                token.tag() == HTMLName::HtmlTag) {
                 reprocessToken(TreeBuilderToken(HTMLToken::StartTag, HTMLName::HeadTag));
                 reprocessToken(token);
                 break;
@@ -281,14 +281,14 @@ void HTMLTreeBuilder::processEndTagToken(TreeBuilderToken token) {
                 break;
             }
         case IN_HEAD:
-            if (token.tokenTagName() == HTMLName::HeadTag) {
+            if (token.tag() == HTMLName::HeadTag) {
                 DCHECK(m_builder.headElement());
                 DCHECK(m_builder.currentElement() == m_builder.headElement());
                 m_builder.popStackItem();
                 switchInsertionMode(AFTER_HEAD);
                 break;
-            } else if (token.tokenTagName() == HTMLName::BodyTag ||
-                       token.tokenTagName() == HTMLName::HtmlTag) {
+            } else if (token.tag() == HTMLName::BodyTag ||
+                       token.tag() == HTMLName::HtmlTag) {
                 processAnythingElseForInHead(token);
                 break;
             } else {
@@ -296,8 +296,8 @@ void HTMLTreeBuilder::processEndTagToken(TreeBuilderToken token) {
                 break;
             }
         case AFTER_HEAD:
-            if (token.tokenTagName() == HTMLName::HtmlTag ||
-                token.tokenTagName() == HTMLName::BodyTag) {
+            if (token.tag() == HTMLName::HtmlTag ||
+                token.tag() == HTMLName::BodyTag) {
                 processAnythingElseForAfterHead(token);
                 break;
             } else {
@@ -305,29 +305,29 @@ void HTMLTreeBuilder::processEndTagToken(TreeBuilderToken token) {
                 break;
             }
         case IN_BODY:
-            if (token.tokenTagName() == HTMLName::BodyTag) {
+            if (token.tag() == HTMLName::BodyTag) {
                 processBodyEndTagTokenInBody(token);
                 break;
-            } else if (token.tokenTagName() == HTMLName::HtmlTag) {
+            } else if (token.tag() == HTMLName::HtmlTag) {
                 if (!processBodyEndTagTokenInBody(
                         TreeBuilderToken(HTMLToken::EndTag, HTMLName::BodyTag))) {
                     break;
                 }
                 reprocessToken(token);
                 break;
-            } else if (token.tokenTagName() == HTMLName::ButtonTag ||
-                       token.tokenTagName() == HTMLName::DivTag) {
-                if (!m_builder.isElementInScope(token.tokenTagName())) {
+            } else if (token.tag() == HTMLName::ButtonTag ||
+                       token.tag() == HTMLName::DivTag) {
+                if (!m_builder.isElementInScope(token.tag())) {
                     PARSE_ERR();
                     break;
                 }
                 m_builder.generateImpliedEndTags();
-                if (m_builder.currentElement()->tagName != token.tokenTagName()) {
+                if (m_builder.currentElement()->tagName != token.tag()) {
                     PARSE_ERR();
                 }
-                m_builder.popUpToStackItemTagName(token.tokenTagName());
+                m_builder.popUpToStackItemTagName(token.tag());
                 break;
-            } else if (token.tokenTagName() == HTMLName::FormTag) {
+            } else if (token.tag() == HTMLName::FormTag) {
                 HTML::HTMLFormElement* node = m_builder.formElement();
                 m_builder.setFormElement(nullptr);
                 if (!node || !m_builder.isElementInScope(node->tagName)) {
@@ -339,29 +339,29 @@ void HTMLTreeBuilder::processEndTagToken(TreeBuilderToken token) {
                     m_builder.popUpToStackItem(node);
                     break;
                 }
-            } else if (token.tokenTagName() == HTMLName::PTag) {
-                if (!m_builder.isElementInButtonScope(token.tokenTagName())) {
+            } else if (token.tag() == HTMLName::PTag) {
+                if (!m_builder.isElementInButtonScope(token.tag())) {
                     PARSE_ERR();
                     reprocessToken(TreeBuilderToken(HTMLToken::StartTag, HTMLName::PTag));
                     reprocessToken(token);
                     break;
                 } else {
-                    m_builder.generateImpliedEndTagsExcluding(token.tokenTagName());
-                    if (m_builder.currentElement()->tagName != token.tokenTagName()) PARSE_ERR();
-                    m_builder.popUpToStackItemTagName(token.tokenTagName());
+                    m_builder.generateImpliedEndTagsExcluding(token.tag());
+                    if (m_builder.currentElement()->tagName != token.tag()) PARSE_ERR();
+                    m_builder.popUpToStackItemTagName(token.tag());
                     break;
                 }
-            } else if (m_builder.isHeadingElement(token.tokenTagName())) {
+            } else if (m_builder.isHeadingElement(token.tag())) {
                 if (!m_builder.isHeadingElementInScope()) {
                     PARSE_ERR();
                     break;
                 } else {
                     m_builder.generateImpliedEndTags();
-                    if (m_builder.currentElement()->tagName != token.tokenTagName()) PARSE_ERR();
+                    if (m_builder.currentElement()->tagName != token.tag()) PARSE_ERR();
                     m_builder.popUpToHeadingElement();
                     break;
                 }
-            } else if (token.tokenTagName() == HTMLName::ATag) {
+            } else if (token.tag() == HTMLName::ATag) {
                 m_builder.popStackItem();
                 break;
             } else {
@@ -370,9 +370,9 @@ void HTMLTreeBuilder::processEndTagToken(TreeBuilderToken token) {
                 while (it != m_builder.stackIteratorEnd()) {
                     DOM::Element* node = *it;
 
-                    if (node->tagName == token.tokenTagName()) {
+                    if (node->tagName == token.tag()) {
                         m_builder.generateImpliedEndTags();
-                        if (token.tokenTagName() != m_builder.currentElement()->tagName)
+                        if (token.tag() != m_builder.currentElement()->tagName)
                             PARSE_ERR();
                         m_builder.popUpToStackItem(node);
                         break;
@@ -387,7 +387,7 @@ void HTMLTreeBuilder::processEndTagToken(TreeBuilderToken token) {
                 break;
             }
         case AFTER_BODY:
-            if (token.tokenTagName() == HTML::HTMLTagName::HtmlTag) {
+            if (token.tag() == HTML::HTMLTagName::HtmlTag) {
                 switchInsertionMode(AFTER_AFTER_BODY);
                 break;
             } else {
@@ -421,7 +421,7 @@ void HTMLTreeBuilder::processEofToken(TreeBuilderToken token) {
 
 void HTMLTreeBuilder::processStartTagTokenInBody(TreeBuilderToken token) {
     TRACE_TOKEN(token);
-    switch (token.tokenTagName()) {
+    switch (token.tag()) {
         case HTMLName::HtmlTag:
             PARSE_ERR();
             DCHECK(m_builder.stackSize() > 0);
@@ -495,7 +495,7 @@ void HTMLTreeBuilder::processStartTagTokenInBody(TreeBuilderToken token) {
             m_builder.popStackItem();
             break;
         case HTMLName::ImageTag:
-            token.setTokenName(HTMLName::ImgTag);
+            token.changeTag(HTMLName::ImgTag);
             reprocessToken(token);
             break;
         case HTMLName::InputTag:
@@ -512,7 +512,7 @@ void HTMLTreeBuilder::processStartTagTokenInBody(TreeBuilderToken token) {
 
 void HTMLTreeBuilder::processStartTagTokenInHead(TreeBuilderToken token) {
     TRACE_TOKEN(token);
-    switch (token.tokenTagName()) {
+    switch (token.tag()) {
         case HTMLName::HtmlTag:
             processStartTagTokenInBody(token);
             break;

@@ -8,96 +8,82 @@
 // TODO: token might not be a tag token, but constructors try to get tag names for them. This is
 // wrong
 
-TreeBuilderToken::TreeBuilderToken(HTMLToken* token)
-    : m_is_token_real(true),
-      m_token_name(HTML::HTMLTagName::GetMappedName(DOM::DOMString(token->data()))),
-      m_real_token(token) {
-    DCHECK(type() != HTMLToken::UNSET);
-}
+TreeBuilderToken::TreeBuilderToken(HTMLToken* token) : m_tag(token->data()), m_token(token) {}
 
 TreeBuilderToken::TreeBuilderToken(HTMLToken::TokenType tokenType, HTML::HTMLTagName::HTMLName name)
-    : m_is_token_real(false), m_token_name(name), m_fake_token_type(tokenType) {
-    DCHECK(type() != HTMLToken::UNSET);
-}
-
-TreeBuilderToken::TreeBuilderToken(const TreeBuilderToken& other)
-    : m_is_token_real(other.m_is_token_real), m_token_name(other.m_token_name) {
-    if (other.m_is_token_real) {
-        m_real_token = other.m_real_token;
-    } else {
-        m_fake_token_type = other.m_fake_token_type;
-    }
-}
-
-TreeBuilderToken::~TreeBuilderToken() {}
+    : m_tag(name), m_token(tokenType) {}
 
 HTMLToken::TokenType TreeBuilderToken::type() const {
-    if (m_is_token_real) return m_real_token->type();
-    return m_fake_token_type;
+    if (auto token = std::get_if<HTMLToken*>(&m_token)) return (*token)->type();
+    return std::get<HTMLToken::TokenType>(m_token);
 }
 
-HTML::HTMLTagName::HTMLName TreeBuilderToken::tokenTagName() const {
+HTML::HTMLTagName TreeBuilderToken::tag() const {
     DCHECK(type() == HTMLToken::StartTag || type() == HTMLToken::EndTag);
-    return m_token_name;
+    return m_tag;
 }
 
 DOM::USVString* TreeBuilderToken::buffer() const {
     DCHECK(type() == HTMLToken::CharacterBuffer);
-
-    if (!m_is_token_real) return nullptr;
-    return &m_real_token->data();
+    if (auto token = std::get_if<HTMLToken*>(&m_token)) return &(*token)->data();
+    return nullptr;
 }
 
 bool TreeBuilderToken::isBufferEmpty() const {
     DCHECK(type() == HTMLToken::CharacterBuffer);
-    if (m_is_token_real) return m_real_token->data().empty();
-
-    return false;
+    if (auto token = std::get_if<HTMLToken*>(&m_token)) return (*token)->data().empty();
+    return true;
 }
 
-void TreeBuilderToken::setTokenName(HTML::HTMLTagName::HTMLName name) {
+void TreeBuilderToken::changeTag(HTML::HTMLTagName name) {
     DCHECK(type() == HTMLToken::StartTag || type() == HTMLToken::EndTag);
-    m_token_name = name;
+    m_tag = name;
 }
 
 void TreeBuilderToken::copyAttrsToElement(DOM::Element* element) const {
     DCHECK(type() == HTMLToken::StartTag || type() == HTMLToken::EndTag);
-    if (!m_is_token_real) return;
 
-    for (auto& attr : m_real_token->attributes()) {
-        element->setAttribute(attr.first, attr.second);
+    if (auto token = std::get_if<HTMLToken*>(&m_token)) {
+        for (auto& attr : (*token)->attributes()) {
+            element->setAttribute(attr.first, attr.second);
+        }
     }
 }
 
 void TreeBuilderToken::copyUniqueAttrsToElement(DOM::Element* element) const {
     DCHECK(type() == HTMLToken::StartTag || type() == HTMLToken::EndTag);
-    if (!m_is_token_real) return;
 
-    for (auto& attr : m_real_token->attributes()) {
-        if (element->hasAttribute(attr.first)) continue;
-        element->setAttribute(attr.first, attr.second);
+    if (auto token = std::get_if<HTMLToken*>(&m_token)) {
+        for (auto& attr : (*token)->attributes()) {
+            if (element->hasAttribute(attr.first)) continue;
+            element->setAttribute(attr.first, attr.second);
+        }
     }
 }
 
 void TreeBuilderToken::trimBufferWhiteSpace() {
     DCHECK(type() == HTMLToken::CharacterBuffer);
-    if (!m_is_token_real) return;
 
-    auto buf = m_real_token->data();
-    auto it = buf.begin();
-    while (*it == '\t' || *it == '\n' || *it == '\f' || *it == '\r' || *it == ' ') ++it;
-    buf.erase(buf.begin(), it);
+    if (auto token = std::get_if<HTMLToken*>(&m_token)) {
+        auto buf = (*token)->data();
+        auto it = buf.begin();
+        while (*it == '\t' || *it == '\n' || *it == '\f' || *it == '\r' || *it == ' ') ++it;
+        buf.erase(buf.begin(), it);
+    }
 }
 
 DOM::USVString TreeBuilderToken::extractBufferWhiteSpace() {
     DCHECK(type() == HTMLToken::CharacterBuffer);
-    if (!m_is_token_real) return DOM::USVString();
 
-    auto buf = m_real_token->data();
-    auto it = buf.begin();
-    while (*it == '\t' || *it == '\n' || *it == '\f' || *it == '\r' || *it == ' ') ++it;
-    DOM::USVString extracted(buf.begin(), it);
-    buf.erase(buf.begin(), it);
+    if (auto token = std::get_if<HTMLToken*>(&m_token)) {
+        auto buf = (*token)->data();
+        auto it = buf.begin();
+        while (*it == '\t' || *it == '\n' || *it == '\f' || *it == '\r' || *it == ' ') ++it;
 
-    return extracted;
+        DOM::USVString extracted(buf.begin(), it);
+        buf.erase(buf.begin(), it);
+        return extracted;
+    }
+
+    return {};
 }

@@ -1,6 +1,8 @@
 #ifndef HTMLPARSER_TREEBUILDER_TOKEN_H
 #define HTMLPARSER_TREEBUILDER_TOKEN_H
 
+#include <variant>
+
 #include "token.h"
 #include "webcore/dom/element.h"
 #include "webcore/dom/usvstring.h"
@@ -17,16 +19,14 @@ struct TreeBuilderToken {
     // Create a fake token. Fake token's can only be created with known htmlname hence the
     // `HTMLTagName::HTMLName` instead of `HTMLTagName`.
     TreeBuilderToken(HTMLToken::TokenType, HTML::HTMLTagName::HTMLName);
-    TreeBuilderToken(const TreeBuilderToken&);
-    ~TreeBuilderToken();
 
     HTMLToken::TokenType type() const;
-    HTML::HTMLTagName::HTMLName tokenTagName() const;
+    HTML::HTMLTagName tag() const;
     DOM::USVString* buffer() const;
     // checks if character buffer is empty
     bool isBufferEmpty() const;
-
-    void setTokenName(HTML::HTMLTagName::HTMLName);
+    // change the tag name of the underlying token
+    void changeTag(HTML::HTMLTagName);
     // copies the token's attributes to the element
     void copyAttrsToElement(DOM::Element*) const;
     // copies the token's attributes to the element without overrite any attribute already set
@@ -37,12 +37,8 @@ struct TreeBuilderToken {
     DOM::USVString extractBufferWhiteSpace();
 
 private:
-    bool m_is_token_real;
-    HTML::HTMLTagName::HTMLName m_token_name;
-    union {
-        HTMLToken::TokenType m_fake_token_type;
-        HTMLToken* m_real_token;
-    };
+    std::variant<HTMLToken*, HTMLToken::TokenType> m_token;
+    HTML::HTMLTagName m_tag;
 };
 
 #endif  // !HTMLPARSER_TREEBUILDER_TOKEN_H

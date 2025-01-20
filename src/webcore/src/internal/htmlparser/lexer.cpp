@@ -31,6 +31,7 @@ HTMLToken& HTMLLexer::next() {
         process(m_in.advance());
     }
 
+    DCHECK(m_impl.token().type() != HTMLToken::UNSET);
     return m_impl.token();
 }
 

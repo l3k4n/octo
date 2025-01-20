@@ -1,6 +1,8 @@
 #ifndef HTML_TAGS_H
 #define HTML_TAGS_H
 
+#include <variant>
+
 #include "webcore/dom/domstring.h"
 
 namespace HTML {
@@ -13,35 +15,28 @@ public:
     H1Tag, H2Tag, H3Tag, H4Tag, H5Tag, H6Tag, BodyTag,
     DivTag, PTag, SpanTag, ButtonTag, FormTag, InputTag,
     ATag, ImgTag, ImageTag,
-    // unknown only exists to allow `operator int()` be possible
-    UnknownTag = -1,
         // clang-format on
     };
 
 public:
-    HTMLTagName(HTMLName knownTag);
-    explicit HTMLTagName(DOM::DOMString unknownTag);
+    HTMLTagName(HTMLName tag);
+    explicit HTMLTagName(const DOM::DOMString& tag);
     HTMLTagName(const HTMLTagName& other);
-    ~HTMLTagName();
+    HTMLTagName& operator=(const HTMLTagName& other);
 
-    operator int() const;
-    operator DOM::DOMString() const;
-    bool operator==(const DOM::DOMString& other) const;
     bool operator==(HTMLName other) const;
     bool operator==(const HTMLTagName& other) const;
-    bool operator!=(const DOM::DOMString& other) const;
     bool operator!=(HTMLName other) const;
     bool operator!=(const HTMLTagName& other) const;
+    operator DOM::DOMString() const;
+    operator int() const;
 
-    static HTMLName GetMappedName(DOM::DOMString);
-    static DOM::DOMString GetMappedName(HTMLName);
+    static HTMLTagName Parse(DOM::DOMString);
 
 private:
-    union {
-        DOM::DOMString* unknownTag;
-        HTMLName knownTag;
-    };
-    const bool isKnownTag;
+    // using a DOMString ptr to reduce the size of HTMLTagName.
+    // since most tags will be resolved to a HTMLName, this should not have too much impact.
+    std::variant<DOM::DOMString*, HTMLName> m_tag;
 };
 
 }  // namespace HTML

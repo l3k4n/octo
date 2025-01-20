@@ -1,6 +1,7 @@
 #include "webcore/html/tagname.h"
 
 #include <unordered_map>
+#include <variant>
 
 #include "webcore/dom/domstring.h"
 #include "webcore/internal/check.h"
@@ -29,68 +30,62 @@ static const std::unordered_map<DOM::DOMString, HTML::HTMLTagName::HTMLName> Rev
 };
 #undef Name
 
-HTMLTagName::HTMLTagName(HTMLName _knownTag) : isKnownTag(true), knownTag(_knownTag) {
-    // unknown tag only exists to make the class usable in switch statements
-    // not as an actual known tag
-    DCHECK(knownTag != UnknownTag);
-}
+HTMLTagName::HTMLTagName(HTMLName tag) : m_tag(tag) {}
 
-HTMLTagName::HTMLTagName(DOM::DOMString _unknownTag)
-    : isKnownTag(false), unknownTag(new DOM::DOMString(_unknownTag)) {}
-
-HTMLTagName::HTMLTagName(const HTMLTagName& other) : isKnownTag(other.isKnownTag) {
-    if (other.isKnownTag) {
-        knownTag = other.knownTag;
+HTMLTagName::HTMLTagName(const DOM::DOMString& tag) {
+    // try resolving tag name, store tag string if not found
+    auto it = ReverseTagMap.find(tag);
+    if (it != ReverseTagMap.end()) {
+        m_tag = it->second;
     } else {
-        unknownTag = other.unknownTag;
+        m_tag = new DOM::DOMString(tag);
     }
 }
 
-HTMLTagName::~HTMLTagName() {
-    if (isKnownTag) return;
-    delete unknownTag;
+HTMLTagName::HTMLTagName(const HTMLTagName& other) {
+    if (auto tag = std::get_if<DOM::DOMString*>(&other.m_tag)) {
+        m_tag = new DOM::DOMString(**tag);
+    } else {
+        m_tag = other.m_tag;
+    }
 }
 
-HTMLTagName::operator int() const {
-    if (isKnownTag) return knownTag;
-    return UnknownTag;
-}
-
-HTMLTagName::operator DOM::DOMString() const {
-    if (isKnownTag) return GetMappedName(knownTag);
-    return *unknownTag;
-}
-
-bool HTMLTagName::operator==(const DOM::DOMString& other) const {
-    if (isKnownTag) return false;
-    return *unknownTag == other;
+HTMLTagName& HTMLTagName::operator=(const HTMLTagName& other) {
+    if (auto tag = std::get_if<DOM::DOMString*>(&other.m_tag)) {
+        m_tag = new DOM::DOMString(**tag);
+    } else {
+        m_tag = other.m_tag;
+    }
+    return *this;
 }
 
 bool HTMLTagName::operator==(HTMLName other) const {
-    if (isKnownTag) return knownTag == other;
+    if (auto tag = std::get_if<HTMLName>(&m_tag)) return *tag == other;
     return false;
 }
 
 bool HTMLTagName::operator==(const HTMLTagName& other) const {
-    if (isKnownTag != other.isKnownTag) return false;
-    if (isKnownTag) return knownTag == other.knownTag;
-    return *unknownTag == *other.unknownTag;
-}
+    if (m_tag.index() != other.m_tag.index()) return false;
 
-bool HTMLTagName::operator!=(const DOM::DOMString& other) const { return !operator==(other); }
+    if (auto tag = std::get_if<HTMLName>(&m_tag)) return *tag == std::get<HTMLName>(other.m_tag);
+    return *std::get<DOM::DOMString*>(m_tag) == *std::get<DOM::DOMString*>(other.m_tag);
+}
 
 bool HTMLTagName::operator!=(HTMLName other) const { return !operator==(other); }
 
 bool HTMLTagName::operator!=(const HTMLTagName& other) const { return !operator==(other); }
 
-DOM::DOMString HTMLTagName::GetMappedName(HTMLName name) {
-    auto it = TagMap.find(name);
-    if (it == TagMap.end()) return u"UNKNOWN";
-    return it->second;
+HTMLTagName::operator DOM::DOMString() const {
+    if (auto tag = std::get_if<HTMLName>(&m_tag)) {
+        auto it = TagMap.find(*tag);
+        DCHECK(it != TagMap.end());
+        return it->second;
+    }
+
+    return *std::get<DOM::DOMString*>(m_tag);
 }
 
-HTMLTagName::HTMLName HTMLTagName::GetMappedName(DOM::DOMString name) {
-    auto it = ReverseTagMap.find(name);
-    if (it == ReverseTagMap.end()) return HTMLName::UnknownTag;
-    return it->second;
+HTMLTagName::operator int() const {
+    if (auto tag = std::get_if<HTMLName>(&m_tag)) return *tag;
+    return -1;
 }

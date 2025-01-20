@@ -42,7 +42,7 @@ DOM::Text* TreeBuilderImpl::createTextNode(DOM::DOMString str) {
 
 DOM::Element* TreeBuilderImpl::createElement(TreeBuilderToken token) {
     DCHECK(token.type() == HTMLToken::StartTag);
-    auto element = m_document.createElement(token.tokenTagName());
+    auto element = m_document.createElement(token.tag());
     token.copyAttrsToElement(element);
     return element;
 }
