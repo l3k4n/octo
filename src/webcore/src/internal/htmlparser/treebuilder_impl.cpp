@@ -47,7 +47,7 @@ DOM::Element* TreeBuilderImpl::createElement(TreeBuilderToken token) {
     return element;
 }
 
-void TreeBuilderImpl::insertBufferAsTextNode(const DOM::USVString& buf) {
+void TreeBuilderImpl::insertCharacterBuffer(const DOM::USVString& buf) {
     if (buf.empty()) return;
 
     if (currentElement()->lastChild() &&
@@ -119,9 +119,10 @@ void TreeBuilderImpl::popUpToHeadingElement() {
 }
 
 bool TreeBuilderImpl::isElementInScope(HTML::HTMLTagName tagName) {
-    auto node = currentElement();
     auto it = stackIteratorBegin();
     while (it != stackIteratorEnd()) {
+        auto node = *it;
+
         if (node->tagName == tagName) return true;
         if (node->tagName == HTML::HTMLTagName::HtmlTag) return false;
         ++it;
@@ -131,9 +132,10 @@ bool TreeBuilderImpl::isElementInScope(HTML::HTMLTagName tagName) {
 }
 
 bool TreeBuilderImpl::isElementInButtonScope(HTML::HTMLTagName tagName) {
-    auto node = currentElement();
     auto it = stackIteratorBegin();
     while (it != stackIteratorEnd()) {
+        auto node = *it;
+
         if (node->tagName == tagName) return true;
         if (node->tagName == HTML::HTMLTagName::HtmlTag ||
             node->tagName == HTML::HTMLTagName::ButtonTag) {
@@ -146,9 +148,10 @@ bool TreeBuilderImpl::isElementInButtonScope(HTML::HTMLTagName tagName) {
 }
 
 bool TreeBuilderImpl::isHeadingElementInScope() {
-    auto node = currentElement();
     auto it = stackIteratorBegin();
     while (it != stackIteratorEnd()) {
+        auto node = *it;
+
         switch (node->tagName) {
             case HTML::HTMLTagName::H1Tag:
             case HTML::HTMLTagName::H2Tag:

@@ -7,7 +7,7 @@ namespace HTML {
 
 class HTMLUnknownElement : public HTMLElement {
 public:
-    HTMLUnknownElement();
+    HTMLUnknownElement(HTML::HTMLTagName name);
 };
 
 }  // namespace HTML

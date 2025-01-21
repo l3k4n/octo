@@ -52,11 +52,11 @@ DOM::Element* Document::createElement(HTML::HTMLTagName tagName) const {
         case HTMLTagName::ImgTag:    return new HTMLImageElement();
         case HTMLTagName::ImageTag:  return new HTMLImageElement();
         case HTMLTagName::SpanTag :  return new HTMLSpanElement();
-        default:                     return new HTMLUnknownElement();
+        default:                     return new HTMLUnknownElement(tagName);
             // clang-format on
     }
 }
 
-Text* Document::createTextNode(DOMString data) const { return new Text(); }
+Text* Document::createTextNode(DOMString data) const { return new Text(data); }
 
 void Document::accept(DOMVisitor& visitor) { visitor.visit(*this); }

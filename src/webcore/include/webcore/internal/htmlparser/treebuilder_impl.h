@@ -35,9 +35,8 @@ public:
     DOM::Text* createTextNode(DOM::DOMString str);
     // creates element from token
     DOM::Element* createElement(TreeBuilderToken token);
-    // extracts continuous whitespace characters from the start of the buffer and inserts it as a
-    // Text Node in the current element
-    void insertBufferAsTextNode(const DOM::USVString&);
+    // inserts buffer as a text node and merges contiguous text nodes
+    void insertCharacterBuffer(const DOM::USVString&);
     // inserts element into current element and adds it to the open element stack
     void insertHTMLElement(HTML::HTMLElement* element);
     // inserts element into document and adds it to the open element stack

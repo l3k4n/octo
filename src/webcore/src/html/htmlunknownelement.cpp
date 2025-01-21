@@ -4,4 +4,4 @@
 
 using HTML::HTMLUnknownElement;
 
-HTMLUnknownElement::HTMLUnknownElement() : HTMLElement(HTMLTagName(u"Unknown")) {}
+HTMLUnknownElement::HTMLUnknownElement(HTML::HTMLTagName name) : HTMLElement(name) {}
