@@ -8,12 +8,12 @@
 #include <string_view>
 #include <unordered_map>
 
+#include "octocore/debug.h"
 #include "webcore/css/propertyid.h"
 #include "webcore/css/values/colorvalue.h"
 #include "webcore/css/values/sizevalue.h"
 #include "webcore/css/values/value.h"
 #include "webcore/css/values/widekeywordvalue.h"
-#include "webcore/internal/check.h"
 #include "webcore/internal/cssparser/token.h"
 #include "webcore/internal/cssparser/tokenstream.h"
 
@@ -52,7 +52,7 @@ inline bool validateHexChar(char c) {
 }
 
 inline uint8_t hexCharToInt(char c) {
-    DCHECK(validateHexChar(c));
+    OCTO_DCHECK(validateHexChar(c));
     if (c >= '0' && c <= '9') return c - '0';
     return std::tolower(c) - 'a' + 10;
 }
@@ -153,7 +153,7 @@ CSS::Value* CssPropertyValueParser::parseWideKeywordValue(CssTokenStream& stream
 
 CssPropertyValueParser::LonghandParser CssPropertyValueParser::resolveLonghandParser(
     CSS::PropertyId id) {
-    DCHECK(!id.isShorthand())
+    OCTO_DCHECK(!id.isShorthand());
     auto idx = static_cast<int>(id);
     return longhand_parsers[idx];
 }

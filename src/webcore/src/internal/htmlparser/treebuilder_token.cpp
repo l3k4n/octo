@@ -1,8 +1,8 @@
 #include "webcore/internal/htmlparser/treebuilder_token.h"
 
+#include "octocore/debug.h"
 #include "webcore/dom/usvstring.h"
 #include "webcore/html/tagname.h"
-#include "webcore/internal/check.h"
 #include "webcore/internal/htmlparser/token.h"
 
 // TODO: token might not be a tag token, but constructors try to get tag names for them. This is
@@ -19,29 +19,29 @@ HTMLToken::TokenType TreeBuilderToken::type() const {
 }
 
 HTML::HTMLTagName TreeBuilderToken::tag() const {
-    DCHECK(type() == HTMLToken::StartTag || type() == HTMLToken::EndTag);
+    OCTO_DCHECK(type() == HTMLToken::StartTag || type() == HTMLToken::EndTag);
     return m_tag;
 }
 
 DOM::USVString* TreeBuilderToken::buffer() const {
-    DCHECK(type() == HTMLToken::CharacterBuffer);
+    OCTO_DCHECK(type() == HTMLToken::CharacterBuffer);
     if (auto token = std::get_if<HTMLToken*>(&m_token)) return &(*token)->data();
     return nullptr;
 }
 
 bool TreeBuilderToken::isBufferEmpty() const {
-    DCHECK(type() == HTMLToken::CharacterBuffer);
+    OCTO_DCHECK(type() == HTMLToken::CharacterBuffer);
     if (auto token = std::get_if<HTMLToken*>(&m_token)) return (*token)->data().empty();
     return true;
 }
 
 void TreeBuilderToken::changeTag(HTML::HTMLTagName name) {
-    DCHECK(type() == HTMLToken::StartTag || type() == HTMLToken::EndTag);
+    OCTO_DCHECK(type() == HTMLToken::StartTag || type() == HTMLToken::EndTag);
     m_tag = name;
 }
 
 void TreeBuilderToken::copyAttrsToElement(DOM::Element* element) const {
-    DCHECK(type() == HTMLToken::StartTag || type() == HTMLToken::EndTag);
+    OCTO_DCHECK(type() == HTMLToken::StartTag || type() == HTMLToken::EndTag);
 
     if (auto token = std::get_if<HTMLToken*>(&m_token)) {
         for (auto& attr : (*token)->attributes()) {
@@ -51,7 +51,7 @@ void TreeBuilderToken::copyAttrsToElement(DOM::Element* element) const {
 }
 
 void TreeBuilderToken::copyUniqueAttrsToElement(DOM::Element* element) const {
-    DCHECK(type() == HTMLToken::StartTag || type() == HTMLToken::EndTag);
+    OCTO_DCHECK(type() == HTMLToken::StartTag || type() == HTMLToken::EndTag);
 
     if (auto token = std::get_if<HTMLToken*>(&m_token)) {
         for (auto& attr : (*token)->attributes()) {
@@ -62,7 +62,7 @@ void TreeBuilderToken::copyUniqueAttrsToElement(DOM::Element* element) const {
 }
 
 void TreeBuilderToken::trimBufferWhiteSpace() {
-    DCHECK(type() == HTMLToken::CharacterBuffer);
+    OCTO_DCHECK(type() == HTMLToken::CharacterBuffer);
 
     if (auto token = std::get_if<HTMLToken*>(&m_token)) {
         auto buf = (*token)->data();
@@ -73,7 +73,7 @@ void TreeBuilderToken::trimBufferWhiteSpace() {
 }
 
 DOM::USVString TreeBuilderToken::extractBufferWhiteSpace() {
-    DCHECK(type() == HTMLToken::CharacterBuffer);
+    OCTO_DCHECK(type() == HTMLToken::CharacterBuffer);
 
     if (auto token = std::get_if<HTMLToken*>(&m_token)) {
         auto buf = (*token)->data();

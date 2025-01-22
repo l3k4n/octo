@@ -3,9 +3,8 @@
 #include <unicode/umachine.h>
 
 #include <cctype>
-#include <iostream>
-#include <ostream>
 
+#include "octocore/debug.h"
 #include "webcore/internal/generic/inputstream.h"
 #include "webcore/internal/htmlparser/token.h"
 
@@ -31,7 +30,7 @@ HTMLToken& HTMLLexer::next() {
         process(m_in.advance());
     }
 
-    DCHECK(m_impl.token().type() != HTMLToken::UNSET);
+    OCTO_DCHECK(m_impl.token().type() != HTMLToken::UNSET);
     return m_impl.token();
 }
 
@@ -51,7 +50,7 @@ void HTMLLexer::process(UChar32 cc) {
         case ATTR_VALUE_SINGLE_QUOTED: processAttrValueSingleQuotedState(cc); break;
         case AFTER_ATTR_VALUE_QUOTED:  processAfterAttrValueQuotedState(cc); break;
         case AFTER_ATTR_NAME:          processAfterAttrNameState(cc); break;
-        default: std::cout << "unhandled state " << m_state << '\n' << std::flush;
+        default: OCTO_NOTREACHED();
     }
     // clang-format on
 }

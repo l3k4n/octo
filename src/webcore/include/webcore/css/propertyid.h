@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <functional>
 
-#include "webcore/internal/check.h"
+#include "octocore/debug.h"
 
 // name, css-name, return-type
 #define LONGHAND_PROPERTY_LIST(X)                      \
@@ -56,17 +56,17 @@ public:
     constexpr PropertyId(Id id) : m_id(id) {}
 
     operator int() const {
-        DCHECK(m_id >= 0 && m_id < PROPERTY_COUNT)
+        OCTO_DCHECK(m_id >= 0 && m_id < PROPERTY_COUNT);
         return m_id;
     }
 
     inline Id longhandId() const {
-        DCHECK(!isShorthand() && m_id >= 0 && m_id < LONGHAND_PROPERTY_COUNT);
+        OCTO_DCHECK(!isShorthand() && m_id >= 0 && m_id < LONGHAND_PROPERTY_COUNT);
         return static_cast<Id>(m_id);
     }
 
     inline Id shorthandId() const {
-        DCHECK(isShorthand());
+        OCTO_DCHECK(isShorthand());
         return static_cast<Id>(m_id);
     }
 

@@ -8,15 +8,13 @@
         auto tok = stream.next();         \
         REQUIRE(tok.type() == _type);     \
         REQUIRE(tok.value().size() == 0); \
-        REQUIRE(tok.unit().size() == 0);  \
     } while (false)
 
-#define Expect2(_type, val)              \
-    do {                                 \
-        auto tok = stream.next();        \
-        REQUIRE(tok.type() == _type);    \
-        REQUIRE(tok.value() == u##val);  \
-        REQUIRE(tok.unit().size() == 0); \
+#define Expect2(_type, val)             \
+    do {                                \
+        auto tok = stream.next();       \
+        REQUIRE(tok.type() == _type);   \
+        REQUIRE(tok.value() == u##val); \
     } while (false)
 
 #define Expect3(_type, val, unt)        \
@@ -27,7 +25,7 @@
         REQUIRE(tok.unit() == u##unt);  \
     } while (false)
 
-auto src = R"(abcdef {
+auto src = R"(abcdef + ghi {
     /* .......... */
                color 
 
@@ -44,6 +42,10 @@ TEST_CASE("CSSTokenStream emits proper tokens", "[cssparser]") {
 
     // NOTE: comment tokens are discarded by the lexer
     Expect2(Ident, "abcdef");
+    Expect(WhiteSpace);
+    Expect2(Delim, "+");
+    Expect(WhiteSpace);
+    Expect2(Ident, "ghi");
     Expect(WhiteSpace);
     Expect(LeftBrace);
     Expect(WhiteSpace);

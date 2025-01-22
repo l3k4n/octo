@@ -3,8 +3,8 @@
 #include <unordered_map>
 #include <variant>
 
+#include "octocore/debug.h"
 #include "webcore/dom/domstring.h"
-#include "webcore/internal/check.h"
 
 using HTML::HTMLTagName;
 
@@ -78,7 +78,7 @@ bool HTMLTagName::operator!=(const HTMLTagName& other) const { return !operator=
 HTMLTagName::operator DOM::DOMString() const {
     if (auto tag = std::get_if<HTMLName>(&m_tag)) {
         auto it = TagMap.find(*tag);
-        DCHECK(it != TagMap.end());
+        OCTO_DCHECK(it != TagMap.end());
         return it->second;
     }
 

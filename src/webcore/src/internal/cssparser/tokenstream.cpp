@@ -5,7 +5,7 @@
 #include <string>
 #include <string_view>
 
-#include "webcore/internal/check.h"
+#include "octocore/debug.h"
 #include "webcore/internal/cssparser/token.h"
 
 #define IS_LETTER(cc) ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z'))
@@ -195,7 +195,7 @@ CssToken CssTokenStream::consumeWhiteSpaceToken() {
 
 CssToken CssTokenStream::consumeStringToken() {
     auto stringToken = '"';
-    DCHECK(m_in.current() == stringToken);
+    OCTO_DCHECK(m_in.current() == stringToken);
 
     auto start = m_in.pos();
     auto badString = false;

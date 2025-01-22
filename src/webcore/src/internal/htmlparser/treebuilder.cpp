@@ -1,13 +1,13 @@
 #include "webcore/internal/htmlparser/treebuilder.h"
 
 #include "loguru/loguru.hpp"
+#include "octocore/debug.h"
 #include "webcore/dom/document.h"
 #include "webcore/dom/usvstring.h"
 #include "webcore/html/htmlelement.h"
 #include "webcore/html/htmlformelement.h"
 #include "webcore/html/htmlheadelement.h"
 #include "webcore/html/tagname.h"
-#include "webcore/internal/check.h"
 #include "webcore/internal/htmlparser/token.h"
 #include "webcore/internal/htmlparser/treebuilder_token.h"
 
@@ -71,7 +71,7 @@ void HTMLTreeBuilder::switchInsertionMode(InsertionMode mode) {
 void HTMLTreeBuilder::processToken(TreeBuilderToken token) {
     switch (token.type()) {
             // clang-format off
-        case HTMLToken::UNSET: DCHECK(false);  // should never happen break;
+        case HTMLToken::UNSET: OCTO_NOTREACHED();
         case HTMLToken::CharacterBuffer: processCharacterBufferToken(token); break;
         case HTMLToken::DOCTYPE:         processDoctypeToken(token); break;
         case HTMLToken::Comment:         processCommentToken(token); break;
@@ -206,10 +206,10 @@ void HTMLTreeBuilder::processStartTagToken(TreeBuilderToken token) {
             } else if (token.tag() == HTMLName::LinkTag || token.tag() == HTMLName::StyleTag ||
                        token.tag() == HTMLName::TitleTag) {
                 PARSE_ERR();
-                DCHECK(m_builder.headElement());
+                OCTO_DCHECK(m_builder.headElement());
                 m_builder.pushStackItem(m_builder.headElement());
                 processStartTagTokenInHead(token);
-                DCHECK(m_builder.currentElement() == m_builder.headElement());
+                OCTO_DCHECK(m_builder.currentElement() == m_builder.headElement());
                 m_builder.popStackItem();
                 break;
             } else if (token.tag() == HTMLName::HeadTag) {
@@ -270,8 +270,8 @@ void HTMLTreeBuilder::processEndTagToken(TreeBuilderToken token) {
             }
         case IN_HEAD:
             if (token.tag() == HTMLName::HeadTag) {
-                DCHECK(m_builder.headElement());
-                DCHECK(m_builder.currentElement() == m_builder.headElement());
+                OCTO_DCHECK(m_builder.headElement());
+                OCTO_DCHECK(m_builder.currentElement() == m_builder.headElement());
                 m_builder.popStackItem();
                 switchInsertionMode(AFTER_HEAD);
                 break;
@@ -408,7 +408,7 @@ void HTMLTreeBuilder::processStartTagTokenInBody(TreeBuilderToken token) {
     switch (token.tag()) {
         case HTMLName::HtmlTag:
             PARSE_ERR();
-            DCHECK(m_builder.stackSize() > 0);
+            OCTO_DCHECK(m_builder.stackSize() > 0);
             token.copyAttrsToElement(m_builder.topElement());
             break;
         case HTMLName::LinkTag:
@@ -441,7 +441,7 @@ void HTMLTreeBuilder::processStartTagTokenInBody(TreeBuilderToken token) {
             if (m_builder.isElementInButtonScope(HTMLName::PTag)) {
                 reprocessToken(TreeBuilderToken(HTMLToken::EndTag, HTMLName::PTag));
             }
-            DCHECK(m_builder.currentElement());
+            OCTO_DCHECK(m_builder.currentElement());
             DOM::Element* node = m_builder.currentElement();
             if (m_builder.isHeadingElement(node->tagName)) {
                 PARSE_ERR();

@@ -6,7 +6,7 @@
 #include "webcore/dom/node.h"
 #include "webcore/dom/usvstring.h"
 #include "webcore/html/tagname.h"
-#include "webcore/internal/check.h"
+#include "octocore/debug.h"
 
 TreeBuilderImpl::TreeBuilderImpl(DOM::Document& doc) : m_document(doc) {}
 
@@ -27,7 +27,7 @@ HTML::HTMLFormElement* TreeBuilderImpl::formElement() { return m_form_element; }
 unsigned long TreeBuilderImpl::stackSize() { return m_open_elements.size(); }
 
 DOM::Element* TreeBuilderImpl::stackItem(unsigned int idx) {
-    DCHECK(idx < m_open_elements.size())
+    OCTO_DCHECK(idx < m_open_elements.size());
     if (m_open_elements.empty()) return nullptr;
     return m_open_elements[idx];
 }
@@ -41,7 +41,7 @@ DOM::Text* TreeBuilderImpl::createTextNode(DOM::DOMString str) {
 }
 
 DOM::Element* TreeBuilderImpl::createElement(TreeBuilderToken token) {
-    DCHECK(token.type() == HTMLToken::StartTag);
+    OCTO_DCHECK(token.type() == HTMLToken::StartTag);
     auto element = m_document.createElement(token.tag());
     token.copyAttrsToElement(element);
     return element;
@@ -80,8 +80,8 @@ void TreeBuilderImpl::pushStackItem(DOM::Element* element) { m_open_elements.pus
 void TreeBuilderImpl::popStackItem() { m_open_elements.pop_back(); }
 
 void TreeBuilderImpl::popUpToStackItem(DOM::Element* element) {
-    DCHECK(!m_open_elements.empty());
-    DCHECK(element);
+    OCTO_DCHECK(!m_open_elements.empty());
+    OCTO_DCHECK(element);
 
     while (!m_open_elements.empty()) {
         if (currentElement() == element) {
@@ -93,7 +93,7 @@ void TreeBuilderImpl::popUpToStackItem(DOM::Element* element) {
 }
 
 void TreeBuilderImpl::popUpToStackItemTagName(HTML::HTMLTagName tagName) {
-    DCHECK(!m_open_elements.empty());
+    OCTO_DCHECK(!m_open_elements.empty());
 
     while (!m_open_elements.empty()) {
         DOM::Element* elem = currentElement();
@@ -106,7 +106,7 @@ void TreeBuilderImpl::popUpToStackItemTagName(HTML::HTMLTagName tagName) {
 }
 
 void TreeBuilderImpl::popUpToHeadingElement() {
-    DCHECK(!m_open_elements.empty());
+    OCTO_DCHECK(!m_open_elements.empty());
 
     while (!m_open_elements.empty()) {
         DOM::Element* elem = currentElement();

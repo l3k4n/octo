@@ -8,7 +8,7 @@
 #include <string>
 #include <string_view>
 
-#include "webcore/internal/check.h"
+#include "octocore/debug.h"
 
 #define EOF_CHAR 0
 #define INVALID_CHAR -1
@@ -38,7 +38,7 @@ public:
     // Puts `ch` back into the stream.
     // Note: `ch` must be the last character consumed.
     inline void putback(UChar32 ch) {
-        DCHECK(ch == current());
+        OCTO_DCHECK(ch == current());
         m_pos = m_data.moveIndex32(m_pos, -1);
     }
     // Returns the last consumed codepoint.
@@ -59,7 +59,7 @@ public:
 
     // Create a string view containing all characters  between `start` and `end`
     inline std::u16string_view createStringView(Position start, Position end) {
-        DCHECK(start < end);
+        OCTO_DCHECK(start.pos < end.pos);
         return std::u16string_view(&m_data.getBuffer()[start.pos],
                                    static_cast<size_t>(end.pos - start.pos));
     }
