@@ -28,7 +28,7 @@
         REQUIRE(result.ok());                                \
     }
 
-TEST_CASE("ss", "[tb]") {
+TEST_CASE("HTMLTreeBuilder creates expected dom trees", "[htmlparser]") {
     TEST_SNAPSHOT(DOMSnapshots::empty, "empty body");
     TEST_SNAPSHOT(DOMSnapshots::simple_body_content, "simple content in body");
     TEST_SNAPSHOT(DOMSnapshots::nested_elements, "nested elements");
