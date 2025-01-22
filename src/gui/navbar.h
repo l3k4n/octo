@@ -4,7 +4,7 @@
 #include <QLineEdit>
 #include <QWidget>
 
-#include "gui/navbarbutton.h"
+#include "navbarbutton.h"
 
 class NavBar : public QWidget {
     Q_OBJECT;

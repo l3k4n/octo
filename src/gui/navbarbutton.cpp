@@ -1,4 +1,4 @@
-#include "gui/navbarbutton.h"
+#include "navbarbutton.h"
 
 QPixmap createColoredPixmap(const QString& iconPath, const QString& sourceColor,
                             const QString& targetColor) {

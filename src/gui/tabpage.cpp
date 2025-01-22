@@ -1,9 +1,9 @@
-#include "gui/tabpage.h"
+#include "tabpage.h"
 
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include "gui/navbar.h"
+#include "navbar.h"
 
 TabPage::TabPage(QWidget* parent) : QWidget(parent) {
     NavBar* navbar = new NavBar(this);

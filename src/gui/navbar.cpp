@@ -1,10 +1,10 @@
-#include "gui/navbar.h"
+#include "navbar.h"
 
 #include <QHBoxLayout>
 #include <QPainter>
 #include <QStyleOption>
 
-#include "gui/navbarbutton.h"
+#include "navbarbutton.h"
 
 NavBar::NavBar(QWidget* parent) : QWidget(parent) {
     NavBarButton* navBackBtn = new NavBarButton(":icons/navigate-back.png", this);

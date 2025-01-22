@@ -1,10 +1,10 @@
-#include "gui/mainwindow.h"
+#include "mainwindow.h"
 
 #include <QTabBar>
 #include <QTabWidget>
 
-#include "gui/tabbar.h"
-#include "gui/tabpage.h"
+#include "tabbar.h"
+#include "tabpage.h"
 
 MainWindow::MainWindow(QWidget* parent) : QTabWidget(parent) {
     setObjectName("MainWindow");
