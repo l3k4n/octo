@@ -1,7 +1,5 @@
 #include "webcore/css/cssstyledeclaration.h"
 
-#include <algorithm>
-
 #include "webcore/css/cssrule.h"
 #include "webcore/css/propertyid.h"
 #include "webcore/css/propertymap.h"
@@ -21,12 +19,8 @@ CSS::CSSRule* CSSStyleDeclaration::parentRule() { return m_parent_rule; }
 CSS::Value* CSSStyleDeclaration::getProperty(CSS::PropertyId prop) { return m_prop_map.get(prop); }
 
 CSS::Value* CSSStyleDeclaration::getProperty(CSSOMString prop) {
-    std::string str;
-    // ignoring any codepoint outside Latin-1 here since would produce invalid property id's anyway.
-    std::transform(prop.begin(), prop.end(), str.begin(),
-                   [](char16_t c) { return static_cast<char>(c); });
-
-    CssTokenStream stream(str);
+    // ignoring any codepoint outside Latin-1 here since they would be invalid property id's anyway.
+    CssTokenStream stream(prop.u8_str());
     auto id = CssPropertyIdParser(stream).parseId();
     if (!id) return nullptr;
 

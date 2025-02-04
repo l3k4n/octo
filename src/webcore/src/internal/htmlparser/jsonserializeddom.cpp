@@ -1,17 +1,8 @@
 #include "webcore/internal/htmlparser/jsonserializeddom.h"
+
 #include "nlohmann/json.hpp"
 #include "webcore/dom/text.h"
 #include "webcore/html/htmlelement.h"
-
-#include <algorithm>
-
-template <typename T>
-inline std::string stringify(T t) {
-    std::string str(t.size(), '\0');
-    std::transform(t.begin(), t.end(), str.begin(),
-                   [](char16_t c) { return static_cast<char>(c); });
-    return str;
-}
 
 JSONSerializedDOMVisitor::JSONSerializedDOMVisitor() : DOMVisitor(), m_root(), m_current(&m_root) {}
 
@@ -23,7 +14,7 @@ void JSONSerializedDOMVisitor::visit(DOM::Document& doc) {
 
 void JSONSerializedDOMVisitor::visit(HTML::HTMLElement& el) {
     (*m_current)["type"] = "HTMLElement";
-    (*m_current)["tagName"] = stringify(DOM::DOMString(el.tagName));
+    (*m_current)["tagName"] = el.tagName.str().u8_str();
 
     for (auto& attr : el.attrList) attr.accept(*this);
 
@@ -32,11 +23,11 @@ void JSONSerializedDOMVisitor::visit(HTML::HTMLElement& el) {
 
 void JSONSerializedDOMVisitor::visit(DOM::Text& text) {
     (*m_current)["type"] = "Text";
-    (*m_current)["wholeText"] = stringify(DOM::DOMString(text.wholeText()));
+    (*m_current)["wholeText"] = text.wholeText().u8_str();
 }
 
 void JSONSerializedDOMVisitor::visit(DOM::Attr& attr) {
-    (*m_current)["attributes"][stringify(attr.name())] = stringify(attr.value);
+    (*m_current)["attributes"][attr.name().u8_str()] = attr.value.u8_str();
 }
 
 void JSONSerializedDOMVisitor::visitChildNodes(DOM::NodeList& list) {

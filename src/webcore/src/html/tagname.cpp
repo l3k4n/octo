@@ -75,7 +75,7 @@ bool HTMLTagName::operator!=(HTMLName other) const { return !operator==(other); 
 
 bool HTMLTagName::operator!=(const HTMLTagName& other) const { return !operator==(other); }
 
-HTMLTagName::operator DOM::DOMString() const {
+const DOM::DOMString& HTMLTagName::str() const {
     if (auto tag = std::get_if<HTMLName>(&m_tag)) {
         auto it = TagMap.find(*tag);
         OCTO_DCHECK(it != TagMap.end());

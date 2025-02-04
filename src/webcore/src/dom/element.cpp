@@ -8,7 +8,7 @@
 using DOM::Element, DOM::DOMString;
 
 Element::Element(const HTML::HTMLTagName& name)
-    : Node(NodeType::ELEMENT_NODE, DOMString(name)), tagName(name) {}
+    : Node(NodeType::ELEMENT_NODE, name.str()), tagName(name) {}
 
 Element::~Element() {}
 

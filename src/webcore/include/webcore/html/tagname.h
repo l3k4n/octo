@@ -28,8 +28,9 @@ public:
     bool operator==(const HTMLTagName& other) const;
     bool operator!=(HTMLName other) const;
     bool operator!=(const HTMLTagName& other) const;
-    operator DOM::DOMString() const;
     operator int() const;
+
+    const DOM::DOMString& str() const;
 
     static HTMLTagName Parse(DOM::DOMString);
 
