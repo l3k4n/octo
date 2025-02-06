@@ -6,6 +6,7 @@ set(DOM_SOURCES
   node.cpp
   nodelist.cpp
   text.cpp
+  treewalker.cpp
 )
 
 target_sources(webcore PRIVATE ${DOM_SOURCES})
