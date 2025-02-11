@@ -9,7 +9,7 @@ JSONSerializedDOMVisitor::JSONSerializedDOMVisitor() : DOMVisitor(), m_root(), m
 void JSONSerializedDOMVisitor::visit(DOM::Document& doc) {
     (*m_current)["type"] = "Document";
 
-    visitChildNodes(doc.childNodes);
+    visitChildNodes(doc.childNodes());
 }
 
 void JSONSerializedDOMVisitor::visit(HTML::HTMLElement& el) {
@@ -18,7 +18,7 @@ void JSONSerializedDOMVisitor::visit(HTML::HTMLElement& el) {
 
     for (auto& attr : el.attrList) attr.accept(*this);
 
-    visitChildNodes(el.childNodes);
+    visitChildNodes(el.childNodes());
 }
 
 void JSONSerializedDOMVisitor::visit(DOM::Text& text) {
@@ -30,7 +30,7 @@ void JSONSerializedDOMVisitor::visit(DOM::Attr& attr) {
     (*m_current)["attributes"][attr.name().u8_str()] = attr.value.u8_str();
 }
 
-void JSONSerializedDOMVisitor::visitChildNodes(DOM::NodeList& list) {
+void JSONSerializedDOMVisitor::visitChildNodes(const DOM::NodeList& list) {
     if (!list.length()) return;
 
     auto& parent = *m_current;

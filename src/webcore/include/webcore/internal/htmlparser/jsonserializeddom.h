@@ -19,7 +19,7 @@ public:
     std::string str();
 
 private:
-    void visitChildNodes(DOM::NodeList& list);
+    void visitChildNodes(const DOM::NodeList& list);
 
 private:
     nlohmann::ordered_json m_root;

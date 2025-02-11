@@ -16,18 +16,18 @@ public:
         Iterator& operator++();
         Node& operator*();
 
-    // private:
+    private:
         Node* m_node;
     };
 
-    NodeList(Node& root);
+    NodeList(const Node& root);
     Node* item(unsigned long idx) const;
     unsigned long length() const;
-    Iterator begin();
-    Iterator end();
+    Iterator begin() const;
+    Iterator end() const;
 
 private:
-    Node& root;
+    const Node& m_root;
 };
 
 }  // namespace DOM

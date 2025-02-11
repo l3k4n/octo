@@ -5,9 +5,9 @@
 
 using DOM::Text;
 
-Text::Text() : Node(NodeType::TEXT_NODE, u"#text") {}
+Text::Text() : Node(NodeType::TEXT_NODE) {}
 
-Text::Text(DOMString text) : Node(NodeType::TEXT_NODE, u"#text"), m_wholeText(text) {}
+Text::Text(DOMString text) : Node(NodeType::TEXT_NODE), m_wholeText(text) {}
 
 Text Text::splitText(unsigned long offset) {
     DOMString substr = m_wholeText.substr(0, offset);
@@ -23,5 +23,7 @@ void Text::insertData(unsigned long offset, const DOMString& data) {
 const DOM::DOMString& Text::wholeText() const { return m_wholeText; }
 
 unsigned long Text::length() const { return m_wholeText.length(); }
+
+DOM::DOMString Text::nodeName() const { return u"#text"; }
 
 void Text::accept(DOMVisitor& visitor) { return visitor.visit(*this); }

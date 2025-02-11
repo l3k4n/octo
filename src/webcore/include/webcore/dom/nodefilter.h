@@ -37,7 +37,7 @@ public:
 
     static inline bool matches(NodeFilter::SHOW mask, Node* node) {
         OCTO_DCHECK(node);
-        return mask & (1 << (node->nodeType - 1));
+        return mask & (1 << (node->nodeType() - 1));
     }
 };
 }  // namespace DOM

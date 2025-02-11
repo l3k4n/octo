@@ -18,6 +18,7 @@ public:
     void setAttribute(const DOMString& name, const DOMString& value);
     bool hasAttribute(const DOMString& name) const;
     bool matches(const DOMString& selectors) const;
+    DOMString nodeName() const override;
 
     // TODO: make these methods
     const HTML::HTMLTagName tagName;

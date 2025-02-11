@@ -7,10 +7,9 @@
 using DOM::Attr;
 
 Attr::Attr(DOMString _name, DOMString _value, Element* _ownerElement)
-    : Node(NodeType::ATTRIBUTE_NODE, _name),
-      m_name(_name),
-      value(_value),
-      m_ownerElement(_ownerElement) {}
+    : Node(NodeType::ATTRIBUTE_NODE), m_name(_name), value(_value), m_ownerElement(_ownerElement) {}
+
+DOM::DOMString Attr::nodeName() const { return this->m_name; }
 
 const DOM::DOMString& Attr::name() const { return m_name; }
 

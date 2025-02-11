@@ -13,6 +13,7 @@ public:
     const DOMString& name() const;
     Element* ownerElement() const;
     void accept(class DOMVisitor& v) override;
+    DOMString nodeName() const override;
 
     // TODO: make this a method
     DOMString value;

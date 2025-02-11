@@ -38,11 +38,11 @@ public:
 public:
     Selector(Type type);
     Selector(Type type, CSSOMString value);
-    Type type();
-    const CSS::CSSOMString& value();
-    Combinator combinator();
-    MatchType matchType();
-    const CSS::CSSOMString& matchValue();
+    Type type() const;
+    const CSS::CSSOMString& value() const;
+    Combinator combinator() const;
+    MatchType matchType() const;
+    const CSS::CSSOMString& matchValue() const;
 
     void setCombinator(Combinator);
     void setMatchType(MatchType);

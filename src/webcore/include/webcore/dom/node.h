@@ -28,15 +28,16 @@ enum NodeType : unsigned short {
 };
 
 class Node {
-private:
-    bool isValidParentNode() const;
-    bool isValidChildNode() const;
-
 public:
-    Node(NodeType _nodeType, DOMString _nodeName);
+    Node(NodeType);
     virtual ~Node() = 0;
 
+    NodeType nodeType() const;
+    virtual DOMString nodeName() const = 0;
     bool hasChildNodes() const;
+    HTML::HTMLCollection children() const;
+    NodeList childNodes() const;
+
     Node* firstChild() const;
     Node* lastChild() const;
     Node* previousSibling() const;
@@ -49,16 +50,15 @@ public:
     Element* nextElementSibling() const;
     void appendChild(Node* node);
     void removeChild(Node* node);
+
     virtual void accept(DOMVisitor& v) = 0;
 
-    // TODO: make these methods
-    HTML::HTMLCollection children;
-    NodeList childNodes;
-    const NodeType nodeType;
-    const DOMString nodeName;
+private:
+    bool isValidParentNode() const;
+    bool isValidChildNode() const;
 
-protected:
-    Element* m_parentElement = nullptr;
+private:
+    const NodeType m_nodeType;
     Node* m_parentNode = nullptr;
     Node* m_firstChild = nullptr;
     Node* m_lastChild = nullptr;

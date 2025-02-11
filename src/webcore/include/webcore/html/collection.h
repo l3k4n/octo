@@ -10,12 +10,12 @@ namespace HTML {
 
 class HTMLCollection {
 public:
-    HTMLCollection(DOM::Node& root);
+    HTMLCollection(const DOM::Node& root);
     unsigned long length() const;
     DOM::Element* item(unsigned long idx) const;
 
 private:
-    DOM::Node& root;
+    const DOM::Node& m_root;
 };
 
 }  // namespace HTML

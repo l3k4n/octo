@@ -7,8 +7,7 @@
 
 using DOM::Element, DOM::DOMString;
 
-Element::Element(const HTML::HTMLTagName& name)
-    : Node(NodeType::ELEMENT_NODE, name.str()), tagName(name) {}
+Element::Element(const HTML::HTMLTagName& name) : Node(NodeType::ELEMENT_NODE), tagName(name) {}
 
 Element::~Element() {}
 
@@ -19,6 +18,8 @@ void Element::setAttribute(const DOMString& name, const DOMString& value) {
 };
 
 bool Element::hasAttribute(const DOMString& name) const { return attrList.has(name); };
+
+DOMString Element::nodeName() const { return tagName.str(); }
 
 bool Element::matches(const DOMString& selectors) const {
     // TODO: implement when cssparser is available

@@ -1,12 +1,12 @@
 #include "webcore/internal/htmlparser/treebuilder_impl.h"
 
+#include "octocore/debug.h"
 #include "webcore/dom/document.h"
 #include "webcore/dom/domstring.h"
 #include "webcore/dom/element.h"
 #include "webcore/dom/node.h"
 #include "webcore/dom/usvstring.h"
 #include "webcore/html/tagname.h"
-#include "octocore/debug.h"
 
 TreeBuilderImpl::TreeBuilderImpl(DOM::Document& doc) : m_document(doc) {}
 
@@ -51,7 +51,7 @@ void TreeBuilderImpl::insertCharacterBuffer(const DOM::USVString& buf) {
     if (buf.empty()) return;
 
     if (currentElement()->lastChild() &&
-        currentElement()->lastChild()->nodeType == DOM::TEXT_NODE) {
+        currentElement()->lastChild()->nodeType() == DOM::TEXT_NODE) {
         // merge with previous sibling if it is also a text node
         DOM::Text* node = static_cast<DOM::Text*>(currentElement()->lastChild());
         node->insertData(node->length(), DOM::DOMString(buf));

@@ -1,13 +1,16 @@
 #include "webcore/dom/node.h"
 
 #include "webcore/dom/element.h"
+#include "webcore/dom/nodelist.h"
+#include "webcore/html/collection.h"
 
 using DOM::Node;
 
-Node::Node(NodeType _nodeType, DOMString _nodeName)
-    : childNodes(*this), children(*this), nodeType(_nodeType), nodeName(_nodeName) {}
+Node::Node(NodeType nodeType) : m_nodeType(nodeType) {}
 
 Node::~Node() {}
+
+DOM::NodeType Node::nodeType() const { return m_nodeType; };
 
 Node* Node::firstChild() const { return m_firstChild; };
 
@@ -19,14 +22,16 @@ Node* Node::nextSibling() const { return m_nextSibling; };
 
 Node* Node::parentNode() const { return m_parentNode; }
 
-DOM::Element* Node::parentElement() const { return m_parentElement; }
+DOM::Element* Node::parentElement() const { return dynamic_cast<DOM::Element*>(m_parentNode); }
 
 bool Node::hasChildNodes() const { return isValidChildNode() && firstChild(); };
 
-bool Node::isValidChildNode() const { return nodeType == ELEMENT_NODE || nodeType == TEXT_NODE; }
+bool Node::isValidChildNode() const {
+    return m_nodeType == ELEMENT_NODE || m_nodeType == TEXT_NODE;
+}
 
 bool Node::isValidParentNode() const {
-    return nodeType == ELEMENT_NODE || nodeType == DOCUMENT_NODE;
+    return m_nodeType == ELEMENT_NODE || m_nodeType == DOCUMENT_NODE;
 }
 
 DOM::Element* Node::firstElementChild() const {
@@ -34,7 +39,7 @@ DOM::Element* Node::firstElementChild() const {
 
     auto child = firstChild();
     while (child) {
-        if (child->nodeType == NodeType::ELEMENT_NODE) {
+        if (child->m_nodeType == NodeType::ELEMENT_NODE) {
             return dynamic_cast<DOM::Element*>(child);
         }
         child = child->nextSibling();
@@ -48,7 +53,7 @@ DOM::Element* Node::lastElementChild() const {
 
     auto child = lastChild();
     while (child) {
-        if (child->nodeType == NodeType::ELEMENT_NODE) {
+        if (child->m_nodeType == NodeType::ELEMENT_NODE) {
             return dynamic_cast<DOM::Element*>(child);
         }
         child = child->previousSibling();
@@ -62,7 +67,7 @@ DOM::Element* Node::previousElementSibling() const {
 
     auto sibling = previousSibling();
     while (sibling) {
-        if (sibling->nodeType == NodeType::ELEMENT_NODE) {
+        if (sibling->m_nodeType == NodeType::ELEMENT_NODE) {
             return dynamic_cast<DOM::Element*>(sibling);
         }
         sibling = sibling->previousSibling();
@@ -76,7 +81,7 @@ DOM::Element* Node::nextElementSibling() const {
 
     auto sibling = nextSibling();
     while (sibling) {
-        if (sibling->nodeType == NodeType::ELEMENT_NODE) {
+        if (sibling->m_nodeType == NodeType::ELEMENT_NODE) {
             return dynamic_cast<DOM::Element*>(sibling);
         }
         sibling = sibling->nextSibling();
@@ -84,6 +89,10 @@ DOM::Element* Node::nextElementSibling() const {
 
     return nullptr;
 };
+
+HTML::HTMLCollection Node::children() const { return HTML::HTMLCollection(*this); }
+
+DOM::NodeList Node::childNodes() const { return NodeList(*this); }
 
 // TODO: make sure node->...element ptrs are updated along with node ptrs
 void Node::appendChild(Node* node) {

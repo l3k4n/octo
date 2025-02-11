@@ -26,7 +26,7 @@
 using DOM::Document, DOM::DOMString, DOM::Text;
 using namespace HTML;
 
-Document::Document() : Node(NodeType::DOCUMENT_NODE, u"#document") {}
+Document::Document() : Node(NodeType::DOCUMENT_NODE) {}
 
 DOM::Element* Document::createElement(HTML::HTMLTagName tagName) const {
     switch (tagName) {
@@ -56,6 +56,8 @@ DOM::Element* Document::createElement(HTML::HTMLTagName tagName) const {
             // clang-format on
     }
 }
+
+DOMString Document::nodeName() const { return u"#document"; }
 
 Text* Document::createTextNode(DOMString data) const { return new Text(data); }
 

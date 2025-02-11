@@ -16,6 +16,7 @@ public:
     void insertData(unsigned long, const DOMString&);
     unsigned long length() const;
     void accept(class DOMVisitor& v) override;
+    DOMString nodeName() const override;
 
 private:
     DOMString m_wholeText;
