@@ -4,6 +4,8 @@ using CSS::CSSRule;
 
 CSSRule::CSSRule(Type t) : m_type(t) {}
 
+CSSRule::~CSSRule() {}
+
 CSSRule::Type CSSRule::ruleType() { return m_type; }
 
 CSSRule* CSSRule::parentRule() { return m_parent_rule; }

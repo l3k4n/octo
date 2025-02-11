@@ -12,6 +12,7 @@ public:
     enum class Type : unsigned short { STYLE_RULE };
 
     CSSRule(Type t);
+    virtual ~CSSRule() = 0;
 
     Type ruleType();
     CSSRule* parentRule();
