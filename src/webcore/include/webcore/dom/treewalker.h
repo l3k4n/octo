@@ -18,6 +18,7 @@ public:
     Node* previousNode();
     Node* nextNode();
     Node* currentNode() const;
+    void setCurrentNode(Node* current);
 
 private:
     inline bool visible(Node* node) { return NodeFilter::matches(m_whatToShow, node); }

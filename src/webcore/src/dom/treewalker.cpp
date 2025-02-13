@@ -90,7 +90,7 @@ DOM::Node* TreeWalker::nextNode() {
 
 DOM::Node* TreeWalker::currentNode() const { return m_currentNode; }
 
-DOM::Node* DOM::TreeWalker::firstVisibleNodeInSubtree(Node* sub_tree_root) {
+DOM::Node* TreeWalker::firstVisibleNodeInSubtree(Node* sub_tree_root) {
     OCTO_DCHECK(sub_tree_root);
 
     DOM::Node* visible_node = nullptr;
@@ -105,7 +105,7 @@ DOM::Node* DOM::TreeWalker::firstVisibleNodeInSubtree(Node* sub_tree_root) {
     return nullptr;
 }
 
-DOM::Node* DOM::TreeWalker::lastVisibleNodeInSubtree(Node* sub_tree_root) {
+DOM::Node* TreeWalker::lastVisibleNodeInSubtree(Node* sub_tree_root) {
     OCTO_DCHECK(sub_tree_root);
 
     DOM::Node* visible_node = nullptr;
@@ -121,7 +121,7 @@ DOM::Node* DOM::TreeWalker::lastVisibleNodeInSubtree(Node* sub_tree_root) {
     return nullptr;
 }
 
-DOM::Node* DOM::TreeWalker::firstVisibleNodeInSiblingsSubtree(Node* first_node) {
+DOM::Node* TreeWalker::firstVisibleNodeInSiblingsSubtree(Node* first_node) {
     OCTO_DCHECK(first_node);
 
     DOM::Node* visible_node = nullptr;
@@ -136,7 +136,7 @@ DOM::Node* DOM::TreeWalker::firstVisibleNodeInSiblingsSubtree(Node* first_node) 
     return nullptr;
 }
 
-DOM::Node* DOM::TreeWalker::lastVisibleNodeInSiblingsSubtree(Node* start_node) {
+DOM::Node* TreeWalker::lastVisibleNodeInSiblingsSubtree(Node* start_node) {
     OCTO_DCHECK(start_node);
 
     DOM::Node* visible_node = nullptr;
@@ -151,3 +151,5 @@ DOM::Node* DOM::TreeWalker::lastVisibleNodeInSiblingsSubtree(Node* start_node) {
 
     return nullptr;
 }
+
+void TreeWalker::setCurrentNode(Node* current) { m_currentNode = current; }
