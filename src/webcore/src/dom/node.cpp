@@ -1,5 +1,7 @@
 #include "webcore/dom/node.h"
 
+#include "octocore/debug.h"
+#include "webcore/dom/document.h"
 #include "webcore/dom/element.h"
 #include "webcore/dom/nodelist.h"
 #include "webcore/html/collection.h"
@@ -112,7 +114,10 @@ void Node::appendChild(Node* node) {
         m_lastChild = node;
     }
 
-    node->m_ownerDocument = m_ownerDocument;
+    auto owner = m_nodeType == DOCUMENT_NODE ? dynamic_cast<DOM::Document*>(this) : m_ownerDocument;
+    OCTO_DCHECK(owner);
+
+    node->m_ownerDocument = owner;
 }
 
 void Node::removeChild(Node* node) {
