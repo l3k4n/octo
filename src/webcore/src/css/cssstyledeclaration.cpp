@@ -12,13 +12,15 @@ using CSS::CSSStyleDeclaration;
 CSSStyleDeclaration::CSSStyleDeclaration(CSS::PropertyMap&& prop_map)
     : m_prop_map(std::move(prop_map)) {}
 
-unsigned long CSSStyleDeclaration::length() { return m_length; }
+unsigned long CSSStyleDeclaration::length() const { return m_length; }
 
-CSS::CSSRule* CSSStyleDeclaration::parentRule() { return m_parent_rule; }
+CSS::CSSRule* CSSStyleDeclaration::parentRule() const { return m_parent_rule; }
 
-CSS::Value* CSSStyleDeclaration::getProperty(CSS::PropertyId prop) { return m_prop_map.get(prop); }
+CSS::Value* CSSStyleDeclaration::getProperty(CSS::PropertyId prop) const {
+    return m_prop_map.get(prop);
+}
 
-CSS::Value* CSSStyleDeclaration::getProperty(CSSOMString prop) {
+CSS::Value* CSSStyleDeclaration::getProperty(CSSOMString prop) const {
     // ignoring any codepoint outside Latin-1 here since they would be invalid property id's anyway.
     CssTokenStream stream(prop.u8_str());
     auto id = CssPropertyIdParser(stream).parseId();

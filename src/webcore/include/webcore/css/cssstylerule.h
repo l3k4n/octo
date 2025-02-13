@@ -11,9 +11,9 @@ public:
     CSSStyleRule(SelectorList&& sels, CSSStyleDeclaration&& decls)
         : CSSRule(CSSRule::Type::STYLE_RULE), m_selectors(sels), m_declarations(decls) {}
 
-    inline const SelectorList& selectorList() { return m_selectors; }
+    inline const SelectorList& selectorList() const { return m_selectors; }
 
-    inline const CSSStyleDeclaration& declarations() { return m_declarations; }
+    inline const CSSStyleDeclaration& declarations() const { return m_declarations; }
 
 private:
     const SelectorList m_selectors;

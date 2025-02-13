@@ -8,7 +8,7 @@ namespace CSS {
 
 class CSSStyleSheet {
 public:
-    CSSRuleList cssRules();
+    CSSRuleList cssRules() const;
 
     // for parser use only
     void insertParsedRule(CSSRule*);

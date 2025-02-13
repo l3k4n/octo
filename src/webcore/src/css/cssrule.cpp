@@ -6,13 +6,13 @@ CSSRule::CSSRule(Type t) : m_type(t) {}
 
 CSSRule::~CSSRule() {}
 
-CSSRule::Type CSSRule::ruleType() { return m_type; }
+CSSRule::Type CSSRule::ruleType() const { return m_type; }
 
-CSSRule* CSSRule::parentRule() { return m_parent_rule; }
+CSSRule* CSSRule::parentRule() const { return m_parent_rule; }
 
-CSS::CSSStyleSheet* CSSRule::parentStyleSheet() { return m_parent_style_sheet; }
+CSS::CSSStyleSheet* CSSRule::parentStyleSheet() const { return m_parent_style_sheet; }
 
-CSSRule* CSSRule::nextRule() { return m_next_rule; }
+CSSRule* CSSRule::nextRule() const { return m_next_rule; }
 
 void CSSRule::setNextRule(CSSRule* rule) { m_next_rule = rule; }
 

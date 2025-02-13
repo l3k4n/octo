@@ -7,12 +7,12 @@ namespace CSS {
 
 class CSSRuleList {
 public:
-    CSSRuleList(CSSRule* rule_list, unsigned long len);
-    unsigned long length();
-    CSSRule* item(unsigned long idx);
+    CSSRuleList(const CSSRule* rule_list, unsigned long len);
+    unsigned long length() const;
+    const CSSRule* item(unsigned long idx) const;
 
 private:
-    CSSRule* m_rules;
+    const CSSRule* m_rules;
 };
 
 }  // namespace CSS

@@ -4,7 +4,7 @@
 
 using CSS::CSSStyleSheet;
 
-CSS::CSSRuleList CSSStyleSheet::cssRules() { return CSSRuleList(m_rules, m_rule_length); }
+CSS::CSSRuleList CSSStyleSheet::cssRules() const { return CSSRuleList(m_rules, m_rule_length); }
 
 void CSSStyleSheet::insertParsedRule(CSSRule* rule) {
     OCTO_DCHECK(!rule->nextRule());

@@ -11,7 +11,7 @@ namespace CSS {
 class PropertyMap {
 public:
     void set(PropertyId, Value*);
-    Value* get(PropertyId);
+    Value* get(PropertyId) const;
 
 private:
     std::unordered_map<PropertyId, Value*> m_map;

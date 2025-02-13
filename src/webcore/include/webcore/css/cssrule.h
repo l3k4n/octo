@@ -14,10 +14,10 @@ public:
     CSSRule(Type t);
     virtual ~CSSRule() = 0;
 
-    Type ruleType();
-    CSSRule* parentRule();
-    CSSStyleSheet* parentStyleSheet();
-    CSSRule* nextRule();
+    Type ruleType() const;
+    CSSRule* parentRule() const;
+    CSSStyleSheet* parentStyleSheet() const;
+    CSSRule* nextRule() const;
 
     void setNextRule(CSSRule*);
     void setParentRule(CSSRule*);

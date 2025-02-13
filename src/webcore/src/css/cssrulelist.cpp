@@ -2,9 +2,9 @@
 
 using CSS::CSSRuleList;
 
-CSSRuleList::CSSRuleList(CSSRule* rule_list, unsigned long len) : m_rules(rule_list) {}
+CSSRuleList::CSSRuleList(const CSSRule* rule_list, unsigned long len) : m_rules(rule_list) {}
 
-unsigned long CSSRuleList::length() {
+unsigned long CSSRuleList::length() const {
     unsigned long len = 0;
     auto rule = m_rules;
 
@@ -15,7 +15,7 @@ unsigned long CSSRuleList::length() {
     return len;
 }
 
-CSS::CSSRule* CSSRuleList::item(unsigned long idx) {
+const CSS::CSSRule* CSSRuleList::item(unsigned long idx) const {
     if (idx >= length()) return nullptr;
 
     auto rule = m_rules;

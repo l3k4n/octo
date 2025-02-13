@@ -7,7 +7,7 @@ using CSS::PropertyMap;
 
 void PropertyMap::set(CSS::PropertyId p, CSS::Value* v) { m_map.insert(std::pair(p, v)); }
 
-CSS::Value* PropertyMap::get(CSS::PropertyId p) {
+CSS::Value* PropertyMap::get(CSS::PropertyId p) const {
     auto it = m_map.find(p);
 
     if (it == m_map.end()) return nullptr;

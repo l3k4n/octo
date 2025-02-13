@@ -14,11 +14,10 @@ class CSSStyleDeclaration {
 public:
     CSSStyleDeclaration(PropertyMap&& prop_map);
 
-    unsigned long length();
-    CSSRule* parentRule();
-    Value* getProperty(CSSOMString property);
-    Value* getProperty(CSS::PropertyId property);
-
+    unsigned long length() const;
+    CSSRule* parentRule() const;
+    Value* getProperty(CSSOMString property) const;
+    Value* getProperty(CSS::PropertyId property) const;
     void setParent(CSSRule*);
 
 private:
