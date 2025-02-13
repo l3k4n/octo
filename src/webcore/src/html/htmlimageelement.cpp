@@ -4,4 +4,5 @@
 
 using HTML::HTMLImageElement;
 
-HTMLImageElement::HTMLImageElement() : HTMLElement(HTMLTagName::ImageTag) {}
+HTMLImageElement::HTMLImageElement(DOM::Document* owner)
+    : HTMLElement(owner, HTMLTagName::ImageTag) {}

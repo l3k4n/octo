@@ -5,15 +5,19 @@
 
 #include "htmlelement.h"
 #include "tagname.h"
+namespace DOM {
+class Document;
+}
+
 namespace HTML {
 
 class HTMLHeadingElement : public HTMLElement {
 public:
     enum HeadingLevel : uint8_t { H1, H2, H3, H4, H5, H6 };
-    HTMLHeadingElement(HeadingLevel);
+    HTMLHeadingElement(DOM::Document*, HeadingLevel);
 
 private:
-    HTMLTagName getTagName(HeadingLevel);
+    static HTMLTagName ToHeadingTag(HeadingLevel);
 };
 
 }  // namespace HTML

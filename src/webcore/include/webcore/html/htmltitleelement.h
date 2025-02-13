@@ -4,11 +4,15 @@
 #include "htmlelement.h"
 #include "webcore/dom/domstring.h"
 
+namespace DOM {
+class Document;
+}
+
 namespace HTML {
 
 class HTMLTitleElement : public HTMLElement {
 public:
-    HTMLTitleElement();
+    HTMLTitleElement(DOM::Document*);
 
     DOM::DOMString text;
 };

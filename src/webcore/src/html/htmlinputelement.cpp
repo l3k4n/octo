@@ -4,4 +4,4 @@
 
 using HTML::HTMLInputElement;
 
-HTMLInputElement::HTMLInputElement() : HTMLElement(HTMLTagName::InputTag) {}
+HTMLInputElement::HTMLInputElement(DOM::Document* owner) : HTMLElement(owner, HTMLTagName::InputTag) {}

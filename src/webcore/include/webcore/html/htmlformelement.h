@@ -1,16 +1,19 @@
 #ifndef HTML_FORMELEMENT_H
 #define HTML_FORMELEMENT_H
 
-#include "collection.h"
 #include "htmlelement.h"
 #include "webcore/dom/domstring.h"
 #include "webcore/dom/usvstring.h"
+
+namespace DOM {
+class Document;
+}
 
 namespace HTML {
 
 class HTMLFormElement : public HTMLElement {
 public:
-    HTMLFormElement();
+    HTMLFormElement(DOM::Document*);
 
     DOM::USVString action;
     DOM::DOMString enctype;

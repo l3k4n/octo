@@ -4,4 +4,4 @@
 
 using HTML::HTMLBodyElement;
 
-HTMLBodyElement::HTMLBodyElement() : HTMLElement(HTMLTagName::BodyTag) {}
+HTMLBodyElement::HTMLBodyElement(DOM::Document* owner) : HTMLElement(owner, HTMLTagName::BodyTag) {}

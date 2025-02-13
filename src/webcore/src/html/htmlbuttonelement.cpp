@@ -4,4 +4,4 @@
 
 using HTML::HTMLButtonElement;
 
-HTMLButtonElement::HTMLButtonElement() : HTMLElement(HTMLTagName::ButtonTag), labels(*this) {}
+HTMLButtonElement::HTMLButtonElement(DOM::Document* owner) : HTMLElement(owner, HTMLTagName::ButtonTag), labels(*this) {}

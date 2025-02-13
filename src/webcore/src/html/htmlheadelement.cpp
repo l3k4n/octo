@@ -5,4 +5,4 @@
 
 using HTML::HTMLHeadElement;
 
-HTMLHeadElement::HTMLHeadElement() : HTMLElement(HTMLTagName::HeadTag) {}
+HTMLHeadElement::HTMLHeadElement(DOM::Document* owner) : HTMLElement(owner, HTMLTagName::HeadTag) {}

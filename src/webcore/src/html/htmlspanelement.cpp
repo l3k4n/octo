@@ -4,4 +4,4 @@
 
 using HTML::HTMLSpanElement;
 
-HTMLSpanElement::HTMLSpanElement() : HTMLElement(HTMLTagName::SpanTag) {}
+HTMLSpanElement::HTMLSpanElement(DOM::Document* owner) : HTMLElement(owner, HTMLTagName::SpanTag) {}

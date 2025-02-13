@@ -6,11 +6,15 @@
 #include "webcore/dom/domtokenlist.h"
 #include "webcore/dom/usvstring.h"
 
+namespace DOM {
+class Document;
+}
+
 namespace HTML {
 
 class HTMLLinkElement : public HTMLElement {
 public:
-    HTMLLinkElement();
+    HTMLLinkElement(DOM::Document*);
 
     DOM::USVString href;
     DOM::DOMString* crossOrigin;

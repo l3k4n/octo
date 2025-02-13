@@ -4,4 +4,5 @@
 
 using HTML::HTMLStyleElement;
 
-HTMLStyleElement::HTMLStyleElement() : HTMLElement(HTMLTagName::StyleTag) {}
+HTMLStyleElement::HTMLStyleElement(DOM::Document* owner)
+    : HTMLElement(owner, HTMLTagName::StyleTag) {}

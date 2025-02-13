@@ -3,11 +3,15 @@
 
 #include "htmlelement.h"
 
+namespace DOM {
+class Document;
+}
+
 namespace HTML {
 
 class HTMLStyleElement : public HTMLElement {
 public:
-    HTMLStyleElement();
+    HTMLStyleElement(DOM::Document*);
 };
 
 }  // namespace HTML

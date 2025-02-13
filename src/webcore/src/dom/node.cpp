@@ -6,11 +6,13 @@
 
 using DOM::Node;
 
-Node::Node(NodeType nodeType) : m_nodeType(nodeType) {}
+Node::Node(Document* owner, NodeType nodeType) : m_nodeType(nodeType), m_ownerDocument(owner) {}
 
 Node::~Node() {}
 
 DOM::NodeType Node::nodeType() const { return m_nodeType; };
+
+DOM::Document* Node::ownerDocument() const { return m_ownerDocument; };
 
 Node* Node::firstChild() const { return m_firstChild; };
 
@@ -109,6 +111,8 @@ void Node::appendChild(Node* node) {
         node->m_previousSibling = m_lastChild;
         m_lastChild = node;
     }
+
+    node->m_ownerDocument = m_ownerDocument;
 }
 
 void Node::removeChild(Node* node) {

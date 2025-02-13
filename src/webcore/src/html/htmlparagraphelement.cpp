@@ -4,4 +4,4 @@
 
 using HTML::HTMLParagraphElement;
 
-HTMLParagraphElement::HTMLParagraphElement() : HTMLElement(HTMLTagName::PTag) {}
+HTMLParagraphElement::HTMLParagraphElement(DOM::Document* owner) : HTMLElement(owner, HTMLTagName::PTag) {}

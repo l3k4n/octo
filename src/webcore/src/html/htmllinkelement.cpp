@@ -4,4 +4,4 @@
 
 using HTML::HTMLLinkElement;
 
-HTMLLinkElement::HTMLLinkElement() : HTMLElement(HTMLTagName::LinkTag) {}
+HTMLLinkElement::HTMLLinkElement(DOM::Document* owner) : HTMLElement(owner, HTMLTagName::LinkTag) {}

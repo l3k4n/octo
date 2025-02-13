@@ -6,10 +6,12 @@
 
 namespace DOM {
 
+class Document;
+
 class Text : public Node {
 public:
-    Text();
-    Text(DOMString);
+    Text(DOM::Document*);
+    Text(DOM::Document*, DOMString);
 
     Text splitText(unsigned long offset);
     const DOMString& wholeText() const;

@@ -5,13 +5,17 @@
 #include "webcore/dom/nodelist.h"
 #include "webcore/dom/usvstring.h"
 
+namespace DOM {
+class Document;
+}
+
 namespace HTML {
 
 class HTMLFormElement;
 
 class HTMLInputElement : public HTMLElement {
 public:
-    HTMLInputElement();
+    HTMLInputElement(DOM::Document*);
 
     DOM::DOMString accept;
     DOM::DOMString alt;

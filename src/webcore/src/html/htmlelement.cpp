@@ -4,7 +4,8 @@
 
 using HTML::HTMLElement;
 
-HTMLElement::HTMLElement(const HTML::HTMLTagName& tagName) : Element(tagName) {}
+HTMLElement::HTMLElement(DOM::Document* owner, const HTML::HTMLTagName& tagName)
+    : Element(owner, tagName) {}
 
 HTMLElement::~HTMLElement() {}
 

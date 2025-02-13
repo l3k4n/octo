@@ -3,11 +3,15 @@
 
 #include "htmlelement.h"
 
+namespace DOM {
+class Document;
+}
+
 namespace HTML {
 
 class HTMLUnknownElement : public HTMLElement {
 public:
-    HTMLUnknownElement(HTML::HTMLTagName name);
+    HTMLUnknownElement(DOM::Document*, HTML::HTMLTagName);
 };
 
 }  // namespace HTML

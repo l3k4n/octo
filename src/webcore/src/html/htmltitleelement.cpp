@@ -4,4 +4,4 @@
 
 using HTML::HTMLTitleElement;
 
-HTMLTitleElement::HTMLTitleElement() : HTMLElement(HTMLTagName::TitleTag) {}
+HTMLTitleElement::HTMLTitleElement(DOM::Document* owner) : HTMLElement(owner, HTMLTagName::TitleTag) {}

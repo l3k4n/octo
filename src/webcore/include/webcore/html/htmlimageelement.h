@@ -5,11 +5,15 @@
 #include "webcore/dom/domstring.h"
 #include "webcore/dom/usvstring.h"
 
+namespace DOM {
+class Document;
+}
+
 namespace HTML {
 
 class HTMLImageElement : public HTMLElement {
 public:
-    HTMLImageElement();
+    HTMLImageElement(DOM::Document*);
 
     DOM::DOMString alt;
     DOM::USVString src;

@@ -5,11 +5,15 @@
 #include "webcore/dom/domstring.h"
 #include "webcore/dom/element.h"
 
+namespace DOM {
+class Document;
+}
+
 namespace HTML {
 
 class HTMLElement : public DOM::Element {
 public:
-    HTMLElement(const HTMLTagName& tagName);
+    HTMLElement(DOM::Document*, const HTMLTagName&);
     virtual ~HTMLElement() = 0;
 
     void accept(class DOMVisitor& v) override;

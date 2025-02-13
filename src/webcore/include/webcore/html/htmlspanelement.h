@@ -2,11 +2,15 @@
 #define HTML_SPANELEMENT_H
 
 #include "htmlelement.h"
+namespace DOM {
+class Document;
+}
+
 namespace HTML {
 
 class HTMLSpanElement : public HTMLElement {
 public:
-    HTMLSpanElement();
+    HTMLSpanElement(DOM::Document*);
 };
 
 }  // namespace HTML

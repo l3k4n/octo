@@ -5,15 +5,16 @@
 
 using DOM::Text;
 
-Text::Text() : Node(NodeType::TEXT_NODE) {}
+Text::Text(DOM::Document* owner) : Node(owner, NodeType::TEXT_NODE) {}
 
-Text::Text(DOMString text) : Node(NodeType::TEXT_NODE), m_wholeText(text) {}
+Text::Text(DOM::Document* owner, DOMString text)
+    : Node(owner, NodeType::TEXT_NODE), m_wholeText(text) {}
 
 Text Text::splitText(unsigned long offset) {
     DOMString substr = m_wholeText.substr(0, offset);
     m_wholeText.erase(0, offset);
 
-    return Text(substr);
+    return Text(ownerDocument(), substr);
 }
 
 void Text::insertData(unsigned long offset, const DOMString& data) {

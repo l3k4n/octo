@@ -5,13 +5,17 @@
 #include "webcore/dom/nodelist.h"
 #include "webcore/dom/usvstring.h"
 
+namespace DOM {
+class Document;
+}
+
 namespace HTML {
 
 class HTMLFormElement;
 
 class HTMLButtonElement : public HTMLElement {
 public:
-    HTMLButtonElement();
+    HTMLButtonElement(DOM::Document*);
 
     HTMLFormElement* form;
     DOM::USVString formAction;

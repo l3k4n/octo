@@ -4,4 +4,4 @@
 
 using HTML::HTMLDivElement;
 
-HTMLDivElement::HTMLDivElement() : HTMLElement(HTMLTagName::DivTag) {}
+HTMLDivElement::HTMLDivElement(DOM::Document* owner) : HTMLElement(owner, HTMLTagName::DivTag) {}

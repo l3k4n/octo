@@ -29,10 +29,11 @@ enum NodeType : unsigned short {
 
 class Node {
 public:
-    Node(NodeType);
+    Node(Document*, NodeType);
     virtual ~Node() = 0;
 
     NodeType nodeType() const;
+    Document* ownerDocument() const;
     virtual DOMString nodeName() const = 0;
     bool hasChildNodes() const;
     HTML::HTMLCollection children() const;
@@ -59,6 +60,7 @@ private:
 
 private:
     const NodeType m_nodeType;
+    DOM::Document* m_ownerDocument;
     Node* m_parentNode = nullptr;
     Node* m_firstChild = nullptr;
     Node* m_lastChild = nullptr;

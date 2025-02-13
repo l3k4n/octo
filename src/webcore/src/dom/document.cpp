@@ -26,39 +26,39 @@
 using DOM::Document, DOM::DOMString, DOM::Text;
 using namespace HTML;
 
-Document::Document() : Node(NodeType::DOCUMENT_NODE) {}
+Document::Document() : Node(nullptr, NodeType::DOCUMENT_NODE) {}
 
-DOM::Element* Document::createElement(HTML::HTMLTagName tagName) const {
+DOM::Element* Document::createElement(HTML::HTMLTagName tagName) {
     switch (tagName) {
             // clang-format off
-        case HTMLTagName::HtmlTag:   return new HTMLHtmlElement();
-        case HTMLTagName::HeadTag:   return new HTMLHeadElement();
-        case HTMLTagName::TitleTag:  return new HTMLTitleElement();
-        case HTMLTagName::LinkTag:   return new HTMLLinkElement();
-        case HTMLTagName::StyleTag:  return new HTMLStyleElement();
-        case HTMLTagName::H1Tag:     return new HTMLHeadingElement(HTMLHeadingElement::H1);
-        case HTMLTagName::H2Tag:     return new HTMLHeadingElement(HTMLHeadingElement::H2);
-        case HTMLTagName::H3Tag:     return new HTMLHeadingElement(HTMLHeadingElement::H3);
-        case HTMLTagName::H4Tag:     return new HTMLHeadingElement(HTMLHeadingElement::H4);
-        case HTMLTagName::H5Tag:     return new HTMLHeadingElement(HTMLHeadingElement::H5);
-        case HTMLTagName::H6Tag:     return new HTMLHeadingElement(HTMLHeadingElement::H6);
-        case HTMLTagName::BodyTag:   return new HTMLBodyElement();
-        case HTMLTagName::DivTag:    return new HTMLDivElement();
-        case HTMLTagName::PTag:      return new HTMLParagraphElement();
-        case HTMLTagName::ButtonTag: return new HTMLButtonElement();
-        case HTMLTagName::FormTag:   return new HTMLFormElement();
-        case HTMLTagName::InputTag:  return new HTMLInputElement();
-        case HTMLTagName::ATag:      return new HTMLAnchorElement();
-        case HTMLTagName::ImgTag:    return new HTMLImageElement();
-        case HTMLTagName::ImageTag:  return new HTMLImageElement();
-        case HTMLTagName::SpanTag :  return new HTMLSpanElement();
-        default:                     return new HTMLUnknownElement(tagName);
+        case HTMLTagName::HtmlTag:   return new HTMLHtmlElement(this);
+        case HTMLTagName::HeadTag:   return new HTMLHeadElement(this);
+        case HTMLTagName::TitleTag:  return new HTMLTitleElement(this);
+        case HTMLTagName::LinkTag:   return new HTMLLinkElement(this);
+        case HTMLTagName::StyleTag:  return new HTMLStyleElement(this);
+        case HTMLTagName::H1Tag:     return new HTMLHeadingElement(this, HTMLHeadingElement::H1);
+        case HTMLTagName::H2Tag:     return new HTMLHeadingElement(this, HTMLHeadingElement::H2);
+        case HTMLTagName::H3Tag:     return new HTMLHeadingElement(this, HTMLHeadingElement::H3);
+        case HTMLTagName::H4Tag:     return new HTMLHeadingElement(this, HTMLHeadingElement::H4);
+        case HTMLTagName::H5Tag:     return new HTMLHeadingElement(this, HTMLHeadingElement::H5);
+        case HTMLTagName::H6Tag:     return new HTMLHeadingElement(this, HTMLHeadingElement::H6);
+        case HTMLTagName::BodyTag:   return new HTMLBodyElement(this);
+        case HTMLTagName::DivTag:    return new HTMLDivElement(this);
+        case HTMLTagName::PTag:      return new HTMLParagraphElement(this);
+        case HTMLTagName::ButtonTag: return new HTMLButtonElement(this);
+        case HTMLTagName::FormTag:   return new HTMLFormElement(this);
+        case HTMLTagName::InputTag:  return new HTMLInputElement(this);
+        case HTMLTagName::ATag:      return new HTMLAnchorElement(this);
+        case HTMLTagName::ImgTag:    return new HTMLImageElement(this);
+        case HTMLTagName::ImageTag:  return new HTMLImageElement(this);
+        case HTMLTagName::SpanTag :  return new HTMLSpanElement(this);
+        default:                     return new HTMLUnknownElement(this, tagName);
             // clang-format on
     }
 }
 
 DOMString Document::nodeName() const { return u"#document"; }
 
-Text* Document::createTextNode(DOMString data) const { return new Text(data); }
+Text* Document::createTextNode(DOMString data) { return new Text(this, data); }
 
 void Document::accept(DOMVisitor& visitor) { visitor.visit(*this); }

@@ -8,10 +8,11 @@
 namespace DOM {
 
 class Attr;
+class Document;
 
 class Element : public Node {
 public:
-    Element(const HTML::HTMLTagName& tagName);
+    Element(Document*, const HTML::HTMLTagName&);
     virtual ~Element() = 0;
 
     const DOMString& getAttribute(const DOMString& name) const;

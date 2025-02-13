@@ -5,11 +5,15 @@
 #include "webcore/dom/domstring.h"
 #include "webcore/dom/domtokenlist.h"
 #include "webcore/dom/usvstring.h"
+namespace DOM {
+class Document;
+}
+
 namespace HTML {
 
 class HTMLAnchorElement : public HTMLElement {
 public:
-    HTMLAnchorElement();
+    HTMLAnchorElement(DOM::Document*);
 
     DOM::DOMString target;
     DOM::DOMString download;

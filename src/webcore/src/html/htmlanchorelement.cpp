@@ -4,4 +4,4 @@
 
 using HTML::HTMLAnchorElement;
 
-HTMLAnchorElement::HTMLAnchorElement() : HTMLElement(HTMLTagName::ATag) {}
+HTMLAnchorElement::HTMLAnchorElement(DOM::Document* owner) : HTMLElement(owner, HTMLTagName::ATag) {}

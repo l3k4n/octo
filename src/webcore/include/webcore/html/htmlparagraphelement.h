@@ -3,11 +3,15 @@
 
 #include "htmlelement.h"
 
+namespace DOM {
+class Document;
+}
+
 namespace HTML {
 
 class HTMLParagraphElement : public HTMLElement {
 public:
-    HTMLParagraphElement();
+    HTMLParagraphElement(DOM::Document*);
 };
 
 }  // namespace HTML

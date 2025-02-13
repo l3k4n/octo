@@ -13,8 +13,8 @@ class Document : public Node {
 public:
     Document();
 
-    Element* createElement(HTML::HTMLTagName tagName) const;
-    Text* createTextNode(DOMString data) const;
+    Element* createElement(HTML::HTMLTagName tagName);
+    Text* createTextNode(DOMString data);
     void accept(class DOMVisitor& v) override;
     DOMString nodeName() const override;
 };
