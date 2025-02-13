@@ -28,6 +28,19 @@ using namespace HTML;
 
 Document::Document() : Node(nullptr, NodeType::DOCUMENT_NODE) {}
 
+HTML::HTMLBodyElement* Document::body() const {
+    if (!m_body && documentElement()) {
+        for (auto& node : documentElement()->childNodes()) {
+            if ((m_body = dynamic_cast<HTMLBodyElement*>(&node))) break;
+        }
+    }
+    return m_body;
+}
+
+HTML::HTMLHtmlElement* Document::documentElement() const {
+    return dynamic_cast<HTMLHtmlElement*>(firstElementChild());
+}
+
 DOM::Element* Document::createElement(HTML::HTMLTagName tagName) {
     switch (tagName) {
             // clang-format off
@@ -62,3 +75,8 @@ DOMString Document::nodeName() const { return u"#document"; }
 Text* Document::createTextNode(DOMString data) { return new Text(this, data); }
 
 void Document::accept(DOMVisitor& visitor) { visitor.visit(*this); }
+
+void Document::setBody(HTML::HTMLBodyElement* body) {
+    if (!body) return;
+    m_body = body;
+}
