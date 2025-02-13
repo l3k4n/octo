@@ -7,7 +7,7 @@ namespace CSS {
 
 class CSSRuleList {
 public:
-    CSSRuleList(const CSSRule* rule_list, unsigned long len);
+    CSSRuleList(const CSSRule* rule_list);
     unsigned long length() const;
     const CSSRule* item(unsigned long idx) const;
 

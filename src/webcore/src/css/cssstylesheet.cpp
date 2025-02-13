@@ -4,17 +4,18 @@
 
 using CSS::CSSStyleSheet;
 
-CSS::CSSRuleList CSSStyleSheet::cssRules() const { return CSSRuleList(m_rules, m_rule_length); }
+CSS::CSSRuleList CSSStyleSheet::cssRules() const { return CSSRuleList(m_firstRule); }
 
 void CSSStyleSheet::insertParsedRule(CSSRule* rule) {
     OCTO_DCHECK(!rule->nextRule());
     OCTO_DCHECK(!rule->parentRule());
 
-    if (!m_rules) {
-        OCTO_DCHECK(m_last_rule == nullptr);
-        m_rules = rule;
+    if (m_lastRule) {
+        m_lastRule->setNextRule(rule);
+        m_lastRule = rule;
     } else {
-        OCTO_DCHECK(m_last_rule != nullptr);
-        m_last_rule->setNextRule(rule);
+        OCTO_DCHECK(!m_firstRule && !m_lastRule);
+        m_firstRule = rule;
+        m_lastRule = rule;
     }
 }

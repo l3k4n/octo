@@ -2,7 +2,7 @@
 
 using CSS::CSSRuleList;
 
-CSSRuleList::CSSRuleList(const CSSRule* rule_list, unsigned long len) : m_rules(rule_list) {}
+CSSRuleList::CSSRuleList(const CSSRule* rule_list) : m_rules(rule_list) {}
 
 unsigned long CSSRuleList::length() const {
     unsigned long len = 0;

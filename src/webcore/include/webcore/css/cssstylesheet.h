@@ -1,8 +1,8 @@
 #ifndef CSS_STYLESHEET_H
 #define CSS_STYLESHEET_H
 
-#include "cssrulelist.h"
 #include "cssrule.h"
+#include "cssrulelist.h"
 
 namespace CSS {
 
@@ -14,9 +14,8 @@ public:
     void insertParsedRule(CSSRule*);
 
 private:
-    CSSRule* m_rules = nullptr;
-    CSSRule* m_last_rule = nullptr;
-    unsigned long m_rule_length;
+    CSSRule* m_firstRule = nullptr;
+    CSSRule* m_lastRule = nullptr;
 };
 
 }  // namespace CSS
