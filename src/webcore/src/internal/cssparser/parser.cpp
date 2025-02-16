@@ -78,18 +78,41 @@ std::optional<CSS::SelectorList> CssParser::consumeSelectorList() {
 }
 
 std::optional<CSS::PropertyMap> CssParser::consumeDeclarationBlock() {
+    CSS::PropertyMap map;
+
+    // skip to the boundary of the next declaration or end of the block
+    auto recover = [this]() {
+        while (!m_stream.eof()) {
+            if (m_stream.peek() == SemiColon) m_stream.next();
+            if (m_stream.peek() == RightBrace) break;
+        }
+    };
+
     if (!m_stream.discard(LeftBrace)) return std::nullopt;
     m_stream.skipWhitespace();
 
-    std::optional<CSS::PropertyId> id = m_prop_id_parser.parseId();
-    if (!m_stream.discard(Colon)) {
-        // TODO: stream is at a wierd position, move to a normal position (e.g ';' or '}')
-        return std::nullopt;
-    }
-    m_stream.skipWhitespace();
+    while (!m_stream.eof() && m_stream.peek() != RightBrace) {
+        std::optional<CSS::PropertyId> id(m_prop_id_parser.parseId());
+        if (!id.has_value() || !m_stream.discard(Colon)) {
+            recover();
+            continue;
+        }
+        m_stream.skipWhitespace();
 
-    CSS::PropertyMap map;
-    if (!m_prop_value_parser.parseValue(*id, map)) return std::nullopt;
+        if (!m_prop_value_parser.parseValue(*id, map)) {
+            recover();
+            continue;
+        }
+        m_stream.skipWhitespace();
+
+        if (!m_stream.discard(SemiColon)) {
+            recover();
+            continue;
+        }
+        m_stream.skipWhitespace();
+    }
+
+    if (!m_stream.discard(RightBrace)) return std::nullopt;
 
     return map;
 }
