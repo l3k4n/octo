@@ -14,7 +14,6 @@ bool CssSelectorParser::parseSelectorList(CSS::SelectorList& list) {
     if (!consumeComplexSelector(list)) return false;
 
     while (true) {
-        m_stream.skipWhitespace();
         if (!m_stream.discard(Comma)) return true;
         m_stream.skipWhitespace();
         if (!consumeComplexSelector(list)) return false;
@@ -30,12 +29,11 @@ bool CssSelectorParser::consumeComplexSelector(CSS::SelectorList& list) {
         bool hadWhitespace = m_stream.peek() == WhiteSpace;
         m_stream.skipWhitespace();
 
-        auto combinator = consumeCombinator();
-        if (combinator) {
-            list.back().setCombinator(*combinator);
-        } else if (m_stream.discard(Comma)) {
-            // comma is technically not a combinator but a selector separator
-            list.back().setCombinator(CSS::Selector::Combinator::None);
+        if (m_stream.peek() == Comma) return true;
+
+        auto nonWhitespaceCombinator = consumeCombinator();
+        if (nonWhitespaceCombinator) {
+            list.back().setCombinator(*nonWhitespaceCombinator);
         } else if (hadWhitespace) {
             // use whitespace as combinator if no combinator
             list.back().setCombinator(CSS::Selector::Combinator::Descendant);
@@ -45,7 +43,12 @@ bool CssSelectorParser::consumeComplexSelector(CSS::SelectorList& list) {
         }
         m_stream.skipWhitespace();
 
-        if (!consumeCompoundSelector(list)) break;
+        if (!consumeCompoundSelector(list)) {
+            // if there is a combinator but no valid selector, then complex selector is invalid
+            if (nonWhitespaceCombinator.has_value()) return false;
+            list.back().setCombinator(CSS::Selector::Combinator::None);
+            return true;
+        };
     }
 
     return true;

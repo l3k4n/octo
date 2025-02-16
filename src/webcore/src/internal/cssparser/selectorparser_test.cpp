@@ -10,8 +10,7 @@
     CssSelectorParser parser(stream);        \
     CSS::SelectorList list;                  \
     REQUIRE(parser.parseSelectorList(list)); \
-    REQUIRE(list.size() == num_selectors);   \
-    REQUIRE(stream.eof())
+    REQUIRE(list.size() == num_selectors);
 
 #define EXPECT_SIMPLE_SELECTOR(sel, sel_type, sel_value)  \
     REQUIRE(sel.type() == CSS::Selector::Type::sel_type); \
@@ -78,7 +77,7 @@ TEST_CASE("Parse css selectors", "[cssparser]") {
     }
 
     SECTION("parse complex selector") {
-        EASY_SETUP("div > span + a.class#id[attr=value], section article .content", 9);
+        EASY_SETUP("div > span + a.class#id[attr=value], section article .content {}", 9);
 
         // div >
         EXPECT_COMPOUND_SELECTOR(list[0], Tag, "div", Child);
