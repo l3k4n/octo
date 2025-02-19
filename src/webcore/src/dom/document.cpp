@@ -26,7 +26,7 @@
 using DOM::Document, DOM::DOMString, DOM::Text;
 using namespace HTML;
 
-Document::Document() : Node(nullptr, NodeType::DOCUMENT_NODE) {}
+Document::Document() : Node(nullptr, NodeType::DOCUMENT_NODE), m_style_engine(this) {}
 
 HTML::HTMLBodyElement* Document::body() const {
     if (!m_body && documentElement()) {
@@ -40,6 +40,8 @@ HTML::HTMLBodyElement* Document::body() const {
 HTML::HTMLHtmlElement* Document::documentElement() const {
     return dynamic_cast<HTMLHtmlElement*>(firstElementChild());
 }
+
+StyleEngine::StyleEngine& Document::styleEngine() { return m_style_engine; }
 
 DOM::Element* Document::createElement(HTML::HTMLTagName tagName) {
     switch (tagName) {

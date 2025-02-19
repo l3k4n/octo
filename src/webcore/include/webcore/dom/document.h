@@ -3,6 +3,7 @@
 
 #include "node.h"
 #include "webcore/html/tagname.h"
+#include "webcore/internal/styleengine/styleengine.h"
 
 namespace HTML {
 class HTMLBodyElement;
@@ -20,6 +21,7 @@ public:
 
     HTML::HTMLBodyElement* body() const;
     HTML::HTMLHtmlElement* documentElement() const;
+    StyleEngine::StyleEngine& styleEngine();
 
     Element* createElement(HTML::HTMLTagName tagName);
     Text* createTextNode(DOMString data);
@@ -29,6 +31,7 @@ public:
 
 private:
     mutable HTML::HTMLBodyElement* m_body = nullptr;
+    StyleEngine::StyleEngine m_style_engine;
 };
 
 }  // namespace DOM

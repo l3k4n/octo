@@ -15,6 +15,8 @@ unsigned long CSSRuleList::length() const {
     return len;
 }
 
+bool CSSRuleList::empty() const { return m_rules == nullptr; }
+
 const CSS::CSSRule* CSSRuleList::item(unsigned long idx) const {
     if (idx >= length()) return nullptr;
 

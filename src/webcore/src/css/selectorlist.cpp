@@ -2,11 +2,11 @@
 
 using namespace CSS;
 
-using Iterator = SelectorList::Iterator;
+using MatchIterator = SelectorList::Iterator;
 using SelectorGroup = SelectorList::SelectorGroup;
 using SelectorGroupIterator = SelectorList::SelectorGroupIterator;
 
-static Iterator find_complex_selector_end(Iterator beg, Iterator end) {
+static MatchIterator find_complex_selector_end(MatchIterator beg, MatchIterator end) {
     auto it = std::find_if(beg, end, [](const CSS::Selector& selector) {
         return selector.combinator() == Selector::Combinator::None;
     });
@@ -17,14 +17,14 @@ static Iterator find_complex_selector_end(Iterator beg, Iterator end) {
 
 SelectorGroup::SelectorGroup(Iterator first, Iterator last) : m_first(first), m_last(last) {}
 
-Iterator SelectorGroup::begin() const { return m_first; }
+MatchIterator SelectorGroup::begin() const { return m_first; }
 
-Iterator SelectorGroup::end() const { return m_last; }
+MatchIterator SelectorGroup::end() const { return m_last; }
 
-std::reverse_iterator<Iterator> SelectorGroup::rbegin() const {
+std::reverse_iterator<MatchIterator> SelectorGroup::rbegin() const {
     return std::reverse_iterator(m_last);
 }
-std::reverse_iterator<Iterator> SelectorGroup::rend() const {
+std::reverse_iterator<MatchIterator> SelectorGroup::rend() const {
     return std::reverse_iterator(m_first);
 }
 

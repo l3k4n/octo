@@ -9,6 +9,7 @@ class CSSRuleList {
 public:
     CSSRuleList(const CSSRule* rule_list);
     unsigned long length() const;
+    bool empty() const;
     const CSSRule* item(unsigned long idx) const;
 
 private:

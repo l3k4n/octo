@@ -3,11 +3,16 @@
 
 #include "webcore/css/properties/property.h"
 
+namespace StyleEngine {
+class ComputedStyle;
+}
+
 namespace CSS::PROPERTIES {
 {% for property in longhands %}
 class {{ property.name }} : public LonghandProperty {
 public:
     Value* parseValue(CssTokenStream&) override;
+    void setComputedValue(StyleEngine::ComputedStyle*, CSS::Value*) override;
 };
 {% endfor %}
 }  // namespace CSS

@@ -2,11 +2,17 @@
 #define GENERATED_CSS_PROPERTIES_SHORTHANDS_H
 
 #include "webcore/css/properties/property.h"
+#include "webcore/internal/styleengine/propertysignificancescore.h"
+
+namespace StyleEngine {
+class StyleBuilder;
+}
 
 namespace CSS::PROPERTIES {
 {% for property in shorthands %}
 class {{ property.name }} : public ShorthandProperty {
 public:
+    void applyLonghands(StyleEngine::StyleBuilder&, CSS::Value*, StyleEngine::PropertySignificanceScore score) override;
 };
 {% endfor %}
 }  // namespace CSS

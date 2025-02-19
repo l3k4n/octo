@@ -11,6 +11,7 @@ namespace CSS {
 class CSSRule;
 
 class CSSStyleDeclaration {
+public:
     struct PropertyDeclaration {
         CSS::Value* value;
         CSS::PropertyId id;
