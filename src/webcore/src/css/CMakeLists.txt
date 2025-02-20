@@ -5,6 +5,7 @@ set(CSS_SOURCES
   cssstylesheet.cpp
   propertymap.cpp
   selector.cpp
+  selectorlist.cpp
 )
 
 target_sources(webcore PRIVATE ${CSS_SOURCES})
