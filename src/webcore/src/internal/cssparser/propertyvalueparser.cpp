@@ -9,6 +9,7 @@
 #include <unordered_map>
 
 #include "octocore/debug.h"
+#include "webcore/css/cssstyledeclaration.h"
 #include "webcore/css/propertyid.h"
 #include "webcore/css/values/colorvalue.h"
 #include "webcore/css/values/sizevalue.h"
@@ -25,12 +26,14 @@ CssPropertyValueParser::LonghandParser CssPropertyValueParser::longhand_parsers[
 
 CssPropertyValueParser::CssPropertyValueParser(CssTokenStream& stream) : m_stream(stream) {}
 
-bool CssPropertyValueParser::parseValue(CSS::PropertyId id, CSS::PropertyMap& map) {
+bool CssPropertyValueParser::parseValue(CSS::PropertyId id, CSS::CSSStyleDeclaration& decls) {
     m_stream.skipWhitespace();
+
+    // TODO: parse priority and semicolon after value
 
     auto wk = parseWideKeywordValue(m_stream);
     if (wk != nullptr) {
-        map.set(id, wk);
+        decls.setProperty(id, wk);
         return true;
     }
 
@@ -38,7 +41,7 @@ bool CssPropertyValueParser::parseValue(CSS::PropertyId id, CSS::PropertyMap& ma
         auto parse = resolveLonghandParser(id);
         auto value = parse(m_stream);
         if (!value) return false;
-        map.set(id, value);
+        decls.setProperty(id, value);
         return true;
     } else {
         // TODO: parse shorthand properties

@@ -3,7 +3,6 @@ set(CSS_SOURCES
   cssrulelist.cpp
   cssstyledeclaration.cpp
   cssstylesheet.cpp
-  propertymap.cpp
   selector.cpp
   selectorlist.cpp
 )

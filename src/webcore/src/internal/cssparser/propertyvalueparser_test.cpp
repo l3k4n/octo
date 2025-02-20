@@ -1,6 +1,7 @@
 #include "webcore/internal/cssparser/propertyvalueparser.h"
 
 #include "catch2/catch_test_macros.hpp"
+#include "webcore/css/cssstyledeclaration.h"
 #include "webcore/css/values/colorvalue.h"
 #include "webcore/css/values/value_cast.h"
 #include "webcore/css/values/widekeywordvalue.h"
@@ -55,20 +56,21 @@ TEST_CASE("PropertyValue parser correctly parses values", "[cssparser]") {
     SECTION("Resolve and parse values from property id") {
         CssTokenStream stream("#ABCDEFD4 inherit");
         CssPropertyValueParser parser(stream);
-        PropertyMap map;
+        CSS::CSSStyleDeclaration decls;
 
-        REQUIRE(parser.parseValue(PropertyId::Color, map));
-        REQUIRE(map.get(PropertyId::Color));
-        auto color_val = css_value_cast<ColorValue*>(map.get(PropertyId::Color));
+        REQUIRE(parser.parseValue(PropertyId::Color, decls));
+        REQUIRE(decls.getProperty(PropertyId::Color));
+        auto color_val = css_value_cast<ColorValue*>(decls.getProperty(PropertyId::Color));
         REQUIRE(int(color_val->rgba().r) == 171);
         REQUIRE(int(color_val->rgba().g) == 205);
         REQUIRE(int(color_val->rgba().b) == 239);
         REQUIRE(int(color_val->rgba().a) == 212);
 
         stream.skipWhitespace();
-        REQUIRE(parser.parseValue(PropertyId::BackgroundColor, map));
-        REQUIRE(map.get(PropertyId::BackgroundColor));
-        auto bg_val = css_value_cast<WideKeywordValue*>(map.get(PropertyId::BackgroundColor));
+        REQUIRE(parser.parseValue(PropertyId::BackgroundColor, decls));
+        REQUIRE(decls.getProperty(PropertyId::BackgroundColor));
+        auto bg_val =
+            css_value_cast<WideKeywordValue*>(decls.getProperty(PropertyId::BackgroundColor));
         REQUIRE(*bg_val == WideKeywordValue::Inherit);
     }
 }

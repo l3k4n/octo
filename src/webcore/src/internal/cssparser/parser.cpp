@@ -13,7 +13,6 @@
 #include "webcore/css/cssstylerule.h"
 #include "webcore/css/cssstylesheet.h"
 #include "webcore/css/propertyid.h"
-#include "webcore/css/propertymap.h"
 #include "webcore/css/selectorlist.h"
 #include "webcore/internal/cssparser/propertyidparser.h"
 #include "webcore/internal/cssparser/propertyvalueparser.h"
@@ -63,12 +62,11 @@ std::unique_ptr<CSS::CSSRule> CssParser::consumeQualifiedRule() {
         return nullptr;
     }
 
-    std::optional<CSS::PropertyMap> properties(consumeDeclarationBlock());
-    if (!properties) return nullptr;
+    std::optional<CSS::CSSStyleDeclaration> style_declaration(consumeDeclarationBlock());
+    if (!style_declaration) return nullptr;
 
-    CSS::CSSStyleDeclaration style_declaration(std::move(*properties));
     return std::make_unique<CSS::CSSStyleRule>(std::move(*selector_list),
-                                               std::move(style_declaration));
+                                               std::move(*style_declaration));
 }
 
 std::optional<CSS::SelectorList> CssParser::consumeSelectorList() {
@@ -77,8 +75,8 @@ std::optional<CSS::SelectorList> CssParser::consumeSelectorList() {
     return list;
 }
 
-std::optional<CSS::PropertyMap> CssParser::consumeDeclarationBlock() {
-    CSS::PropertyMap map;
+std::optional<CSS::CSSStyleDeclaration> CssParser::consumeDeclarationBlock() {
+    CSS::CSSStyleDeclaration style_declaration;
 
     // skip to the boundary of the next declaration or end of the block
     auto recover = [this]() {
@@ -99,7 +97,7 @@ std::optional<CSS::PropertyMap> CssParser::consumeDeclarationBlock() {
         }
         m_stream.skipWhitespace();
 
-        if (!m_prop_value_parser.parseValue(*id, map)) {
+        if (!m_prop_value_parser.parseValue(*id, style_declaration)) {
             recover();
             continue;
         }
@@ -114,7 +112,7 @@ std::optional<CSS::PropertyMap> CssParser::consumeDeclarationBlock() {
 
     if (!m_stream.discard(RightBrace)) return std::nullopt;
 
-    return map;
+    return style_declaration;
 }
 
 void CssParser::skipAtRule() {

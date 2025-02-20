@@ -9,7 +9,6 @@
 #include "tokenstream.h"
 #include "webcore/css/cssrule.h"
 #include "webcore/css/cssstylesheet.h"
-#include "webcore/css/propertymap.h"
 #include "webcore/css/selectorlist.h"
 #include "webcore/internal/cssparser/propertyidparser.h"
 #include "webcore/internal/cssparser/propertyvalueparser.h"
@@ -27,7 +26,7 @@ private:
     // consume a list of selectors. Invalid selector may cause inconsistent stream.
     std::optional<CSS::SelectorList> consumeSelectorList();
     // consumes a declaration block and ignores invalid declaration.
-    std::optional<CSS::PropertyMap> consumeDeclarationBlock();
+    std::optional<CSS::CSSStyleDeclaration> consumeDeclarationBlock();
     // checks if next token begins an at rule and skips it if it does
     void skipAtRule();
     // checks if next token begins a block and skips it if it does
