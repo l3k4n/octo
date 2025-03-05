@@ -8,14 +8,14 @@ class Value;
 
 class Property {
 public:
-    Property(bool isShorhand) : m_shorthand(isShorhand) {}
+    Property(bool isLonghand) : m_longhand(isLonghand) {}
     virtual ~Property() {}
 
-    bool isLonghand() { return !m_shorthand; }
-    bool isShorthand() { return m_shorthand; }
+    bool isLonghand() { return m_longhand; }
+    bool isShorthand() { return !m_longhand; }
 
 private:
-    bool m_shorthand;
+    bool m_longhand;
 };
 
 class LonghandProperty : public Property {

@@ -60,8 +60,9 @@ inline CSS::ColorValue* parseHexColor(std::u16string_view str) {
 
 CSS::Value* CssPropertyValueParser::parseColorValue(CssTokenStream& stream) {
     static std::unordered_map<std::u16string_view, CSS::ColorValue::RGBA> known_colors = {
-        {u"white", {255, 255, 255}}, {u"black", {0, 0, 0}},  {u"red", {255, 0, 0}},
-        {u"green", {0, 255, 0}},     {u"blue", {0, 0, 255}}, {u"transparent", {0, 0, 0, 0}},
+        {u"white", {255, 255, 255, 255}}, {u"black", {0, 0, 0, 255}},
+        {u"red", {255, 0, 0, 255}},       {u"green", {0, 255, 0, 255}},
+        {u"blue", {0, 0, 255, 255}},      {u"transparent", {0, 0, 0, 0}},
     };
 
     switch (stream.peek()) {
