@@ -5,7 +5,7 @@
 #include <string>
 #include <string_view>
 
-#include "webcore/css/propertyid.h"
+#include "webcore/css/properties/propertyid.h"
 
 class CssTokenStream;
 

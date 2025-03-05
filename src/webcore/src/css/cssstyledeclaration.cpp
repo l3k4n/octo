@@ -3,7 +3,7 @@
 #include <algorithm>
 
 #include "webcore/css/cssrule.h"
-#include "webcore/css/propertyid.h"
+#include "webcore/css/properties/propertyid.h"
 #include "webcore/css/values/value.h"
 
 using CSS::CSSStyleDeclaration;

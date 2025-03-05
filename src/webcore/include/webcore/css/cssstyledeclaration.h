@@ -1,8 +1,10 @@
 #ifndef CSS_STYLE_DECLARATION_H
 #define CSS_STYLE_DECLARATION_H
 
-#include "propertyid.h"
+#include <vector>
+
 #include "values/value.h"
+#include "webcore/css/properties/propertyid.h"
 
 namespace CSS {
 

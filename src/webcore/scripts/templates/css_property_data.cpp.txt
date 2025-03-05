@@ -1,0 +1,22 @@
+#include <string_view>
+#include <unordered_map>
+
+#include "propertydata.h"
+#include "longhands.h"
+#include "shorthands.h"
+
+#include "webcore/css/properties/property.h"
+
+using namespace CSS::PROPERTIES;
+
+CSS::Property* CSS::PropertyInstances[PROPERTY_COUNT] = {
+{%- for property in properties %}
+    new {{ property.name }}(),
+{%- endfor %}
+};
+
+const std::unordered_map<std::string_view, CSS::PropertyId> CSS::PropertyMap = {
+{%- for property in properties %}
+    {{ '{' }} "{{ property.css_name }}", CSS::PropertyId::{{ property.name }} {{ '}' }},
+{%- endfor %}
+};

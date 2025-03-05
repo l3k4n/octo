@@ -16,6 +16,8 @@ public:
     ColorValue(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255)
         : Value(Color), m_color({r, g, b, a}) {}
 
+    ColorValue(RGBA color) : Value(Color), m_color(color) {}
+
     RGBA rgba() { return m_color; }
 
 private:

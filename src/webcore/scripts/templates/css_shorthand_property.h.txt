@@ -1,0 +1,14 @@
+#ifndef GENERATED_CSS_PROPERTIES_SHORTHANDS_H
+#define GENERATED_CSS_PROPERTIES_SHORTHANDS_H
+
+#include "webcore/css/properties/property.h"
+
+namespace CSS::PROPERTIES {
+{% for property in shorthands %}
+class {{ property.name }} : public ShorthandProperty {
+public:
+};
+{% endfor %}
+}  // namespace CSS
+
+#endif  // !GENERATED_CSS_PROPERTIES_SHORTHANDS_H

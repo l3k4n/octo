@@ -1,0 +1,16 @@
+#ifndef GENERATED_CSS_PROPERTIES_PROPERTY_ID_H
+#define GENERATED_CSS_PROPERTIES_PROPERTY_ID_H
+
+#include <cstdint>
+
+namespace CSS {
+
+enum class PropertyId : int8_t {
+{%- for property in properties %}
+    {{ property.name }},
+{%- endfor %}
+};
+
+}  // namespace CSS
+
+#endif  // !GENERATED_CSS_PROPERTIES_PROPERTY_ID_H

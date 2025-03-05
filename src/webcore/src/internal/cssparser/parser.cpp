@@ -12,7 +12,7 @@
 #include "webcore/css/cssstyledeclaration.h"
 #include "webcore/css/cssstylerule.h"
 #include "webcore/css/cssstylesheet.h"
-#include "webcore/css/propertyid.h"
+#include "webcore/css/properties/propertyid.h"
 #include "webcore/css/selectorlist.h"
 #include "webcore/internal/cssparser/propertyidparser.h"
 #include "webcore/internal/cssparser/propertyvalueparser.h"

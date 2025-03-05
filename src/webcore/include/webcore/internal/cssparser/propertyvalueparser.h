@@ -1,17 +1,15 @@
 #ifndef CSSPARSER_VALUE_PARSER_H
 #define CSSPARSER_VALUE_PARSER_H
 
-#include "webcore/css/propertyid.h"
+#include "webcore/css/properties/propertyid.h"
 
 namespace CSS {
 class Value;
 class CSSStyleDeclaration;
-}
+}  // namespace CSS
 class CssTokenStream;
 
 class CssPropertyValueParser {
-public:
-    typedef CSS::Value* (*LonghandParser)(CssTokenStream&);
 public:
     CssPropertyValueParser(CssTokenStream&);
 
@@ -21,11 +19,7 @@ public:
     static CSS::Value* parseSizeValue(CssTokenStream&);
     static CSS::Value* parseWideKeywordValue(CssTokenStream&);
 
-    static LonghandParser resolveLonghandParser(CSS::PropertyId);
-
 private:
-    static LonghandParser longhand_parsers[];
-
     CssTokenStream& m_stream;
 };
 

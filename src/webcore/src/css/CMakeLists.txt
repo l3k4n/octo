@@ -7,4 +7,6 @@ set(CSS_SOURCES
   selectorlist.cpp
 )
 
+add_subdirectory(properties)
+
 target_sources(webcore PRIVATE ${CSS_SOURCES})

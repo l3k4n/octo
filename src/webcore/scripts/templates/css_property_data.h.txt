@@ -1,0 +1,20 @@
+#ifndef GENERATED_CSS_PROPERTIES_DATA_H
+#define GENERATED_CSS_PROPERTIES_DATA_H
+
+#include <string_view>
+#include <unordered_map>
+
+#include "propertyid.h"
+#include "webcore/css/properties/property.h"
+
+namespace CSS {
+
+constexpr size_t PROPERTY_COUNT = {{ property_count }};
+
+extern Property* PropertyInstances[PROPERTY_COUNT];
+
+extern const std::unordered_map<std::string_view, PropertyId> PropertyMap;
+
+} // namespace CSS
+
+#endif  // !GENERATED_CSS_PROPERTIES_DATA_H
