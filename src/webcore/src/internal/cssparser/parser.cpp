@@ -78,11 +78,15 @@ std::optional<CSS::SelectorList> CssParser::consumeSelectorList() {
 std::optional<CSS::CSSStyleDeclaration> CssParser::consumeDeclarationBlock() {
     CSS::CSSStyleDeclaration style_declaration;
 
-    // skip to the boundary of the next declaration or end of the block
+    // skip to the end of a declaration or right before end of the block
     auto recover = [this]() {
         while (!m_stream.eof()) {
-            if (m_stream.peek() == SemiColon) m_stream.next();
+            if (m_stream.peek() == SemiColon) {
+                m_stream.next();
+                break;
+            }
             if (m_stream.peek() == RightBrace) break;
+            m_stream.next();
         }
     };
 
